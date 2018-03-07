@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.TrakEngineering.FluidSecureHubFOBapp">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        android:protectionLevel="signature" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <!--
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    -->
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:name="android.support.multidex.MultiDexApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.nfc_reader.TagViewer">
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptVehicleActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptOdoActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.DisplayMeterActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.RegistrationActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.SplashActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.MainActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.Login"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.TestSocket" />
+
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundFOBReader"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_AP"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_AP_PIPE"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_FS_UNIT_3"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_FS_UNIT_4"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundServiceHotspotCheck"
+            android:enabled="true" />
+
+        <receiver android:name="com.TrakEngineering.FluidSecureHubFOBapp.MobileDataReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.TrakEngineering.FluidSecureHubFOBapp.WifiReceiver">
+            <intent-filter android:priority="100">
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.TrakEngineering.FluidSecureHubFOBapp.OnBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptFieldActivity" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptPinActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptDeptActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptOtherActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptCheckAll" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptHoursAcitvity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.SelectFSActivity" />
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.ActivityFobKeyReader" />
+        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeAct"></activity>
+    </application>
+
+</manifest>

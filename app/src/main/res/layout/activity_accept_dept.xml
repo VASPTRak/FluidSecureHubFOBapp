@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="50dp">
+
+
+
+        <LinearLayout
+            android:id="@+id/linearDept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:text="Enter Department Number"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/heading_text" />
+
+
+            <EditText
+                android:id="@+id/etDeptNumber"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/colorPrimary"
+                android:textColorHint="#fff"
+                android:textColor="@color/white"
+                android:hint="  Enter Department Number"
+                android:imeOptions="actionDone"
+                android:inputType="number|text"
+                android:maxLength="10"
+                android:padding="5sp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/edit_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+     android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginRight="25dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@color/backbtn"
+                android:text="Back"
+                android:textColor="@color/black"
+                android:textSize="@dimen/go_button_text" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="25dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@color/colorFluid"
+                android:text="Go"
+                android:textColor="@color/white"
+                android:textSize="@dimen/go_button_text" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <!-- menu bar -->
+    <include
+        layout="@layout/activity_footer_keybord"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

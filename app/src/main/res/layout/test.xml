@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="2dp"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="150sp"
+                    android:layout_height="150sp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/fuel_secure_lock" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Enter Vehicle Number:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/heading_text" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editVehicleNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:background="@drawable/textbox_gradient"
+                android:gravity="center_horizontal"
+                android:hint="Enter here.."
+                android:padding="5sp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/edit_text" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10sp"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_weight="1"
+                    android:background="@color/cancel_button"
+                    android:text="Cancel"
+                    android:textColor="@color/save_button"
+                    android:textSize="@dimen/go_button_text" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_weight="1"
+                    android:background="@color/save_button"
+                    android:onClick="saveButtonAction"
+                    android:text="Save"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/go_button_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btn_fob_Reader"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginLeft="150dp"
+                android:layout_marginRight="150dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/Pink"
+                android:textColor="@color/black"
+                android:textAllCaps="false"
+                android:paddingLeft="55dp"
+                android:paddingRight="55dp"
+                android:text="Please Hold Personnel FOB to Reader"
+                android:textSize="@dimen/go_button_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPerso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_ok"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="20dp"
+                android:text="Fob Read Successfully"
+                android:textColor="@color/Red"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="35dp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/tv_enter_pin_no"
+                android:layout_marginLeft="20dp"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:text="Personnel Number:"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="35dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/tv_fob_number"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:text="FOB#:"
+                android:textSize="@dimen/date_text" />
+
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_dont_have_fob"
+                android:layout_marginLeft="75dp"
+                android:layout_marginRight="75dp"
+                android:text="If you don't have a Personnel Fob then, enter Personnel Number below on keypad"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="20dp" />
+
+
+            <EditText
+                android:id="@+id/etPersonnelPin"
+                android:layout_width="350dp"
+                android:layout_height="60dp"
+                android:background="@color/colorFluid"
+                android:layout_gravity="center_horizontal"
+                android:imeOptions="actionDone"
+                android:layout_marginRight="55dp"
+                android:layout_marginLeft="55dp"
+                android:inputType="number|text"
+                android:maxLength="10"
+                android:padding="5sp"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textColorHint="#fff"
+                android:textSize="@dimen/edit_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Linear_layout_Save_back_buttons"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5sp"
+                android:layout_weight="1"
+                android:layout_marginRight="25dp"
+                android:background="@color/backbtn"
+                android:text="Back"
+                android:textColor="@color/black"
+                android:textSize="@dimen/go_button_text" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="25dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10sp"
+                android:layout_weight="1"
+                android:background="@color/colorFluid"
+                android:text="Enter"
+                android:textColor="@color/white"
+                android:textSize="@dimen/go_button_text" />
+
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <!-- menu bar -->
+    <include
+        layout="@layout/activity_footer_keybord"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.TrakEngineering.FluidSecureHubFOBapp.ActivityFobKeyReader">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="100dp"
+        android:layout_margin="50dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_retry"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="RETRY"
+            android:textSize="@dimen/go_button_text"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Back"
+            android:textSize="@dimen/go_button_text" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="btn_rest"
+            tools:layout_editor_absoluteX="147dp"
+            tools:layout_editor_absoluteY="71dp" />
+
+        <Button
+            android:id="@+id/btn_power_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="btn_power_on"
+            tools:layout_editor_absoluteX="147dp"
+            tools:layout_editor_absoluteY="155dp" />
+
+
+        <Button
+            android:id="@+id/btn_transmit_malual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transmit"
+            tools:layout_editor_absoluteX="147dp"
+            tools:layout_editor_absoluteY="155dp" />
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

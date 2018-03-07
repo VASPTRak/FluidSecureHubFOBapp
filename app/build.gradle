@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g" // 2g should be also OK
+    }
+
+    defaultConfig {
+        applicationId "com.TrakEngineering.FluidSecureHubFOBapp"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 47
+        versionName "0.47.9"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/acsaj-1.0.0.jar')
+    compile files('libs/acsbt-1.0.0preview9.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:cardview-v7:25.4.0'
+    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:multidex:1.0.1'
+    testCompile 'junit:junit:4.12'
+    implementation files('libs/guavalib.jar')
+}

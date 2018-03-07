@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_test_socket"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_margin="50dp"
+    tools:context="com.TrakEngineering.FluidSecureHubFOBapp.TestSocket">
+
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="----"
+        android:textSize="18sp" />
+
+
+    <Button
+        android:id="@+id/btnSocketOn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Socket On" />
+
+    <Button
+        android:id="@+id/btnSocketOff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Socket Off" />
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Connect" />
+
+    <Button
+        android:id="@+id/btnturnonrelay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="turn on relay" />
+
+    <Button
+        android:id="@+id/btnbeginfueling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="begin fueling" />
+
+    <Button
+        android:id="@+id/btnquantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="quantity" />
+
+    <Button
+        android:id="@+id/btnturnoffrelay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="turn off relay" />
+
+    <Button
+        android:id="@+id/btnrecordcheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="record check" />
+
+
+</LinearLayout>

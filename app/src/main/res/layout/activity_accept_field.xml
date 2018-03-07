@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:scrollbars="none">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="50dp"
+            android:padding="5sp">
+
+            <LinearLayout
+                android:id="@+id/linearOdo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Odometer No Tenths:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/heading_text" />
+
+
+                <EditText
+                    android:id="@+id/etOdometer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textbox_gradient"
+                    android:gravity="center_horizontal"
+                    android:hint="Enter here.."
+                    android:imeOptions="actionDone"
+                    android:maxLength="10"
+                    android:padding="5sp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/edit_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearDept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_marginTop="10dp"
+                    android:text="Department Number:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/heading_text" />
+
+
+                <EditText
+                    android:id="@+id/etDeptNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textbox_gradient"
+                    android:gravity="center_horizontal"
+                    android:hint="Enter here.."
+                    android:imeOptions="actionDone"
+                    android:maxLength="10"
+                    android:padding="5sp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/edit_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearPerso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="left"
+                    android:text="Personnel Pin:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/heading_text" />
+
+
+                <EditText
+                    android:id="@+id/etPersonnelPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textbox_gradient"
+                    android:gravity="center_horizontal"
+                    android:hint="Enter here.."
+                    android:imeOptions="actionDone"
+                    android:maxLength="10"
+                    android:padding="5sp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/edit_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="left"
+                    android:text="Other:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/heading_text" />
+
+
+                <EditText
+                    android:id="@+id/etOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textbox_gradient"
+                    android:gravity="center_horizontal"
+                    android:hint="Enter here.."
+                    android:imeOptions="actionDone"
+                    android:padding="5sp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/edit_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_weight="1"
+                    android:background="@color/cancel_button"
+                    android:text="Back"
+                    android:textColor="@color/save_button"
+                    android:textSize="@dimen/go_button_text" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_blue"
+                    android:text="Enter"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/go_button_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

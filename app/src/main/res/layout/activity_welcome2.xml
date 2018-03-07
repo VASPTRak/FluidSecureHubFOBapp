@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="status_change_notifications"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="connection_status" />
+
+                <TextView
+                    android:id="@+id/textView_ReaderState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="card_status_2" />
+
+                <TextView
+                    android:id="@+id/textView_IccState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="battery_level" />
+
+                <TextView
+                    android:id="@+id/textView_BatteryLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textview05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="battery_status" />
+
+                <TextView
+                    android:id="@+id/textView_BatteryStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView06"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="authentication_key"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editText_Master_Key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="authentication_key" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/textView_Authentication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView08"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="apdu_command"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editText_ADPU"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="apdu_command" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_Response"
+            android:layout_width="fill_parent"
+            android:padding="20dp"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView09"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="escape_command"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editText_Escape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="escape_command" />
+
+            <TextView
+                android:id="@+id/textView_EscapeResponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/button_Clear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="clear" />
+
+            <Button
+                android:id="@+id/button_Authenticate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="authenticate" />
+            <Button
+                android:id="@+id/button_TransmitADPU"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="transmit_apdu" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/button_StartPolling"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="start_polling" />
+
+                <Button
+                    android:id="@+id/button_Connect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Connect" />
+
+                <Button
+                    android:id="@+id/button_Disconnect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Disconnect" />
+
+
+            </LinearLayout>
+
+
+
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
