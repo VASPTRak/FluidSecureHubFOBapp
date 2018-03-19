@@ -403,38 +403,11 @@ public class AppConstants {
 
     public static void ClearEdittextFielsOnBack(Context ctx) {
 
-        if (Constants.CurrentSelectedHose.equals("FS1")) {
-            Constants.AccVehicleNumber_FS1 = "";
-            Constants.AccOdoMeter_FS1 = 0;
-            Constants.AccDepartmentNumber_FS1 = "";
-            Constants.AccPersonnelPIN_FS1 = "";
-            Constants.AccOther_FS1 = "";
-
-        } else if (Constants.CurrentSelectedHose.equals("FS2")) {
-
-            Constants.AccVehicleNumber = "";
-            Constants.AccOdoMeter = 0;
-            Constants.AccDepartmentNumber = "";
-            Constants.AccPersonnelPIN = "";
-            Constants.AccOther = "";
-
-        } else if (Constants.CurrentSelectedHose.equals("FS3")) {
-
-            Constants.AccVehicleNumber_FS3 = "";
-            Constants.AccOdoMeter_FS3 = 0;
-            Constants.AccDepartmentNumber_FS3 = "";
-            Constants.AccPersonnelPIN_FS3 = "";
-            Constants.AccOther_FS3 = "";
-
-        } else {
-
-            Constants.AccVehicleNumber_FS4 = "";
-            Constants.AccOdoMeter_FS4 = 0;
-            Constants.AccDepartmentNumber_FS4 = "";
-            Constants.AccPersonnelPIN_FS4 = "";
-            Constants.AccOther_FS4 = "";
-
-        }
+        Constants.AccVehicleNumber = "";
+        Constants.AccOdoMeter = 0;
+        Constants.AccDepartmentNumber = "";
+        Constants.AccPersonnelPIN = "";
+        Constants.AccOther = "";
     }
 
 }

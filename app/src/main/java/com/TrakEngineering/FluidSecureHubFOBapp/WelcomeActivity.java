@@ -15,7 +15,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
@@ -24,6 +23,8 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.TrakEngineering.FluidSecureHubFOBapp.WifiHotspot.WifiApManager;
-import com.TrakEngineering.FluidSecureHubFOBapp.enity.AuthEntityClass;
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.RenameHose;
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.UpdateMacAddressClass;
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.UserInfoEntity;
@@ -59,14 +59,7 @@ import com.acs.bluetooth.BluetoothReaderGattCallback;
 import com.acs.bluetooth.BluetoothReaderManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.gson.Gson;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -241,6 +234,10 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     };
     /* Bluetooth GATT client. */
     private BluetoothGatt mBluetoothGatt;
+    //Phone NFC
+    private NfcAdapter mAdapter;
+    private PendingIntent mPendingIntent;
+    private NdefMessage mNdefPushMessage;
     /* Device scan callback. */
     private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 
@@ -518,12 +515,12 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         //Hide keyboard
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-
+/*
         linear_fs_1.setVisibility(View.INVISIBLE);
         linear_fs_2.setVisibility(View.INVISIBLE);
         linear_fs_3.setVisibility(View.INVISIBLE);
         linear_fs_4.setVisibility(View.INVISIBLE);
-
+*/
         ReconnectFobReader();//Reconnect Fobreader by recreating welcome activity
         new GetConnectedDevicesIP().execute();
         new GetSSIDUsingLocationOnResume().execute();
@@ -538,6 +535,25 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
 
     }
+
+    /*//Is a tag discovered?
+    @Override
+    public void onNewIntent(Intent intent) {
+        System.out.println("saw intent");
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent)
+                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent)
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent)){
+            System.out.println("saw nfc");
+            Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            byte[] id = tag.getId();
+            String FobKey= CommonUtils.toHex(id);
+            System.out.println("read nfc " + FobKey);
+            if (FobKey.length() > 6) {
+                AppConstants.APDU_FOB_KEY = FobKey;
+            }
+        }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -557,7 +573,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        tvSSIDName = (TextView) findViewById(R.id.tvSSIDName);
+//        tvSSIDName = (TextView) findViewById(R.id.tvSSIDName);
         tvLatLng = (TextView) findViewById(R.id.tvLatLng);
 
         tvLatLng.setVisibility(View.GONE);
@@ -715,6 +731,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                         mBluetoothReader = reader;
                         setListener(reader);
                         activateReader(reader);
+
+
                     }
                 });
 
@@ -783,6 +801,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             }
         });
 
+        //SW 3/6 Phone NFC
+        //mAdapter = NfcAdapter.getDefaultAdapter(this);
+        // mAdapter.enableForegroundDispatch(this, mPendingIntent, null, null);
+        //mAdapter.enableForegroundNdefPush(this, mNdefPushMessage);
+
 
     }
 
@@ -824,7 +847,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                                 // System.out.println("FS UI Update here");
                                 int FS_Count = serverSSIDList.size();
                                 if (!serverSSIDList.isEmpty()) {
-
+/*
                                     //FS Visibility on Dashboard
                                     if (FS_Count == 1) {
                                         tv_FS1_hoseName.setText(serverSSIDList.get(0).get("WifiSSId"));
@@ -872,11 +895,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                                         params.height = match_parent; // In dp
                                         linear_fs_3.setLayoutParams(params);*/
 
-                                        linear_fs_4.setVisibility(View.INVISIBLE);
+                                    // linear_fs_4.setVisibility(View.INVISIBLE);
                                        /* LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) linear_fs_4.getLayoutParams();
                                         params1.height = 0; // In dp
                                         linear_fs_4.setLayoutParams(params1);*/
-
+/*
 
                                     } else {
 
@@ -893,16 +916,16 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                                         params.height = match_parent; // In dp
                                         linear_fs_3.setLayoutParams(params);*/
 
-                                        linear_fs_4.setVisibility(View.VISIBLE);
+                                    // linear_fs_4.setVisibility(View.VISIBLE);
                                         /*LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) linear_fs_4.getLayoutParams();
                                         params1.height = match_parent; // In dp
-                                        linear_fs_4.setLayoutParams(params1);*/
+                                        linear_fs_4.setLayoutParams(params1);
 
-                                    }
+                                    }*/
                                 }
 
                                 //===Display Dashboard every Second=====
-                                DisplayDashboardEveSecond();
+                                // DisplayDashboardEveSecond();
                             }
                         });
                     }
@@ -981,8 +1004,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     private void InItGUI() {
 
-        textDateTime = (TextView) findViewById(R.id.textDateTime);
-      /*  tv_fs1_Qty = (TextView) findViewById(R.id.tv_fs1_Qty);
+        textDateTime = (TextView) findViewById(R.id.textDateTime);/*
+        tv_fs1_Qty = (TextView) findViewById(R.id.tv_fs1_Qty);
         tv_fs2_Qty = (TextView) findViewById(R.id.tv_fs2_Qty);
         tv_fs3_Qty = (TextView) findViewById(R.id.tv_fs3_Qty);
         tv_fs4_Qty = (TextView) findViewById(R.id.tv_fs4_Qty);
@@ -1014,20 +1037,20 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         tv_fs1QTN = (TextView) findViewById(R.id.tv_fs1QTN);
         tv_fs2QTN = (TextView) findViewById(R.id.tv_fs2QTN);
         tv_fs3QTN = (TextView) findViewById(R.id.tv_fs3QTN);
-        tv_fs4QTN = (TextView) findViewById(R.id.tv_fs4QTN);*/
+        tv_fs4QTN = (TextView) findViewById(R.id.tv_fs4QTN);
 
         imgFuelLogo = (ImageView) findViewById(R.id.imgFuelLogo);
         linearHose = (LinearLayout) findViewById(R.id.linearHose);
-     /*   linear_fs_1 = (LinearLayout) findViewById(R.id.linear_fs_1);
+        linear_fs_1 = (LinearLayout) findViewById(R.id.linear_fs_1);
         linear_fs_2 = (LinearLayout) findViewById(R.id.linear_fs_2);
         linear_fs_3 = (LinearLayout) findViewById(R.id.linear_fs_3);
         linear_fs_4 = (LinearLayout) findViewById(R.id.linear_fs_4);
-*/
+
         tv_fs1_stop.setOnClickListener(this);
         tv_fs2_stop.setOnClickListener(this);
         tv_fs3_stop.setOnClickListener(this);
         tv_fs4_stop.setOnClickListener(this);
-
+*/
         btnGo = (Button) findViewById(R.id.btnGo);
         btnRetryWifi = (Button) findViewById(R.id.btnRetryWifi);
     }
@@ -1041,110 +1064,20 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
 
         try {
-
-            boolean flagGo = false;
-
-            LocationManager locationManager = (LocationManager) WelcomeActivity.this.getSystemService(Context.LOCATION_SERVICE);
-            boolean statusOfGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-
-                if (!statusOfGPS) {
-                    turnGPSOn();
-                } else {
-                    flagGo = true;
-                }
-
-            } else {
-                flagGo = true;
-
-            }
-
-
-            if (flagGo) {
-
-                if (SelectedItemPos >= 0) {
-
-                    if (serverSSIDList.size() > 0) {
-
-                        String selectedSSID = serverSSIDList.get(SelectedItemPos).get("WifiSSId");
-                        String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
-                        String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
-                        String SiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
-                        String HoseId = serverSSIDList.get(SelectedItemPos).get("HoseId");
-
-                        AppConstants.LAST_CONNECTED_SSID = selectedSSID;
-
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-
-                            AppConstants.NeedToRename = false;
-
-                            AppConstants.REPLACEBLE_WIFI_NAME = "";
-                            AppConstants.R_HOSE_ID = "";
-                            AppConstants.R_SITE_ID = "";
-
-                        } else {
-                            AppConstants.NeedToRename = true;
-
-                            AppConstants.REPLACEBLE_WIFI_NAME = ReplaceableHoseName;
-                            AppConstants.R_HOSE_ID = HoseId;
-                            AppConstants.R_SITE_ID = SiteId;
-
-                        }
-
-                        AppConstants.R_SITE_ID = SiteId;
-
-                        AuthEntityClass authEntityClass = CommonUtils.getWiFiDetails(WelcomeActivity.this, selectedSSID);
-
-                        if (authEntityClass != null) {
-
-
                             cd = new ConnectionDetector(WelcomeActivity.this);
                             if (cd.isConnectingToInternet()) {
-
-                                //Set FluidSecure Link Busy:
-                                String Status_busy = new ChangeBusyStatus().execute().get();
-                                JSONObject jsonObject = new JSONObject(Status_busy);
-                                String ResponceMessage = jsonObject.getString("ResponceMessage");
-                                if (ResponceMessage.equalsIgnoreCase("success")) {
-
-                                    String ResponceText = jsonObject.getString("ResponceText");
-                                    System.out.println("eeee1" + ResponceText);
-                                    if (ResponceText.equalsIgnoreCase("Y")) {
-                                        // AppConstants.colorToastBigFont(WelcomeActivity.this, "Hose in use", Color.RED);
-                                        AppConstants.alertBigActivity(WelcomeActivity.this, "Hose in use, Please try After sometime.");
-                                    } else {
-                                        handleGetAndroidSSID(selectedSSID);
-                                    }
-
-
-                                }
-
+                                Constants.AccPersonnelPIN = "";
+                                Constants.AccVehicleNumber = "";
+                                handleGetAndroidSSID("FS_UNIT51");
+                                AppConstants.LAST_CONNECTED_SSID = "FS_UNIT51";
+                                Intent intent = new Intent(WelcomeActivity.this, AcceptVehicleActivity.class);
+                                startActivity(intent);
 
                             } else {
                                 CommonUtils.showNoInternetDialog(WelcomeActivity.this);
                             }
 
-                        } else {
-                            Toast.makeText(WelcomeActivity.this, "Please try later.", Toast.LENGTH_SHORT).show();
-                        }
 
-                        /*
-                           // if (ssidList.contains(serverSSIDList.get(SelectedItemPos).get("item"))) {
-
-                        } else {
-                            AppConstants.alertBigActivity(WelcomeActivity.this, "Fuel site not available at this location\nPlease try again.");
-
-                            scanLocalWiFi();
-                        }*/
-
-                    } else {
-                        AppConstants.alertBigActivity(WelcomeActivity.this, "Unable to get Fluid Secure list from server");
-                    }
-                } else {
-                    AppConstants.alertBigActivity(WelcomeActivity.this, "Please select Hose");
-                }
-            }
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
         }
@@ -1242,8 +1175,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
-            /*case R.id.tv_fs1_stop:
+/*
+            case R.id.tv_fs1_stop:
 
                 String selSSID = serverSSIDList.get(0).get("WifiSSId");
                 String selMacAddress = serverSSIDList.get(0).get("MacAddress");
@@ -1381,7 +1314,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                 } else {
                     Toast.makeText(getApplicationContext(), "Please make sure your connected to FS unit", Toast.LENGTH_SHORT).show();
                 }
-                break;*/
+                break;
+                */
         }
     }
 
@@ -1398,66 +1332,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     public void refreshWiFiList() {
         new GetSSIDUsingLocation().execute();
-    }
-
-    public void turnGPSOn() {
-
-
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        LocationRequest mLocationRequest1 = new LocationRequest();
-        mLocationRequest1.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest)
-                .addLocationRequest(mLocationRequest1);
-
-
-        LocationSettingsRequest mLocationSettingsRequest = builder.build();
-
-
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(
-                        mGoogleApiClient,
-                        mLocationSettingsRequest
-                );
-
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        Log.i("Splash", "All location settings are satisfied.");
-
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.i("Splash", "Location settings are not satisfied. Show the user a dialog to" +
-                                "upgrade location settings ");
-
-                        try {
-                            // Show the dialog by calling startResolutionForResult(), and check the result
-                            // in onActivityResult().
-                            status.startResolutionForResult(WelcomeActivity.this, REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.i("Splash", "PendingIntent unable to execute request.");
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.i("Splash", "Location settings are inadequate, and cannot be fixed here. Dialog " +
-                                "not created.");
-                        break;
-                }
-            }
-        });
-
-
-        //Intent in = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        //startActivity(in);
-
     }
 
     @Override
@@ -1756,37 +1630,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         dialog.show();
     }
 
-    private void UpdateSSIDStatusToServer() {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                //Update SSID rename statu to server
-                if (AppConstants.NeedToRenameFS_ON_UPDATE_MAC) {
-                    String userEmail = CommonUtils.getCustomerDetails(WelcomeActivity.this).PersonEmail;
-
-                    String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + userEmail + ":" + "SetHoseNameReplacedFlag");
-
-
-                    RenameHose rhose = new RenameHose();
-                    rhose.SiteId = AppConstants.CURRENT_SELECTED_SITEID;
-                    rhose.HoseId = AppConstants.CURRENT_HOSE_SSID;
-                    rhose.IsHoseNameReplaced = "Y";
-
-                    Gson gson = new Gson();
-                    String jsonData = gson.toJson(rhose);
-
-
-                    new SetHoseNameReplacedFlagO_Mac().execute(jsonData, authString);
-
-                }
-            }
-        }, 5000);
-
-
-    }
-
     //Connect to wifi with Password
     public void connectToWifiMarsh(String networkSSID) {
 
@@ -1911,560 +1754,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    //=======FS UNIT 1 =========
-    public void stopButtonFunctionality_FS1() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS1().execute(URL_RELAY_FS1, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS1().execute(URL_GET_PULSAR_FS1).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs1(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs1();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
-    }
-
-    public void convertCountToQuantity_fs1(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs1() {
-
-        new CommandsPOST_FS1().execute(URL_SET_PULSAR_FS1, jsonPulsarOff);
-
-    }
-
-    //=======FS UNIT 2 =========
-    public void stopButtonFunctionality_FS2() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS2().execute(URL_RELAY_FS2, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS2().execute(URL_GET_PULSAR_FS2).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs2(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs2();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
-    }
-
-    public void convertCountToQuantity_fs2(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs2() {
-
-
-        new CommandsPOST_FS2().execute(URL_SET_PULSAR_FS2, jsonPulsarOff);
-
-
-    }
-
-    //=======FS UNIT 3 =========
-    public void stopButtonFunctionality_FS3() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS3().execute(URL_RELAY_FS3, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS3().execute(URL_GET_PULSAR_FS3).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs3(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs3();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
-    }
-
-    public void convertCountToQuantity_fs3(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
     //=========================Stop button functionality for each hose==============
-
-    public void finalLastStep_fs3() {
-
-        new CommandsPOST_FS3().execute(URL_SET_PULSAR_FS3, jsonPulsarOff);
-
-    }
-
-    //=======FS UNIT 4 =========
-    public void stopButtonFunctionality_FS4() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS4().execute(URL_RELAY_FS4, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS4().execute(URL_GET_PULSAR_FS4).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs4(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs4();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
-    }
-
-    public void convertCountToQuantity_fs4(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs4() {
-
-        new CommandsPOST_FS4().execute(URL_SET_PULSAR_FS4, jsonPulsarOff);
-
-    }
-
-    public void DisplayDashboardEveSecond() {
-        // Toast.makeText(getApplicationContext(),"FS_Count"+FS_Count,Toast.LENGTH_SHORT).show();
-        if (Constants.FS_1STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs1_Qty.setText(Constants.FS_1Gallons);
-            tv_fs1_Pulse.setText(Constants.FS_1Pulse);
-            tv_fs1_stop.setClickable(false);
-
-            if (Constants.FS_1Gallons.equals("") || Constants.FS_1Gallons.equals("0.00")) {
-                Constants.FS_1Gallons = String.valueOf("0.00");
-                Constants.FS_1Pulse = "00";
-                tv_fs1_Qty.setText("");
-                tv_fs1_Pulse.setText("");
-                linear_fs_1.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs1_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS1.setTextColor(getResources().getColor(R.color.black));
-                tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_1Gallons = String.valueOf("0.00");
-                        Constants.FS_1Pulse = "00";
-                        tv_fs1_Qty.setText("");
-                        tv_fs1_Pulse.setText("");
-                        linear_fs_1.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs1_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS1.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-        } else {
-
-            tv_fs1_Qty.setText(Constants.FS_1Gallons);
-            tv_fs1_Pulse.setText(Constants.FS_1Pulse);
-            linear_fs_1.setBackgroundResource(R.color.colorPrimary);
-            tv_fs1_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS1.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_stop.setClickable(true);
-        }
-
-        if (Constants.FS_2STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs2_Qty.setText(Constants.FS_2Gallons);
-            tv_fs2_Pulse.setText(Constants.FS_2Pulse);
-            tv_fs2_stop.setClickable(false);
-
-            if (Constants.FS_2Gallons.equals("") || Constants.FS_2Gallons.equals("0.00")) {
-                Constants.FS_2Gallons = String.valueOf("0.00");
-                Constants.FS_2Pulse = "00";
-                tv_fs2_Qty.setText("");
-                tv_fs2_Pulse.setText("");
-                linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS2.setTextColor(getResources().getColor(R.color.black));
-                tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_2Gallons = String.valueOf("0.00");
-                        Constants.FS_2Pulse = "00";
-                        tv_fs2_Qty.setText("");
-                        tv_fs2_Pulse.setText("");
-                        linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS2.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-
-        } else {
-            tv_fs2_Qty.setText(Constants.FS_2Gallons);
-            tv_fs2_Pulse.setText(Constants.FS_2Pulse);
-            linear_fs_2.setBackgroundResource(R.color.colorPrimary);
-            tv_fs2_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS2.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_stop.setClickable(true);
-        }
-
-        if (Constants.FS_3STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs3_Qty.setText(Constants.FS_3Gallons);
-            tv_fs3_Pulse.setText(Constants.FS_3Pulse);
-            tv_fs3_stop.setClickable(false);
-
-            if (Constants.FS_3Gallons.equals("") || Constants.FS_3Gallons.equals("0.00")) {
-                Constants.FS_3Gallons = String.valueOf("0.00");
-                Constants.FS_3Pulse = "00";
-                tv_fs3_Qty.setText("");
-                tv_fs3_Pulse.setText("");
-                linear_fs_3.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs3_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS3.setTextColor(getResources().getColor(R.color.black));
-                tv_FS3_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_3Gallons = String.valueOf("0.00");
-                        Constants.FS_3Pulse = "00";
-                        tv_fs2_Qty.setText("");
-                        tv_fs2_Pulse.setText("");
-                        linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS2.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-
-        } else {
-            tv_fs3_Qty.setText(Constants.FS_3Gallons);
-            tv_fs3_Pulse.setText(Constants.FS_3Pulse);
-            linear_fs_3.setBackgroundResource(R.color.colorPrimary);
-            tv_fs3_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS3.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_FS3_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_stop.setClickable(true);
-        }
-
-        if (Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs4_Qty.setText(Constants.FS_4Gallons);
-            tv_fs4_Pulse.setText(Constants.FS_4Pulse);
-            tv_fs4_stop.setClickable(false);
-
-            if (Constants.FS_4Gallons.equals("") || Constants.FS_4Gallons.equals("0.00")) {
-                Constants.FS_4Gallons = String.valueOf("0.00");
-                Constants.FS_4Pulse = "00";
-                tv_fs4_Qty.setText("");
-                tv_fs4_Pulse.setText("");
-                linear_fs_4.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs4_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS4.setTextColor(getResources().getColor(R.color.black));
-                tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_4Gallons = String.valueOf("0.00");
-                        Constants.FS_4Pulse = "00";
-                        tv_fs4_Qty.setText("");
-                        tv_fs4_Pulse.setText("");
-                        linear_fs_4.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs4_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS4.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-
-        } else {
-            tv_fs4_Qty.setText(Constants.FS_4Gallons);
-            tv_fs4_Pulse.setText(Constants.FS_4Pulse);
-            linear_fs_4.setBackgroundResource(R.color.colorPrimary);
-            tv_fs4_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS4.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_stop.setClickable(true);
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -2789,6 +2079,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             try {
                 ServerHandler serverHandler = new ServerHandler();
                 //----------------------------------------------------------------------------------
+                //String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + Email + ":" + "AndroidSSID");
+                //response = serverHandler.PostTextData(WelcomeActivity.this, AppConstants.webURL, latLong, authString);
                 String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + Email + ":" + "AndroidSSID");
                 response = serverHandler.PostTextData(WelcomeActivity.this, AppConstants.webURL, latLong, authString);
                 //----------------------------------------------------------------------------------
@@ -3262,250 +2554,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-   /* public void OnHoseSelected_OnClick(String position) {
-
-
-        new GetConnectedDevicesIP().execute();//Refreshed donnected devices list on hose selection.
-        String IpAddress = "";
-        SelectedItemPos = Integer.parseInt(position);
-        String selSSID = serverSSIDList.get(SelectedItemPos).get("WifiSSId");
-        String IsBusy = serverSSIDList.get(SelectedItemPos).get("IsBusy");
-        String selMacAddress = serverSSIDList.get(SelectedItemPos).get("MacAddress");
-        String selSiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
-        String hoseID = serverSSIDList.get(SelectedItemPos).get("HoseId");
-        AppConstants.CURRENT_SELECTED_SSID = selSSID;
-        AppConstants.CURRENT_HOSE_SSID = hoseID;
-        AppConstants.CURRENT_SELECTED_SITEID = selSiteId;
-        AppConstants.SELECTED_MACADDRESS = selMacAddress;
-        String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
-        String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
-
-        //Rename SSID while mac address updation
-        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-            AppConstants.NeedToRenameFS_ON_UPDATE_MAC = false;
-            AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = "";
-        } else {
-            AppConstants.NeedToRenameFS_ON_UPDATE_MAC = true;
-            AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = ReplaceableHoseName;
-        }
-
-        if (selMacAddress.trim().equals("")) {  //MacAddress on server is null
-
-            if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
-
-                loading = new ProgressDialog(WelcomeActivity.this);
-                loading.setCancelable(true);
-                loading.setMessage("Updating mac address please wait..");
-                loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                loading.setCancelable(false);
-                loading.show();
-
-                //Do not enable hotspot.
-                Constants.hotspotstayOn = false;
-
-                //AppConstants.colorToast(WelcomeActivity.this, "Updating mac address please wait..", Color.RED);
-                wifiApManager.setWifiApEnabled(null, false);  //Hotspot disabled
-
-                // Toast.makeText(getApplicationContext(),"Enabled WIFI connecting to "+AppConstants.CURRENT_SELECTED_SSID,Toast.LENGTH_LONG).show();
-
-                WifiManager wifiManagerMM = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-                if (!wifiManagerMM.isWifiEnabled()) {
-                    wifiManagerMM.setWifiEnabled(true);
-                }
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //new ChangeSSIDofHubStation().execute(); //Connect to selected (SSID) and Rename UserName and password of Fs unit
-                        new WiFiConnectTask().execute(); //1)Connect to selected (SSID) wifi network and 2)change the ssid and password settings to connect to Hub's hotspot 3)Update MackAddress
-                    }
-                }, 1000);
-
-
-            } else {
-                AppConstants.colorToastBigFont(WelcomeActivity.this, "Can't update mac address,Hose is busy please retry later.", Color.RED);
-            }
-
-        } else {
-
-            try {
-                for (int i = 0; i < AppConstants.DetailsListOfConnectedDevices.size(); i++) {
-                    String MA_ConnectedDevices = AppConstants.DetailsListOfConnectedDevices.get(i).get("macAddress");
-                    if (selMacAddress.equalsIgnoreCase(MA_ConnectedDevices)) {
-                        IpAddress = AppConstants.DetailsListOfConnectedDevices.get(i).get("ipAddress");
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-
-            if (IpAddress.equals("")) {
-                tvSSIDName.setText("Can't select this Hose not connected");
-                btnGo.setVisibility(View.GONE);
-
-            } else {
-
-                //Selected position
-                //Toast.makeText(getApplicationContext(), "FS Position" + position, Toast.LENGTH_SHORT).show();
-                AppConstants.FS_selected = String.valueOf(position);
-                if (String.valueOf(position).equalsIgnoreCase("0")) {
-
-                    if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS1 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS1 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS1 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS1 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS1_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS1";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-
-                    }
-                } else if (String.valueOf(position).equalsIgnoreCase("1")) {
-                    if (Constants.FS_2STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS2 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS2 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS2 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS2 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS2_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS2";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-                    }
-
-                } else if (String.valueOf(position).equalsIgnoreCase("2")) {
-
-
-                    if (Constants.FS_3STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS3 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS3 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS3 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS3 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS3_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS3";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-                    }
-
-
-                } else if (String.valueOf(position).equalsIgnoreCase("3")) {
-
-
-                    if (Constants.FS_4STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS4 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS4 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS4 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS4 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS4_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS4";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-                    }
-                } else {
-
-                    tvSSIDName.setText("Can't select this Hose for current version");
-                    btnGo.setVisibility(View.GONE);
-                }
-            }
-
-        }
-        //dialog.dismiss();
-
-    }*/
-
-    public class CommandsPOST extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-
-        protected String doInBackground(String... param) {
-
-            System.out.println("url" + HTTP_URL);
-            try {
-
-
-                MediaType JSON = MediaType.parse("application/json");
-
-                OkHttpClient client = new OkHttpClient();
-
-                RequestBody body = RequestBody.create(JSON, param[1]);
-
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
+    //-------------------Bluetooth Reader------------
 
     public class CommandsGET_INFO extends AsyncTask<String, Void, String> {
 
@@ -3544,8 +2593,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
         }
     }
-
-    //-------------------Bluetooth Reader------------
 
     public class CommandsPOST_ChangeHotspotSettings extends AsyncTask<String, Void, String> {
 
@@ -3850,434 +2897,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public class CommandsPOST_FS1 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-        ProgressDialog pd;
-
-        @Override
-        protected void onPreExecute() {
-            pd = new ProgressDialog(WelcomeActivity.this);
-            pd.setMessage("Please wait...");
-            pd.setCancelable(false);
-        }
-
-        protected String doInBackground(String... param) {
-
-            System.out.println("url" + HTTP_URL_FS_1);
-            try {
-
-
-                MediaType JSON = MediaType.parse("application/json");
-
-                OkHttpClient client = new OkHttpClient();
-
-                RequestBody body = RequestBody.create(JSON, param[1]);
-
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            pd.dismiss();
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class GETFINALPulsar_FS1 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-
-        protected String doInBackground(String... param) {
-
-
-            try {
-
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class CommandsPOST_FS2 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-        ProgressDialog pd;
-
-        @Override
-        protected void onPreExecute() {
-            pd = new ProgressDialog(WelcomeActivity.this);
-            pd.setMessage("Please wait...");
-            pd.setCancelable(false);
-        }
-
-        protected String doInBackground(String... param) {
-
-            System.out.println("url" + HTTP_URL_FS_2);
-            try {
-
-
-                MediaType JSON = MediaType.parse("application/json");
-
-                OkHttpClient client = new OkHttpClient();
-
-                RequestBody body = RequestBody.create(JSON, param[1]);
-
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            pd.dismiss();
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class GETFINALPulsar_FS2 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-
-        protected String doInBackground(String... param) {
-
-
-            try {
-
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class CommandsPOST_FS3 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-        ProgressDialog pd;
-
-        @Override
-        protected void onPreExecute() {
-            pd = new ProgressDialog(WelcomeActivity.this);
-            pd.setMessage("Please wait...");
-            pd.setCancelable(false);
-        }
-
-        protected String doInBackground(String... param) {
-
-            System.out.println("url" + HTTP_URL_FS_3);
-            try {
-
-
-                MediaType JSON = MediaType.parse("application/json");
-
-                OkHttpClient client = new OkHttpClient();
-
-                RequestBody body = RequestBody.create(JSON, param[1]);
-
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            pd.dismiss();
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class GETFINALPulsar_FS3 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-
-        protected String doInBackground(String... param) {
-
-
-            try {
-
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class CommandsPOST_FS4 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-        ProgressDialog pd;
-
-        @Override
-        protected void onPreExecute() {
-            pd = new ProgressDialog(WelcomeActivity.this);
-            pd.setMessage("Please wait...");
-            pd.setCancelable(false);
-        }
-
-        protected String doInBackground(String... param) {
-
-            System.out.println("url" + HTTP_URL_FS_4);
-            try {
-
-
-                MediaType JSON = MediaType.parse("application/json");
-
-                OkHttpClient client = new OkHttpClient();
-
-                RequestBody body = RequestBody.create(JSON, param[1]);
-
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            pd.dismiss();
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
-    public class GETFINALPulsar_FS4 extends AsyncTask<String, Void, String> {
-
-        public String resp = "";
-
-
-        protected String doInBackground(String... param) {
-
-
-            try {
-
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(param[0])
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-
-            try {
-
-                consoleString += "OUTPUT- " + result + "\n";
-
-                // tvConsole.setText(consoleString);
-
-                System.out.println(result);
-
-
-            } catch (Exception e) {
-
-                System.out.println(e);
-            }
-
-        }
-    }
-
     public class ChangeBusyStatus extends AsyncTask<String, Void, String> {
 
 
@@ -4330,57 +2949,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             }
         }
     }
-
-    public class SetHoseNameReplacedFlagO_Mac extends AsyncTask<String, Void, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-
-
-        }
-
-        protected String doInBackground(String... param) {
-            String resp = "";
-
-
-            try {
-                OkHttpClient client = new OkHttpClient();
-                MediaType TEXT = MediaType.parse("application/text;charset=UTF-8");
-
-                RequestBody body = RequestBody.create(TEXT, param[0]);
-                Request request = new Request.Builder()
-                        .url(AppConstants.webURL)
-                        .post(body)
-                        .addHeader("Authorization", param[1])
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (Exception e) {
-                Log.d("Ex", e.getMessage());
-            }
-
-
-            return resp;
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            try {
-
-                System.out.println("Wifi renamed on server---" + result);
-
-            } catch (Exception e) {
-                System.out.println("eeee" + e);
-            }
-        }
-
-
-    }
-
 
 
     //========================ends=========================================

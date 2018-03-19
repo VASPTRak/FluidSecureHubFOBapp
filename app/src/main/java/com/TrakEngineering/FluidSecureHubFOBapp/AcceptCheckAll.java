@@ -1,7 +1,7 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class AcceptCheckAll extends AppCompatActivity {
 

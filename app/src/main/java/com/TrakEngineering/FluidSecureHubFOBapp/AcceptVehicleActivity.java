@@ -41,11 +41,10 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     private static final String TAG = "AcceptVehicleActivity";
     public static String SITE_ID = "0";
-    private EditText editVehicleNumber;
+    public static double CurrentLat = 0, CurrentLng = 0;
     String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequire = "",IsPersonnelPINRequireForHub ="", IsOtherRequire = "";
     Button btnCancel, btn_fob_Reader, btnSave;
     GoogleApiClient mGoogleApiClient;
-    public static double CurrentLat = 0, CurrentLng = 0;
     RelativeLayout footer_keybord;
     LinearLayout Linear_layout_Save_back_buttons;
     TextView tv_return, tv_swipekeybord, tv_fob_number, tv_vehicle_no_below, tv_dont_have_fob, tv_enter_vehicle_no;
@@ -57,72 +56,66 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     int FobRetryCount = 0;
     long screenTimeOut;
     Timer t, ScreenOutTimeVehicle;
-
+    boolean started_process = false;
+    private EditText editVehicleNumber;
 
     @Override
     protected void onResume() {
         super.onResume();
+        try {
 
-
-        if (Constants.CurrentSelectedHose.equals("FS1")) {
-            editVehicleNumber.setText(Constants.AccVehicleNumber_FS1);
-        } else if (Constants.CurrentSelectedHose.equals("FS2")) {
             editVehicleNumber.setText(Constants.AccVehicleNumber);
-        } else if (Constants.CurrentSelectedHose.equals("FS3")) {
-            editVehicleNumber.setText(Constants.AccVehicleNumber_FS3);
-        } else if (Constants.CurrentSelectedHose.equals("FS4")) {
-            editVehicleNumber.setText(Constants.AccVehicleNumber_FS4);
-        }
 
-        DisplayScreenInit();
-        Istimeout_Sec = true;
-        TimeoutVehicleScreen();
+            DisplayScreenInit();
+            Istimeout_Sec = true;
+            TimeoutVehicleScreen();
 
 
-        t = new Timer();
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run() {
-                //do something
-                System.out.println("Vehi FOK_KEY" + AppConstants.APDU_FOB_KEY);
-                if (!AppConstants.APDU_FOB_KEY.equalsIgnoreCase("") && AppConstants.APDU_FOB_KEY.length() > 6) {
+            t = new Timer();
+            TimerTask tt = new TimerTask() {
+                @Override
+                public void run() {
+                    //do something
+                    System.out.println("Vehi FOK_KEY" + AppConstants.APDU_FOB_KEY);
+                    if (!AppConstants.APDU_FOB_KEY.equalsIgnoreCase("") && AppConstants.APDU_FOB_KEY.length() > 6 && !started_process) {
+                        started_process = true;
+                        try {
 
-                    try {
 
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                                    editVehicleNumber.setText("");
+                                    Istimeout_Sec = false;
+                                    ScreenOutTimeVehicle.cancel();
+                                    GetVehicleNuOnFobKeyDetection();
 
-                                editVehicleNumber.setText("");
-                                Istimeout_Sec = false;
-                                ScreenOutTimeVehicle.cancel();
-                                GetVehicleNuOnFobKeyDetection();
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CallSaveButtonFunctionality();//Press Enter fun
+                                        }
+                                    }, 2000);
 
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        CallSaveButtonFunctionality();//Press Enter fun
-                                    }
-                                }, 2000);
-                            }
-                        });
+                                }
+                            });
 
-                        t.cancel();
-                    } catch (Exception e) {
+                            t.cancel();
+                        } catch (Exception e) {
 
-                        System.out.println(e);
+                            System.out.println(e);
+                            e.printStackTrace();
+                        }
                     }
 
                 }
 
-            }
-
-            ;
-        };
-        t.schedule(tt, 500, 500);
-
-
+            };
+            t.schedule(tt, 500, 500);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -151,10 +144,6 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
         SharedPreferences sharedPrefODO = AcceptVehicleActivity.this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        IsDepartmentRequire = sharedPrefODO.getString(AppConstants.IsDepartmentRequire, "");
-        IsPersonnelPINRequire = sharedPrefODO.getString(AppConstants.IsPersonnelPINRequire, "");
-        IsOtherRequire = sharedPrefODO.getString(AppConstants.IsOtherRequire, "");
-        TimeOutinMinute = sharedPrefODO.getString(AppConstants.TimeOut, "1");
         AppConstants.HUB_ID = sharedPrefODO.getString(AppConstants.HubId, "");
 
 
@@ -174,14 +163,14 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         editVehicleNumber.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                boolean ps = isKeyboardShown(editVehicleNumber.getRootView());
-                if (ps == true) {
-                    footer_keybord.setEnabled(true);
-                    footer_keybord.setVisibility(View.VISIBLE);
-                } else {
+//                boolean ps = isKeyboardShown(editVehicleNumber.getRootView());
+//                if (ps == true) {
+//                    footer_keybord.setEnabled(true);
+//                    footer_keybord.setVisibility(View.VISIBLE);
+//                } else {
                     footer_keybord.setEnabled(false);
                     footer_keybord.setVisibility(View.INVISIBLE);
-                }
+//                }
 
             }
         });
@@ -223,7 +212,14 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
             }
         });
-
+        editVehicleNumber.setEnabled(false);
+        editVehicleNumber.setVisibility(View.GONE);
+        tv_dont_have_fob.setVisibility(View.GONE);
+        btnSave.setEnabled(false);
+        btnSave.setVisibility(View.GONE);
+        tv_swipekeybord.setEnabled(false);
+        tv_swipekeybord.setVisibility(View.GONE);
+        hideKeybord();
     }
 
 
@@ -258,6 +254,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         } catch (Exception ex) {
 
             CommonUtils.LogMessage(TAG, "", ex);
+            ex.printStackTrace();
         }
 
         return ssiteId;
@@ -282,6 +279,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
             editVehicleNumber = (EditText) findViewById(R.id.editVehicleNumber);
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -339,28 +337,10 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                 String vehicleNumber = "";
                 String pinNumber = "";
 
-                if (Constants.CurrentSelectedHose.equalsIgnoreCase("FS1")) {
-                    pinNumber = Constants.AccPersonnelPIN_FS1;
-                    vehicleNumber = editVehicleNumber.getText().toString().trim();
-                    Constants.AccVehicleNumber_FS1 = vehicleNumber;
-
-
-                } else if (Constants.CurrentSelectedHose.equalsIgnoreCase("FS2")) {
                     pinNumber = Constants.AccPersonnelPIN;
                     vehicleNumber = editVehicleNumber.getText().toString().trim();
                     Constants.AccVehicleNumber = vehicleNumber;
 
-                } else if (Constants.CurrentSelectedHose.equalsIgnoreCase("FS3")) {
-                    pinNumber = Constants.AccPersonnelPIN_FS3;
-                    vehicleNumber = editVehicleNumber.getText().toString().trim();
-                    Constants.AccVehicleNumber_FS3 = vehicleNumber;
-
-                } else {
-                    pinNumber = Constants.AccPersonnelPIN_FS4;
-                    vehicleNumber = editVehicleNumber.getText().toString().trim();
-                    Constants.AccVehicleNumber_FS4 = vehicleNumber;
-
-                }
 
 
                 VehicleRequireEntity objEntityClass = new VehicleRequireEntity();
@@ -418,8 +398,8 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                         editor.commit();
 
 
-
-                      /*  if (IsOdoMeterRequire.equalsIgnoreCase("True")) {
+/*
+                        if (IsOdoMeterRequire.equalsIgnoreCase("True")) {
 
                             Intent intent = new Intent(AcceptVehicleActivity.this, AcceptOdoActivity.class);//AcceptPinActivity
                             startActivity(intent);
@@ -445,29 +425,31 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                             Intent intent = new Intent(AcceptVehicleActivity.this, AcceptOtherActivity.class);
                             startActivity(intent);
 
-                        } else {*/
-
+                        } else {
+*/
                             AcceptServiceCall asc = new AcceptServiceCall();
                             asc.activity = AcceptVehicleActivity.this;
                             asc.checkAllFields();
-//                        }
+                        //}
 
                     } else {
                         String ResponceText = jsonObject.getString("ResponceText");
                         String ValidationFailFor = jsonObject.getString("ValidationFailFor");
-/*                        if (ValidationFailFor.equalsIgnoreCase("Pin")) {
+                        if (ValidationFailFor.equalsIgnoreCase("Pin")) {
                             AppConstants.colorToastBigFont(this, ResponceText, Color.RED);
-                            Intent i = new Intent(this, AcceptPinActivity.class);
-                            startActivity(i);
+                            AppConstants.ClearEdittextFielsOnBack(AcceptVehicleActivity.this);
+                            Istimeout_Sec = false;
+                            AppConstants.APDU_FOB_KEY = "";
+                            finish();
 
                         } else {
                             //Empty Fob key & enable edit text and Enter button
-                            // AppConstants.FOB_KEY_VEHICLE = "";*/
+                            // AppConstants.FOB_KEY_VEHICLE = "";
                             editVehicleNumber.setEnabled(true);
                             btnSave.setEnabled(true);
                             tv_vehicle_no_below.setText("Enter Vehicle Number:");
                             CommonUtils.showCustomMessageDilaog(AcceptVehicleActivity.this, "Message", ResponceText);
-//                        }
+                        }
 
                     }
 
@@ -492,6 +474,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -502,28 +485,10 @@ public class AcceptVehicleActivity extends AppCompatActivity {
             String vehicleNumber = "";
             String pinNumber = "";
 
-            if (Constants.CurrentSelectedHose.equalsIgnoreCase("FS1")) {
-                pinNumber = Constants.AccPersonnelPIN_FS1;
-                vehicleNumber = editVehicleNumber.getText().toString().trim();
-                Constants.AccVehicleNumber_FS1 = vehicleNumber;
-
-
-            } else if (Constants.CurrentSelectedHose.equalsIgnoreCase("FS2")) {
                 pinNumber = Constants.AccPersonnelPIN;
                 vehicleNumber = editVehicleNumber.getText().toString().trim();
                 Constants.AccVehicleNumber = vehicleNumber;
 
-            } else if (Constants.CurrentSelectedHose.equalsIgnoreCase("FS3")) {
-                pinNumber = Constants.AccPersonnelPIN_FS3;
-                vehicleNumber = editVehicleNumber.getText().toString().trim();
-                Constants.AccVehicleNumber_FS3 = vehicleNumber;
-
-            } else {
-                pinNumber = Constants.AccPersonnelPIN_FS4;
-                vehicleNumber = editVehicleNumber.getText().toString().trim();
-                Constants.AccVehicleNumber_FS4 = vehicleNumber;
-
-            }
 
             VehicleRequireEntity objEntityClass = new VehicleRequireEntity();
             objEntityClass.IMEIUDID = AppConstants.getIMEI(AcceptVehicleActivity.this);
@@ -582,12 +547,14 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                 } else {
                     String ResponceText = jsonObject.getString("ResponceText");
                     String ValidationFailFor = jsonObject.getString("ValidationFailFor");
-//                    if (ValidationFailFor.equalsIgnoreCase("Pin")) {
-//                        AppConstants.colorToastBigFont(this, ResponceText, Color.RED);
-//                        Intent i = new Intent(this, AcceptPinActivity.class);
-//                        startActivity(i);
-//
-//                    } else {
+                    if (ValidationFailFor.equalsIgnoreCase("Pin")) {
+                        AppConstants.colorToastBigFont(this, ResponceText, Color.RED);
+                        AppConstants.ClearEdittextFielsOnBack(AcceptVehicleActivity.this);
+                        Istimeout_Sec = false;
+                        AppConstants.APDU_FOB_KEY = "";
+                        finish();
+
+                    } else {
 
                         Istimeout_Sec = true;
                         TimeoutVehicleScreen();
@@ -595,13 +562,15 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                         tv_enter_vehicle_no.setVisibility(View.VISIBLE);
                         tv_fob_number.setVisibility(View.GONE);
                         btn_fob_Reader.setVisibility(View.GONE);
+                        btnSave.setEnabled(true);
+                        btnSave.setVisibility(View.VISIBLE);
                         tv_vehicle_no_below.setVisibility(View.GONE);
                         tv_dont_have_fob.setVisibility(View.VISIBLE);
                         tv_dont_have_fob.setText("Enter Vehicle Number below on keypad");
                         editVehicleNumber.setVisibility(View.VISIBLE);
                         Linear_layout_Save_back_buttons.setVisibility(View.VISIBLE);
                         // CommonUtils.showMessageDilaog(AcceptVehicleActivity.this, "Message", ResponceText);
-//                    }
+                    }
 
                 }
 
@@ -612,79 +581,9 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
+            ex.printStackTrace();
         }
     }
-
-    public class AuthTestAsynTask extends AsyncTask<Void, Void, Void> {
-
-        AuthEntityClass authEntityClass = null;
-
-        public String response = null;
-
-        public AuthTestAsynTask(AuthEntityClass authEntityClass) {
-            this.authEntityClass = authEntityClass;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            try {
-                ServerHandler serverHandler = new ServerHandler();
-
-                Gson gson = new Gson();
-                String jsonData = gson.toJson(authEntityClass);
-                String userEmail = CommonUtils.getCustomerDetails(AcceptVehicleActivity.this).Email;
-
-
-                //----------------------------------------------------------------------------------
-                String authString = "Basic " + AppConstants.convertStingToBase64(authEntityClass.IMEIUDID + ":" + userEmail + ":" + "AuthorizationSequence");
-                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
-                //----------------------------------------------------------------------------------
-
-            } catch (Exception ex) {
-
-                CommonUtils.LogMessage(TAG, "AuthTestAsynTask ", ex);
-            }
-            return null;
-        }
-
-    }
-
-    public class CheckVehicleRequireOdometerEntryAndRequireHourEntry extends AsyncTask<Void, Void, Void> {
-
-        VehicleRequireEntity vrentity = null;
-
-        public String response = null;
-
-        public CheckVehicleRequireOdometerEntryAndRequireHourEntry(VehicleRequireEntity vrentity) {
-            this.vrentity = vrentity;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            try {
-                ServerHandler serverHandler = new ServerHandler();
-
-                Gson gson = new Gson();
-                String jsonData = gson.toJson(vrentity);
-                String userEmail = CommonUtils.getCustomerDetails(AcceptVehicleActivity.this).PersonEmail;
-
-                System.out.println("jsonDatajsonDatajsonData" + jsonData);
-                //----------------------------------------------------------------------------------
-                String authString = "Basic " + AppConstants.convertStingToBase64(vrentity.IMEIUDID + ":" + userEmail + ":" + "CheckVehicleRequireOdometerEntryAndRequireHourEntry");
-                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
-                //----------------------------------------------------------------------------------
-
-            } catch (Exception ex) {
-
-                CommonUtils.LogMessage(TAG, "CheckVehicleRequireOdometerEntryAndRequireHourEntry ", ex);
-            }
-            return null;
-        }
-
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -695,6 +594,32 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         finish();
     }
 
+    public void Readfobkey() {
+
+        //for (int i = 0; i < 2; i++) {AppConstants.colorToastBigFont(AcceptVehicleActivity.this, "  Please hold fob up to Reader  ", Color.BLUE);}
+        tv_enter_vehicle_no.setText("Please Hold FOB to Reader");
+        tv_enter_vehicle_no.setTextColor(Color.parseColor("#ff0000"));
+
+
+    }
+
+    @SuppressLint("ResourceAsColor")
+    public void FobBtnEnable() {
+
+        btn_fob_Reader.setBackgroundColor(Color.parseColor("#3F51B5"));
+        btn_fob_Reader.setEnabled(true);
+        btn_fob_Reader.setTextColor(Color.parseColor("#FFFFFF"));
+
+    }
+
+    @SuppressLint("ResourceAsColor")
+    public void FobBtnDisable() {
+
+        btn_fob_Reader.setBackgroundColor(Color.parseColor("#f5f1f0"));
+        btn_fob_Reader.setEnabled(false);
+        btn_fob_Reader.setTextColor(R.color.black);
+
+    }
 
     public void TimeoutVehicleScreen() {
 
@@ -734,13 +659,13 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                     } catch (Exception e) {
 
                         System.out.println(e);
+                        e.printStackTrace();
                     }
 
                 }
 
             }
 
-            ;
         };
         ScreenOutTimeVehicle.schedule(tttt, screenTimeOut, 500);
 
@@ -750,7 +675,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     public void DisplayScreenInit() {
 
         //showKeybord();
-        AppConstants.APDU_FOB_KEY = "";
+        //AppConstants.APDU_FOB_KEY = "";
         //editVehicleNumber.setText("");
         tv_enter_vehicle_no.setVisibility(View.GONE);
         tv_vehicle_no_below.setVisibility(View.GONE);
@@ -761,6 +686,14 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         Linear_layout_Save_back_buttons.setVisibility(View.VISIBLE);
 
 
+        editVehicleNumber.setEnabled(false);
+        editVehicleNumber.setVisibility(View.GONE);
+        tv_dont_have_fob.setVisibility(View.GONE);
+        btnSave.setEnabled(false);
+        btnSave.setVisibility(View.GONE);
+        tv_swipekeybord.setEnabled(false);
+        tv_swipekeybord.setVisibility(View.GONE);
+        hideKeybord();
     }
 
     public void DisplayScreenFobReadSuccess() {
@@ -775,11 +708,14 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     }
 
-
     public void hideKeybord() {
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception ex) {
+            System.out.println("tried to hide the keyboard, but already hidden");
+            ex.printStackTrace();
+        }
 
     }
 
@@ -788,5 +724,82 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppConstants.APDU_FOB_KEY = "";
+    }
+
+    public class AuthTestAsynTask extends AsyncTask<Void, Void, Void> {
+
+        public String response = null;
+        AuthEntityClass authEntityClass = null;
+
+        public AuthTestAsynTask(AuthEntityClass authEntityClass) {
+            this.authEntityClass = authEntityClass;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                ServerHandler serverHandler = new ServerHandler();
+
+                Gson gson = new Gson();
+                String jsonData = gson.toJson(authEntityClass);
+                String userEmail = CommonUtils.getCustomerDetails(AcceptVehicleActivity.this).Email;
+
+
+                //----------------------------------------------------------------------------------
+                String authString = "Basic " + AppConstants.convertStingToBase64(authEntityClass.IMEIUDID + ":" + userEmail + ":" + "AuthorizationSequence");
+                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
+                //----------------------------------------------------------------------------------
+
+            } catch (Exception ex) {
+
+                CommonUtils.LogMessage(TAG, "AuthTestAsynTask ", ex);
+                ex.printStackTrace();
+            }
+            return null;
+        }
+
+    }
+
+    public class CheckVehicleRequireOdometerEntryAndRequireHourEntry extends AsyncTask<Void, Void, Void> {
+
+        public String response = null;
+        VehicleRequireEntity vrentity = null;
+
+        public CheckVehicleRequireOdometerEntryAndRequireHourEntry(VehicleRequireEntity vrentity) {
+            this.vrentity = vrentity;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                ServerHandler serverHandler = new ServerHandler();
+
+                Gson gson = new Gson();
+                String jsonData = gson.toJson(vrentity);
+                String userEmail = CommonUtils.getCustomerDetails(AcceptVehicleActivity.this).PersonEmail;
+
+                System.out.println("jsonDatajsonDatajsonData" + jsonData);
+                //----------------------------------------------------------------------------------
+                String authString = "Basic " + AppConstants.convertStingToBase64(vrentity.IMEIUDID + ":" + userEmail + ":" + "CheckVehicleRequireOdometerEntryAndRequireHourEntry");
+                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
+                //----------------------------------------------------------------------------------
+
+            } catch (Exception ex) {
+
+                CommonUtils.LogMessage(TAG, "CheckVehicleRequireOdometerEntryAndRequireHourEntry ", ex);
+                ex.printStackTrace();
+            }
+            return null;
+        }
+
+    }
+
 
 }

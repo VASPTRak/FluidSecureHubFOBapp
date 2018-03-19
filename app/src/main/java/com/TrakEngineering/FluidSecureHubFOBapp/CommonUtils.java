@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.text.Editable;
 import android.text.Html;
 import android.text.format.Time;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.AuthEntityClass;
@@ -32,8 +34,11 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import static android.content.Context.WIFI_SERVICE;
@@ -79,6 +84,25 @@ public class CommonUtils {
         String CurrantDate = df.format(c.getTime());
         return (CurrantDate);
     }
+
+
+    public static String getTodaysDateInStringPrint(String ServerDate001) {
+
+        String outputDateStr = null;
+        try {
+            DateFormat inputFormat = new SimpleDateFormat("mm/dd/yyyy hh:mm:ss a");
+            DateFormat outputFormat = new SimpleDateFormat("hh:mm a MMM dd,yyyy");
+            Date date = inputFormat.parse(ServerDate001);
+            outputDateStr = outputFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return outputDateStr;
+    }
+
+
 
 
     public static String GetDateString(Long dateinms) {
@@ -281,6 +305,32 @@ public class CommonUtils {
         editor.commit();
     }
 
+    public static void SaveVehiFuelInPref(Activity activity, String TransactionId, String VehicleId, String PhoneNumber, String PersonId, String PulseRatio, String MinLimit, String FuelTypeId, String ServerDate, String IntervalToStopFuel, String PrintDate, String Company, String Location, String PersonName, String PrinterMacAddress, String PrinterName, String vehicleNumber, String accOther) {
+
+        SharedPreferences sharedPref = activity.getSharedPreferences(Constants.PREF_VehiFuel, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString("TransactionId", TransactionId);
+        editor.putString("VehicleId", VehicleId);
+        editor.putString("PhoneNumber", PhoneNumber);
+        editor.putString("PersonId", PersonId);
+        editor.putString("PulseRatio", PulseRatio);
+        editor.putString("MinLimit", MinLimit);
+        editor.putString("FuelTypeId", FuelTypeId);
+        editor.putString("ServerDate", ServerDate);
+        editor.putString("IntervalToStopFuel", IntervalToStopFuel);
+        editor.putString("PrintDate", PrintDate);
+        editor.putString("Company", Company);
+        editor.putString("Location", Location);
+        editor.putString("PersonName", PersonName);
+        editor.putString("PrinterMacAddress", PrinterMacAddress);
+        editor.putString("PrinterName", PrinterName);
+        editor.putString("vehicleNumber", vehicleNumber);
+        editor.putString("accOther", accOther);
+
+        editor.commit();
+    }
+
     public static AuthEntityClass getWiFiDetails(Activity activity, String wifiSSID) {
 
 
@@ -340,7 +390,6 @@ public class CommonUtils {
         return userInfoEntity;
     }
 
-
     /**
      * Creates a hexadecimal <code>String</code> representation of the
      * <code>byte[]</code> passed. Each element is converted to a
@@ -374,6 +423,31 @@ public class CommonUtils {
                 && !(value >= 'a' && value <= 'f'));
     }
 
+    /**
+     * Checks a hexadecimal <code>String</code> that is contained hexadecimal
+     * value or not.
+     *
+     * @param string the string to check.
+     * @return <code>true</code> the <code>string</code> contains Hex number
+     * only, <code>false</code> otherwise.
+     * @throws NullPointerException if <code>string == null</code>.
+     */
+    public static boolean isHexNumber(String string) {
+        if (string == null)
+            throw new NullPointerException("string was null");
+
+        boolean flag = true;
+
+        for (int i = 0; i < string.length(); i++) {
+            char cc = string.charAt(i);
+            if (!isHexNumber((byte) cc)) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
     private static byte uniteBytes(byte src0, byte src1) {
         byte _b0 = Byte.decode("0x" + new String(new byte[] { src0 }))
                 .byteValue();
@@ -382,6 +456,74 @@ public class CommonUtils {
                 .byteValue();
         byte ret = (byte) (_b0 ^ _b1);
         return ret;
+    }
+
+    /**
+     * Creates a <code>byte[]</code> representation of the hexadecimal
+     * <code>String</code> passed.
+     *
+     * @param string the hexadecimal string to be converted.
+     * @return the <code>array</code> representation of <code>String</code>.
+     * @throws IllegalArgumentException if <code>string</code> length is not in even number.
+     * @throws NullPointerException     if <code>string == null</code>.
+     * @throws NumberFormatException    if <code>string</code> cannot be parsed as a byte value.
+     */
+    public static byte[] hexString2Bytes(String string) {
+        if (string == null)
+            throw new NullPointerException("string was null");
+
+        int len = string.length();
+
+        if (len == 0)
+            return new byte[0];
+        if (len % 2 == 1)
+            throw new IllegalArgumentException(
+                    "string length should be an even number");
+
+        byte[] ret = new byte[len / 2];
+        byte[] tmp = string.getBytes();
+
+        for (int i = 0; i < len; i += 2) {
+            if (!isHexNumber(tmp[i]) || !isHexNumber(tmp[i + 1])) {
+                throw new NumberFormatException(
+                        "string contained invalid value");
+            }
+            ret[i / 2] = uniteBytes(tmp[i], tmp[i + 1]);
+        }
+        return ret;
+    }
+
+    /**
+     * Creates a <code>byte[]</code> representation of the hexadecimal
+     * <code>String</code> in the EditText control.
+     *
+     * @param editText the EditText control which contains hexadecimal string to be
+     *                 converted.
+     * @return the <code>array</code> representation of <code>String</code> in
+     * the EditText control. <code>null</code> if the string format is
+     * not correct.
+     */
+    public static byte[] getEditTextinHexBytes(EditText editText) {
+        Editable edit = editText.getText();
+
+        if (edit == null) {
+            return null;
+        }
+
+        String rawdata = edit.toString();
+
+        if (rawdata == null || rawdata.isEmpty()) {
+            return null;
+        }
+
+        String command = rawdata.replace(" ", "").replace("\n", "");
+
+        if (command.isEmpty() || command.length() % 2 != 0
+                || isHexNumber(command) == false) {
+            return null;
+        }
+
+        return hexString2Bytes(command);
     }
 
 
