@@ -113,18 +113,6 @@
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService"
             android:enabled="true" />
         <service
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_AP"
-            android:enabled="true" />
-        <service
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_AP_PIPE"
-            android:enabled="true" />
-        <service
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_FS_UNIT_3"
-            android:enabled="true" />
-        <service
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_FS_UNIT_4"
-            android:enabled="true" />
-        <service
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundServiceHotspotCheck"
             android:enabled="true" />
 

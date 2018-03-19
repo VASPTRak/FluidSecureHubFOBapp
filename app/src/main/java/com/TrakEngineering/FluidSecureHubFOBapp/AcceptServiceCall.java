@@ -369,24 +369,5 @@ public class AcceptServiceCall {
 
     }
 
-    public String SplitLocation(String CurrentString)
-    {
-
-        String LocationStr = "";
-        if (!CurrentString.equalsIgnoreCase(""))
-        {
-            String[] separated = CurrentString.split(",");
-            String L1 = separated[0];
-            String L2 = separated[1];
-            String L3 = separated[2];
-
-            LocationStr = L1+","+L2+","+L3+".";
-
-        }
-
-
-        return LocationStr;
-    }
-
 
 }

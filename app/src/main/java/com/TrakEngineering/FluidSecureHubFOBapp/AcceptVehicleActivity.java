@@ -696,33 +696,6 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     }
 
 
-    public void Readfobkey() {
-
-        //for (int i = 0; i < 2; i++) {AppConstants.colorToastBigFont(AcceptVehicleActivity.this, "  Please hold fob up to Reader  ", Color.BLUE);}
-        tv_enter_vehicle_no.setText("Please Hold FOB to Reader");
-        tv_enter_vehicle_no.setTextColor(Color.parseColor("#ff0000"));
-
-
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void FobBtnEnable() {
-
-        btn_fob_Reader.setBackgroundColor(Color.parseColor("#3F51B5"));
-        btn_fob_Reader.setEnabled(true);
-        btn_fob_Reader.setTextColor(Color.parseColor("#FFFFFF"));
-
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void FobBtnDisable() {
-
-        btn_fob_Reader.setBackgroundColor(Color.parseColor("#f5f1f0"));
-        btn_fob_Reader.setEnabled(false);
-        btn_fob_Reader.setTextColor(R.color.black);
-
-    }
-
     public void TimeoutVehicleScreen() {
 
         SharedPreferences sharedPrefODO = AcceptVehicleActivity.this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
