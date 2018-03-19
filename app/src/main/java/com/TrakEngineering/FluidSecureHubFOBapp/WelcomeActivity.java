@@ -96,69 +96,9 @@ import static com.TrakEngineering.FluidSecureHubFOBapp.R.id.textView;
 
 public class WelcomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
-    private String TAG = " WelcomeActivity ";
-    private float density;
-    ProgressDialog dialog1;
-
-    Button btn_disconnect;
-
-    private TextView textDateTime, tv_fs1_Qty, tv_fs2_Qty, tv_fs3_Qty, tv_fs4_Qty, tv_FS1_hoseName, tv_FS2_hoseName, tv_FS3_hoseName,
-            tv_FS4_hoseName, tv_fs1_stop, tv_fs2_stop, tv_fs3_stop, tv_fs4_stop, tv_fs1QTN, tv_fs2QTN, tv_fs3QTN, tv_fs4QTN, tv_fs1_pulseTxt, tv_fs2_pulseTxt, tv_fs3_pulseTxt, tv_fs4_pulseTxt, tv_fs1_Pulse, tv_fs2_Pulse, tv_fs3_Pulse, tv_fs4_Pulse;
-    private ImageView imgFuelLogo;
-    private TextView tvTitle;
-    private Button btnGo,btnRetryWifi;
-    private ConnectionDetector cd;
-    private double latitude = 0;
-    private double longitude = 0;
-    TextView tvSSIDName, tv_NFS1, tv_NFS2, tv_NFS3, tv_NFS4;//tv_fs1_pulse
-    LinearLayout linearHose, linear_fs_1, linear_fs_2, linear_fs_3, linear_fs_4;
-    WifiManager mainWifi;
-    StringBuilder sb = new StringBuilder();
-
-    ArrayList<HashMap<String, String>> serverSSIDList = new ArrayList<>();
-    ArrayList<HashMap<String, String>> ListOfConnectedDevices = new ArrayList<>();
-    public static int SelectedItemPos;
-    GoogleApiClient mGoogleApiClient;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-    TextView tvLatLng;
-    static WifiApManager wifiApManager;
-    boolean isTCancelled = false;
-    int RetryOneAtemptConnectToSelectedSSSID = 0;
-    String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequireForHub = "", IsPersonnelPINRequire = "", IsOtherRequire = "";
-
-
-    //FS For Stopbutton
-    String PhoneNumber;
-    String consoleString = "", outputQuantity = "0";
-    boolean stopTimer = true;
-    double minFuelLimit = 0, numPulseRatio = 0;
-    double fillqty = 0;
-    ProgressDialog loading = null;
-
-
-    String HTTP_URL = "";//"http://192.168.43.153:80/";//for pipe
-    String URL_GET_PULSAR_FS1, URL_SET_PULSAR_FS1, URL_WIFI_FS1, URL_RELAY_FS1, URL_GET_PULSAR_FS2, URL_SET_PULSAR_FS2, URL_WIFI_FS2, URL_RELAY_FS2, URL_GET_PULSAR_FS3, URL_SET_PULSAR_FS3, URL_WIFI_FS3, URL_RELAY_FS3, URL_GET_PULSAR_FS4, URL_SET_PULSAR_FS4, URL_WIFI_FS4, URL_RELAY_FS4;
-    String HTTP_URL_FS_1 = "", HTTP_URL_FS_2 = "", HTTP_URL_FS_3 = "", HTTP_URL_FS_4 = "";
-
-    String jsonRename;
-    String jsonRelayOff = "{\"relay_request\":{\"Password\":\"12345678\",\"Status\":0}}";
-
-    String jsonPulsar = "{\"pulsar_request\":{\"counter_set\":1}}";
-    String jsonPulsarOff = "{\"pulsar_request\":{\"counter_set\":0}}";
-    String URL_INFO = "";
-    String URL_UPDATE_FS_INFO = "";
-    Timer t,ScreenOutTime;
-
-    //============Bluetooth reader Gatt==============
-    private BluetoothAdapter mBluetoothAdapter;
-    private boolean mScanning;
-    private Handler mHandler;
     /* Stops scanning after 10 seconds. */
     private static final long SCAN_PERIOD = 3000;
-    //================================================
-
-    //---------------Bluetooth reader using Gatt------------------------
-
     /* Default master key. */
     private static final String DEFAULT_1255_MASTER_KEY = "ACR1255U-J1 Auth";
     /* Read 16 bytes from the binary block 0x04 (MIFARE 1K or 4K). */
@@ -167,6 +107,55 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     private static final String DEFAULT_1255_ESCAPE_COMMAND_NO_SLEEP = "E0 00 00 48 04";//NO SLEEP
     private static final byte[] AUTO_POLLING_START = {(byte) 0xE0, 0x00, 0x00, 0x40, 0x01};
     private static final byte[] AUTO_POLLING_STOP = {(byte) 0xE0, 0x00, 0x00, 0x40, 0x00};
+    public static int SelectedItemPos;
+    static WifiApManager wifiApManager;
+    ProgressDialog dialog1;
+    Button btn_disconnect;
+    TextView tvSSIDName, tv_NFS1, tv_NFS2, tv_NFS3, tv_NFS4;//tv_fs1_pulse
+    LinearLayout linearHose, linear_fs_1, linear_fs_2, linear_fs_3, linear_fs_4;
+    WifiManager mainWifi;
+    StringBuilder sb = new StringBuilder();
+    ArrayList<HashMap<String, String>> serverSSIDList = new ArrayList<>();
+    ArrayList<HashMap<String, String>> ListOfConnectedDevices = new ArrayList<>();
+    GoogleApiClient mGoogleApiClient;
+    TextView tvLatLng;
+    boolean isTCancelled = false;
+    int RetryOneAtemptConnectToSelectedSSSID = 0;
+    String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequireForHub = "", IsPersonnelPINRequire = "", IsOtherRequire = "";
+    //FS For Stopbutton
+    String PhoneNumber;
+    String consoleString = "", outputQuantity = "0";
+    boolean stopTimer = true;
+    double minFuelLimit = 0, numPulseRatio = 0;
+    double fillqty = 0;
+    ProgressDialog loading = null;
+    String HTTP_URL = "";//"http://192.168.43.153:80/";//for pipe
+    String URL_GET_PULSAR_FS1, URL_SET_PULSAR_FS1, URL_WIFI_FS1, URL_RELAY_FS1, URL_GET_PULSAR_FS2, URL_SET_PULSAR_FS2, URL_WIFI_FS2, URL_RELAY_FS2, URL_GET_PULSAR_FS3, URL_SET_PULSAR_FS3, URL_WIFI_FS3, URL_RELAY_FS3, URL_GET_PULSAR_FS4, URL_SET_PULSAR_FS4, URL_WIFI_FS4, URL_RELAY_FS4;
+    String HTTP_URL_FS_1 = "", HTTP_URL_FS_2 = "", HTTP_URL_FS_3 = "", HTTP_URL_FS_4 = "";
+    String jsonRename;
+    String jsonRelayOff = "{\"relay_request\":{\"Password\":\"12345678\",\"Status\":0}}";
+    String jsonPulsar = "{\"pulsar_request\":{\"counter_set\":1}}";
+    String jsonPulsarOff = "{\"pulsar_request\":{\"counter_set\":0}}";
+    String URL_INFO = "";
+    String URL_UPDATE_FS_INFO = "";
+    Timer t,ScreenOutTime;
+    private String TAG = " WelcomeActivity ";
+    private float density;
+    private TextView textDateTime, tv_fs1_Qty, tv_fs2_Qty, tv_fs3_Qty, tv_fs4_Qty, tv_FS1_hoseName, tv_FS2_hoseName, tv_FS3_hoseName,
+            tv_FS4_hoseName, tv_fs1_stop, tv_fs2_stop, tv_fs3_stop, tv_fs4_stop, tv_fs1QTN, tv_fs2QTN, tv_fs3QTN, tv_fs4QTN, tv_fs1_pulseTxt, tv_fs2_pulseTxt, tv_fs3_pulseTxt, tv_fs4_pulseTxt, tv_fs1_Pulse, tv_fs2_Pulse, tv_fs3_Pulse, tv_fs4_Pulse;
+    private ImageView imgFuelLogo;
+    private TextView tvTitle;
+    private Button btnGo, btnRetryWifi;
+    //================================================
+
+    //---------------Bluetooth reader using Gatt------------------------
+    private ConnectionDetector cd;
+    private double latitude = 0;
+    private double longitude = 0;
+    //============Bluetooth reader Gatt==============
+    private BluetoothAdapter mBluetoothAdapter;
+    private boolean mScanning;
+    private Handler mHandler;
     /* Reader to be connected. */
     private String mDeviceName;
     private String mDeviceAddress;
@@ -177,9 +166,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     private BluetoothReaderManager mBluetoothReaderManager;
     private BluetoothReaderGattCallback mGattCallback;
     private ProgressDialog mProgressDialog;
-    /* Bluetooth GATT client. */
-    private BluetoothGatt mBluetoothGatt;
-
     /*
      * Listen to Bluetooth bond status change event. And turns on reader's
      * notifications once the card reader is bonded.
@@ -253,7 +239,139 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
 
     };
+    /* Bluetooth GATT client. */
+    private BluetoothGatt mBluetoothGatt;
+    /* Device scan callback. */
+    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        @Override
+        public void onLeScan(final BluetoothDevice device, int rssi,
+                             byte[] scanRecord) {
+
+            try {
+                if (device.getName().equalsIgnoreCase(AppConstants.BT_READER_NAME)) {
+
+                    //Toast.makeText(getApplicationContext(), "Device found: "+AppConstants.BT_READER_NAME, Toast.LENGTH_SHORT).show();
+
+                    AppConstants.WriteinFile("WelcomeActivity~~~~~~~~~" + "BT_READER_DEVICE_NAME " + device.getName());
+                    AppConstants.WriteinFile("WelcomeActivity~~~~~~~~~" + "BT_READER_DEVICE_ADDRESS " + String.valueOf(device));
+                    scanLeDevice(false);
+
+                    mDeviceName = device.getName();
+                    mDeviceAddress = String.valueOf(device);
+
+                   /* try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            setBluetooth(false);//Off Bluetooth
+                        }
+                    }, 1000);
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            setBluetooth(true);
+                        }
+                    }, 4000);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            connectReader();
+                        }
+                    }, 6000);
+
+                    /*// Connect the reader.
+                    if(connectReader()) {
+                        transmitEscapeCommend();
+                    }*/
+
+                }
+            } catch (NullPointerException e) {
+                System.out.println(e);
+            }
+
+        }
+    };
+
+    public static String PasswordGeneration() {
+
+        String FinalPass;
+        String hubName = AppConstants.HubName;//"HUB00000001";
+        String numb = hubName.substring(hubName.length() - 8);
+        String numb1 = numb.substring(0, 4);
+        String numb2 = hubName.substring(hubName.length() - 4);
+
+        String result1 = "";
+        String result2 = "";
+
+        //Result one
+        for (int i = 0; i < numb1.length(); i++) {
+
+            String xp = String.valueOf(numb1.charAt(i));
+            int p = Integer.parseInt(xp);
+
+            if (p >= 5) {
+                p = p - 2;
+                result1 = result1 + p;
+
+            } else {
+                p = p + i + 1;
+                result1 = result1 + p;
+            }
+
+        }
+
+        //Result Two
+        String rev_numb2 = new StringBuilder(numb2).reverse().toString();
+        String res = "";
+        for (int j = 0; j < rev_numb2.length(); j++) {
+
+            String xps = String.valueOf(rev_numb2.charAt(j));
+            int q = Integer.parseInt(xps);
+
+            if (q >= 5) {
+                q = q - 2;
+                res = res + q;
+
+            } else {
+                q = q + j + 1;
+                res = res + q;
+            }
+            result2 = new StringBuilder(res).reverse().toString();
+
+        }
+        FinalPass = "HUB" + result1 + result2;
+        System.out.println("FinalPass" + FinalPass);
+
+        return FinalPass;
+    }
+
+
+    //_---------------Bluetooth reader using Gatt------------------------
+
+    public static boolean setBluetooth(boolean enable) {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        boolean isEnabled = bluetoothAdapter.isEnabled();
+        if (enable && !isEnabled) {
+            return bluetoothAdapter.enable();
+        } else if (!enable && isEnabled) {
+            return bluetoothAdapter.disable();
+        }
+        // No need to change bluetooth state
+        return true;
+    }
 
     /*
      * Update listener
@@ -391,10 +509,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             mBluetoothReader.enableNotification(true);
         }
     }
-
-
-    //_---------------Bluetooth reader using Gatt------------------------
-
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -694,7 +808,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             loading = null;
         }
     }
-
 
     public void UpdateFSUI_seconds() {
 
@@ -1272,36 +1385,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public class GetAndroidSSID extends AsyncTask<Void, Void, Void> {
-
-        String Email = null;
-        String latLong = null;
-        String response = null;
-
-        public GetAndroidSSID(String Email, String latLong) {
-            this.Email = Email;
-            this.latLong = latLong;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            try {
-                ServerHandler serverHandler = new ServerHandler();
-                //----------------------------------------------------------------------------------
-                String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + Email + ":" + "AndroidSSID");
-                response = serverHandler.PostTextData(WelcomeActivity.this, AppConstants.webURL, latLong, authString);
-                //----------------------------------------------------------------------------------
-
-            } catch (Exception ex) {
-
-                CommonUtils.LogMessage(TAG, "AuthTestAsynTask ", ex);
-            }
-            return null;
-        }
-
-    }
-
     public void onChangeWifiAction(View view) {
         try {
 
@@ -1418,6 +1501,1305 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                 }
                 break;
         }
+    }
+
+    public boolean isNotNULL(String value) {
+
+        boolean flag = true;
+        if (value == null) {
+            flag = false;
+        } else if (value.trim().isEmpty()) {
+            flag = false;
+        } else if (value != null && value.trim().equalsIgnoreCase("null")) {
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    public void alertSelectHoseList(String errMsg) {
+
+
+        final Dialog dialog = new Dialog(WelcomeActivity.this);
+        dialog.setTitle("Fuel Secure");
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_hose_list);
+        //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogSlideAnimation;
+
+        TextView tvNoFuelSites = (TextView) dialog.findViewById(R.id.tvNoFuelSites);
+        ListView lvHoseNames = (ListView) dialog.findViewById(R.id.lvHoseNames);
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+
+        if (!errMsg.trim().isEmpty())
+            tvNoFuelSites.setText(errMsg);
+
+        if (serverSSIDList != null && serverSSIDList.size() > 0) {
+
+            lvHoseNames.setVisibility(View.VISIBLE);
+            tvNoFuelSites.setVisibility(View.GONE);
+
+        } else {
+            lvHoseNames.setVisibility(View.GONE);
+            tvNoFuelSites.setVisibility(View.VISIBLE);
+        }
+
+        SimpleAdapter adapter = new SimpleAdapter(WelcomeActivity.this, serverSSIDList, R.layout.item_hose, new String[]{"item"}, new int[]{R.id.tvSingleItem});
+        lvHoseNames.setAdapter(adapter);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        lvHoseNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //OnHoseSelected_OnClick(Integer.toString(position));
+
+                new GetConnectedDevicesIP().execute();//Refreshed donnected devices list on hose selection.
+                String IpAddress = "";
+                SelectedItemPos = position;
+                String selSSID = serverSSIDList.get(SelectedItemPos).get("WifiSSId");
+                String IsBusy = serverSSIDList.get(SelectedItemPos).get("IsBusy");
+                String selMacAddress = serverSSIDList.get(SelectedItemPos).get("MacAddress");
+                String selSiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
+                String hoseID = serverSSIDList.get(SelectedItemPos).get("HoseId");
+                AppConstants.CURRENT_SELECTED_SSID = selSSID;
+                AppConstants.CURRENT_HOSE_SSID = hoseID;
+                AppConstants.CURRENT_SELECTED_SITEID = selSiteId;
+                AppConstants.SELECTED_MACADDRESS = selMacAddress;
+                String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
+                String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
+                String PulserTimingAd = serverSSIDList.get(SelectedItemPos).get("PulserTimingAdjust");
+                AppConstants.PulserTimingAdjust = PulserTimingAd;
+
+                //Rename SSID while mac address updation
+                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                    AppConstants.NeedToRenameFS_ON_UPDATE_MAC = false;
+                    AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = "";
+                } else {
+                    AppConstants.NeedToRenameFS_ON_UPDATE_MAC = true;
+                    AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = ReplaceableHoseName;
+                }
+
+                if (selMacAddress.trim().equals("")) {  //MacAddress on server is null
+
+                    if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
+
+                        loading = new ProgressDialog(WelcomeActivity.this);
+                        loading.setCancelable(true);
+                        loading.setMessage("Updating mac address please wait..");
+                        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        loading.setCancelable(false);
+                        loading.show();
+
+                        //Do not enable hotspot.
+                        Constants.hotspotstayOn = false;
+
+                        //AppConstants.colorToast(WelcomeActivity.this, "Updating mac address please wait..", Color.RED);
+                        wifiApManager.setWifiApEnabled(null, false);  //Hotspot disabled
+
+                        // Toast.makeText(getApplicationContext(),"Enabled WIFI connecting to "+AppConstants.CURRENT_SELECTED_SSID,Toast.LENGTH_LONG).show();
+
+                        WifiManager wifiManagerMM = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                        if (!wifiManagerMM.isWifiEnabled()) {
+                            wifiManagerMM.setWifiEnabled(true);
+                        }
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //new ChangeSSIDofHubStation().execute(); //Connect to selected (SSID) and Rename UserName and password of Fs unit
+                                new WiFiConnectTask().execute(); //1)Connect to selected (SSID) wifi network and 2)change the ssid and password settings to connect to Hub's hotspot 3)Update MackAddress
+                            }
+                        }, 1000);
+
+
+                    } else {
+                        AppConstants.colorToastBigFont(WelcomeActivity.this, "Can't update mac address,Hose is busy please retry later.", Color.RED);
+                    }
+
+                } else {
+
+                    try {
+                        for (int i = 0; i < AppConstants.DetailsListOfConnectedDevices.size(); i++) {
+                            String MA_ConnectedDevices = AppConstants.DetailsListOfConnectedDevices.get(i).get("macAddress");
+                            if (selMacAddress.equalsIgnoreCase(MA_ConnectedDevices)) {
+                                IpAddress = AppConstants.DetailsListOfConnectedDevices.get(i).get("ipAddress");
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+
+                    if (IpAddress.equals("")) {
+                        tvSSIDName.setText("Can't select this Hose not connected");
+                        btnGo.setVisibility(View.GONE);
+
+                    } else {
+
+                        //Selected position
+                        //Toast.makeText(getApplicationContext(), "FS Position" + position, Toast.LENGTH_SHORT).show();
+                        AppConstants.FS_selected = String.valueOf(position);
+                        if (String.valueOf(position).equalsIgnoreCase("0")) {
+
+                            if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                                //Rename SSID from cloud
+                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                                    AppConstants.NeedToRenameFS1 = false;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS1 = "";
+                                } else {
+                                    AppConstants.NeedToRenameFS1 = true;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS1 = ReplaceableHoseName;
+                                }
+
+                                Constants.AccPersonnelPIN = "";
+                                tvSSIDName.setText(selSSID);
+                                AppConstants.FS1_CONNECTED_SSID = selSSID;
+                                Constants.CurrentSelectedHose = "FS1";
+                                btnGo.setVisibility(View.VISIBLE);
+                            } else {
+                                tvSSIDName.setText("Hose in use.\nPlease try again later");
+                                btnGo.setVisibility(View.GONE);
+
+                            }
+                        } else if (String.valueOf(position).equalsIgnoreCase("1")) {
+                            if (Constants.FS_2STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                                //Rename SSID from cloud
+                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                                    AppConstants.NeedToRenameFS2 = false;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS2 = "";
+                                } else {
+                                    AppConstants.NeedToRenameFS2 = true;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS2 = ReplaceableHoseName;
+                                }
+
+                                Constants.AccPersonnelPIN = "";
+                                tvSSIDName.setText(selSSID);
+                                AppConstants.FS2_CONNECTED_SSID = selSSID;
+                                Constants.CurrentSelectedHose = "FS2";
+                                btnGo.setVisibility(View.VISIBLE);
+                            } else {
+                                tvSSIDName.setText("Hose in use.\nPlease try again later");
+                                btnGo.setVisibility(View.GONE);
+                            }
+
+                        } else if (String.valueOf(position).equalsIgnoreCase("2")) {
+
+
+                            if (Constants.FS_3STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                                //Rename SSID from cloud
+                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                                    AppConstants.NeedToRenameFS3 = false;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS3 = "";
+                                } else {
+                                    AppConstants.NeedToRenameFS3 = true;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS3 = ReplaceableHoseName;
+                                }
+
+                                Constants.AccPersonnelPIN = "";
+                                tvSSIDName.setText(selSSID);
+                                AppConstants.FS3_CONNECTED_SSID = selSSID;
+                                Constants.CurrentSelectedHose = "FS3";
+                                btnGo.setVisibility(View.VISIBLE);
+                            } else {
+                                tvSSIDName.setText("Hose in use.\nPlease try again later");
+                                btnGo.setVisibility(View.GONE);
+                            }
+
+
+                        } else if (String.valueOf(position).equalsIgnoreCase("3")) {
+
+
+                            if (Constants.FS_4STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                                //Rename SSID from cloud
+                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                                    AppConstants.NeedToRenameFS4 = false;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS4 = "";
+                                } else {
+                                    AppConstants.NeedToRenameFS4 = true;
+                                    AppConstants.REPLACEBLE_WIFI_NAME_FS4 = ReplaceableHoseName;
+                                }
+
+                                Constants.AccPersonnelPIN = "";
+                                tvSSIDName.setText(selSSID);
+                                AppConstants.FS4_CONNECTED_SSID = selSSID;
+                                Constants.CurrentSelectedHose = "FS4";
+                                btnGo.setVisibility(View.VISIBLE);
+                            } else {
+                                tvSSIDName.setText("Hose in use.\nPlease try again later");
+                                btnGo.setVisibility(View.GONE);
+                            }
+                        } else {
+
+                            tvSSIDName.setText("Can't select this Hose for current version");
+                            btnGo.setVisibility(View.GONE);
+                        }
+                    }
+
+                }
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void UpdateSSIDStatusToServer() {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                //Update SSID rename statu to server
+                if (AppConstants.NeedToRenameFS_ON_UPDATE_MAC) {
+                    String userEmail = CommonUtils.getCustomerDetails(WelcomeActivity.this).PersonEmail;
+
+                    String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + userEmail + ":" + "SetHoseNameReplacedFlag");
+
+
+                    RenameHose rhose = new RenameHose();
+                    rhose.SiteId = AppConstants.CURRENT_SELECTED_SITEID;
+                    rhose.HoseId = AppConstants.CURRENT_HOSE_SSID;
+                    rhose.IsHoseNameReplaced = "Y";
+
+                    Gson gson = new Gson();
+                    String jsonData = gson.toJson(rhose);
+
+
+                    new SetHoseNameReplacedFlagO_Mac().execute(jsonData, authString);
+
+                }
+            }
+        }, 5000);
+
+
+    }
+
+    //Connect to wifi with Password
+    public void connectToWifiMarsh(String networkSSID) {
+
+
+        try {
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(android.content.Context.WIFI_SERVICE);
+            WifiConfiguration wc = new WifiConfiguration();
+
+
+            wc.SSID = "\"" + networkSSID + "\"";
+            wc.preSharedKey = "\"" + Constants.CurrFsPass + "\"";
+
+            wc.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+            wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+
+
+            wifiManager.setWifiEnabled(true);
+            int netId = getExistingNetworkId(networkSSID);
+
+            if (netId == -1) {
+                netId = wifiManager.addNetwork(wc);
+            }
+
+            wifiManager.disconnect();
+            wifiManager.enableNetwork(netId, true);
+            wifiManager.reconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getExistingNetworkId(String SSID) {
+
+        SSID = "\"" + SSID + "\"";
+
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        List<WifiConfiguration> configuredNetworks = wifiManager.getConfiguredNetworks();
+        if (configuredNetworks != null) {
+            for (WifiConfiguration existingConfig : configuredNetworks) {
+                if (existingConfig.SSID != null && existingConfig.SSID.equals(SSID)) {
+                    return existingConfig.networkId;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public void AlertSettings(final Context ctx, String message) {
+        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(ctx);
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setCancelable(false);
+
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        dialog.dismiss();
+                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    }
+                }
+
+        );
+
+        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public boolean setHotspotNamePassword(Context context) {//String newName, String newKey,
+        try {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
+            Method getConfigMethod = wifiManager.getClass().getMethod("getWifiApConfiguration");
+            WifiConfiguration wifiConfig = (WifiConfiguration) getConfigMethod.invoke(wifiManager);
+
+
+            //Temp###########
+           /* String CurrentHotspotName = wifiConfig.SSID;
+            String CurrentHotspotPassword = wifiConfig.preSharedKey;
+            if (CurrentHotspotName.equals("FS_AP_TEST") && CurrentHotspotPassword.equals("12345678")) {
+                //Do nothing
+            } else {
+
+                wifiConfig.SSID = "FS_AP_TEST";
+                wifiConfig.preSharedKey = "12345678";
+
+               *//* //Disable hotspot
+                wifiApManager.setWifiApEnabled(null, false);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //Enable Hotsopt
+                        wifiApManager.setWifiApEnabled(null, true);
+
+                    }
+                }, 100);*//*
+
+                AppConstants.AlertDialogFinish(WelcomeActivity.this, "Configured Hotspot, Please restart the application");
+
+            }*/
+
+            //Temp##########
+
+            AppConstants.HubGeneratedpassword = PasswordGeneration();
+            String CurrentHotspotName = wifiConfig.SSID;
+            String CurrentHotspotPassword = wifiConfig.preSharedKey;
+            if (CurrentHotspotName.equals(AppConstants.HubName) && CurrentHotspotPassword.equals(AppConstants.HubGeneratedpassword)) {
+                //No need to change hotspot username password
+
+            } else {
+
+                wifiConfig.SSID = AppConstants.HubName;
+                wifiConfig.preSharedKey = AppConstants.HubGeneratedpassword;
+
+            }
+
+            Method setConfigMethod = wifiManager.getClass().getMethod("setWifiApConfiguration", WifiConfiguration.class);
+            setConfigMethod.invoke(wifiManager, wifiConfig);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //=======FS UNIT 1 =========
+    public void stopButtonFunctionality_FS1() {
+
+        //it stops pulsar logic------
+        stopTimer = false;
+
+
+        new CommandsPOST_FS1().execute(URL_RELAY_FS1, jsonRelayOff);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String cntA = "0", cntB = "0", cntC = "0";
+
+                    for (int i = 0; i < 3; i++) {
+
+                        String result = new GETFINALPulsar_FS1().execute(URL_GET_PULSAR_FS1).get();
+
+
+                        if (result.contains("pulsar_status")) {
+
+                            JSONObject jsonObject = new JSONObject(result);
+                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
+                            String counts = joPulsarStat.getString("counts");
+                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
+                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
+
+                            convertCountToQuantity_fs1(counts);
+
+
+                            if (i == 2) {
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finalLastStep_fs1();
+                                    }
+                                }, 1000);
+
+
+                            }
+
+
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }, 1000);
+
+
+    }
+
+    public void convertCountToQuantity_fs1(String counts) {
+
+        outputQuantity = counts;
+        fillqty = Double.parseDouble(outputQuantity);
+        fillqty = fillqty / numPulseRatio;//convert to gallons
+
+        fillqty = AppConstants.roundNumber(fillqty, 2);
+
+    }
+
+    public void finalLastStep_fs1() {
+
+        new CommandsPOST_FS1().execute(URL_SET_PULSAR_FS1, jsonPulsarOff);
+
+    }
+
+    //=======FS UNIT 2 =========
+    public void stopButtonFunctionality_FS2() {
+
+        //it stops pulsar logic------
+        stopTimer = false;
+
+
+        new CommandsPOST_FS2().execute(URL_RELAY_FS2, jsonRelayOff);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String cntA = "0", cntB = "0", cntC = "0";
+
+                    for (int i = 0; i < 3; i++) {
+
+                        String result = new GETFINALPulsar_FS2().execute(URL_GET_PULSAR_FS2).get();
+
+
+                        if (result.contains("pulsar_status")) {
+
+                            JSONObject jsonObject = new JSONObject(result);
+                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
+                            String counts = joPulsarStat.getString("counts");
+                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
+                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
+
+                            convertCountToQuantity_fs2(counts);
+
+
+                            if (i == 2) {
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finalLastStep_fs2();
+                                    }
+                                }, 1000);
+
+
+                            }
+
+
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }, 1000);
+
+
+    }
+
+    public void convertCountToQuantity_fs2(String counts) {
+
+        outputQuantity = counts;
+        fillqty = Double.parseDouble(outputQuantity);
+        fillqty = fillqty / numPulseRatio;//convert to gallons
+
+        fillqty = AppConstants.roundNumber(fillqty, 2);
+
+    }
+
+    public void finalLastStep_fs2() {
+
+
+        new CommandsPOST_FS2().execute(URL_SET_PULSAR_FS2, jsonPulsarOff);
+
+
+    }
+
+    //=======FS UNIT 3 =========
+    public void stopButtonFunctionality_FS3() {
+
+        //it stops pulsar logic------
+        stopTimer = false;
+
+
+        new CommandsPOST_FS3().execute(URL_RELAY_FS3, jsonRelayOff);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String cntA = "0", cntB = "0", cntC = "0";
+
+                    for (int i = 0; i < 3; i++) {
+
+                        String result = new GETFINALPulsar_FS3().execute(URL_GET_PULSAR_FS3).get();
+
+
+                        if (result.contains("pulsar_status")) {
+
+                            JSONObject jsonObject = new JSONObject(result);
+                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
+                            String counts = joPulsarStat.getString("counts");
+                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
+                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
+
+                            convertCountToQuantity_fs3(counts);
+
+
+                            if (i == 2) {
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finalLastStep_fs3();
+                                    }
+                                }, 1000);
+
+
+                            }
+
+
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }, 1000);
+
+
+    }
+
+    public void convertCountToQuantity_fs3(String counts) {
+
+        outputQuantity = counts;
+        fillqty = Double.parseDouble(outputQuantity);
+        fillqty = fillqty / numPulseRatio;//convert to gallons
+
+        fillqty = AppConstants.roundNumber(fillqty, 2);
+
+    }
+
+    //=========================Stop button functionality for each hose==============
+
+    public void finalLastStep_fs3() {
+
+        new CommandsPOST_FS3().execute(URL_SET_PULSAR_FS3, jsonPulsarOff);
+
+    }
+
+    //=======FS UNIT 4 =========
+    public void stopButtonFunctionality_FS4() {
+
+        //it stops pulsar logic------
+        stopTimer = false;
+
+
+        new CommandsPOST_FS4().execute(URL_RELAY_FS4, jsonRelayOff);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    String cntA = "0", cntB = "0", cntC = "0";
+
+                    for (int i = 0; i < 3; i++) {
+
+                        String result = new GETFINALPulsar_FS4().execute(URL_GET_PULSAR_FS4).get();
+
+
+                        if (result.contains("pulsar_status")) {
+
+                            JSONObject jsonObject = new JSONObject(result);
+                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
+                            String counts = joPulsarStat.getString("counts");
+                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
+                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
+
+                            convertCountToQuantity_fs4(counts);
+
+
+                            if (i == 2) {
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finalLastStep_fs4();
+                                    }
+                                }, 1000);
+
+
+                            }
+
+
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }, 1000);
+
+
+    }
+
+    public void convertCountToQuantity_fs4(String counts) {
+
+        outputQuantity = counts;
+        fillqty = Double.parseDouble(outputQuantity);
+        fillqty = fillqty / numPulseRatio;//convert to gallons
+
+        fillqty = AppConstants.roundNumber(fillqty, 2);
+
+    }
+
+    public void finalLastStep_fs4() {
+
+        new CommandsPOST_FS4().execute(URL_SET_PULSAR_FS4, jsonPulsarOff);
+
+    }
+
+    public void DisplayDashboardEveSecond() {
+        // Toast.makeText(getApplicationContext(),"FS_Count"+FS_Count,Toast.LENGTH_SHORT).show();
+        if (Constants.FS_1STATUS.equalsIgnoreCase("FREE")) {
+
+            tv_fs1_Qty.setText(Constants.FS_1Gallons);
+            tv_fs1_Pulse.setText(Constants.FS_1Pulse);
+            tv_fs1_stop.setClickable(false);
+
+            if (Constants.FS_1Gallons.equals("") || Constants.FS_1Gallons.equals("0.00")) {
+                Constants.FS_1Gallons = String.valueOf("0.00");
+                Constants.FS_1Pulse = "00";
+                tv_fs1_Qty.setText("");
+                tv_fs1_Pulse.setText("");
+                linear_fs_1.setBackgroundResource(R.color.Dashboard_background);
+                tv_fs1_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                tv_NFS1.setTextColor(getResources().getColor(R.color.black));
+                tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.black));
+                tv_fs1_stop.setTextColor(getResources().getColor(R.color.black));
+                tv_fs1QTN.setTextColor(getResources().getColor(R.color.black));
+                tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                tv_fs1_Qty.setTextColor(getResources().getColor(R.color.black));
+                tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.black));
+                tv_fs1_stop.setClickable(false);
+
+            } else {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Constants.FS_1Gallons = String.valueOf("0.00");
+                        Constants.FS_1Pulse = "00";
+                        tv_fs1_Qty.setText("");
+                        tv_fs1_Pulse.setText("");
+                        linear_fs_1.setBackgroundResource(R.color.Dashboard_background);
+                        tv_fs1_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                        tv_NFS1.setTextColor(getResources().getColor(R.color.black));
+                        tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs1_stop.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs1QTN.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs1_Qty.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs1_stop.setClickable(false);
+
+                    }
+                }, 6000);
+
+
+            }
+
+        } else {
+
+            tv_fs1_Qty.setText(Constants.FS_1Gallons);
+            tv_fs1_Pulse.setText(Constants.FS_1Pulse);
+            linear_fs_1.setBackgroundResource(R.color.colorPrimary);
+            tv_fs1_stop.setBackgroundResource(R.drawable.selector_button);
+            tv_NFS1.setTextColor(getResources().getColor(R.color.white));
+            tv_fs1_stop.setTextColor(getResources().getColor(R.color.white));
+            tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.white));
+            tv_fs1QTN.setTextColor(getResources().getColor(R.color.white));
+            tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.white));
+            tv_fs1_Qty.setTextColor(getResources().getColor(R.color.white));
+            tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.white));
+            tv_fs1_stop.setClickable(true);
+        }
+
+        if (Constants.FS_2STATUS.equalsIgnoreCase("FREE")) {
+
+            tv_fs2_Qty.setText(Constants.FS_2Gallons);
+            tv_fs2_Pulse.setText(Constants.FS_2Pulse);
+            tv_fs2_stop.setClickable(false);
+
+            if (Constants.FS_2Gallons.equals("") || Constants.FS_2Gallons.equals("0.00")) {
+                Constants.FS_2Gallons = String.valueOf("0.00");
+                Constants.FS_2Pulse = "00";
+                tv_fs2_Qty.setText("");
+                tv_fs2_Pulse.setText("");
+                linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
+                tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                tv_NFS2.setTextColor(getResources().getColor(R.color.black));
+                tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
+                tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
+                tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
+                tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
+                tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
+                tv_fs2_stop.setClickable(false);
+
+            } else {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Constants.FS_2Gallons = String.valueOf("0.00");
+                        Constants.FS_2Pulse = "00";
+                        tv_fs2_Qty.setText("");
+                        tv_fs2_Pulse.setText("");
+                        linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
+                        tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                        tv_NFS2.setTextColor(getResources().getColor(R.color.black));
+                        tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_stop.setClickable(false);
+
+                    }
+                }, 6000);
+
+
+            }
+
+
+        } else {
+            tv_fs2_Qty.setText(Constants.FS_2Gallons);
+            tv_fs2_Pulse.setText(Constants.FS_2Pulse);
+            linear_fs_2.setBackgroundResource(R.color.colorPrimary);
+            tv_fs2_stop.setBackgroundResource(R.drawable.selector_button);
+            tv_NFS2.setTextColor(getResources().getColor(R.color.white));
+            tv_fs2_stop.setTextColor(getResources().getColor(R.color.white));
+            tv_fs2QTN.setTextColor(getResources().getColor(R.color.white));
+            tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.white));
+            tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.white));
+            tv_fs2_Qty.setTextColor(getResources().getColor(R.color.white));
+            tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.white));
+            tv_fs2_stop.setClickable(true);
+        }
+
+        if (Constants.FS_3STATUS.equalsIgnoreCase("FREE")) {
+
+            tv_fs3_Qty.setText(Constants.FS_3Gallons);
+            tv_fs3_Pulse.setText(Constants.FS_3Pulse);
+            tv_fs3_stop.setClickable(false);
+
+            if (Constants.FS_3Gallons.equals("") || Constants.FS_3Gallons.equals("0.00")) {
+                Constants.FS_3Gallons = String.valueOf("0.00");
+                Constants.FS_3Pulse = "00";
+                tv_fs3_Qty.setText("");
+                tv_fs3_Pulse.setText("");
+                linear_fs_3.setBackgroundResource(R.color.Dashboard_background);
+                tv_fs3_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                tv_NFS3.setTextColor(getResources().getColor(R.color.black));
+                tv_FS3_hoseName.setTextColor(getResources().getColor(R.color.black));
+                tv_fs3_stop.setTextColor(getResources().getColor(R.color.black));
+                tv_fs3QTN.setTextColor(getResources().getColor(R.color.black));
+                tv_fs3_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                tv_fs3_Qty.setTextColor(getResources().getColor(R.color.black));
+                tv_fs3_Pulse.setTextColor(getResources().getColor(R.color.black));
+                tv_fs3_stop.setClickable(false);
+
+            } else {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Constants.FS_3Gallons = String.valueOf("0.00");
+                        Constants.FS_3Pulse = "00";
+                        tv_fs2_Qty.setText("");
+                        tv_fs2_Pulse.setText("");
+                        linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
+                        tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                        tv_NFS2.setTextColor(getResources().getColor(R.color.black));
+                        tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs2_stop.setClickable(false);
+
+                    }
+                }, 6000);
+
+
+            }
+
+
+        } else {
+            tv_fs3_Qty.setText(Constants.FS_3Gallons);
+            tv_fs3_Pulse.setText(Constants.FS_3Pulse);
+            linear_fs_3.setBackgroundResource(R.color.colorPrimary);
+            tv_fs3_stop.setBackgroundResource(R.drawable.selector_button);
+            tv_NFS3.setTextColor(getResources().getColor(R.color.white));
+            tv_fs3_stop.setTextColor(getResources().getColor(R.color.white));
+            tv_fs3QTN.setTextColor(getResources().getColor(R.color.white));
+            tv_fs3_pulseTxt.setTextColor(getResources().getColor(R.color.white));
+            tv_FS3_hoseName.setTextColor(getResources().getColor(R.color.white));
+            tv_fs3_Qty.setTextColor(getResources().getColor(R.color.white));
+            tv_fs3_Pulse.setTextColor(getResources().getColor(R.color.white));
+            tv_fs3_stop.setClickable(true);
+        }
+
+        if (Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
+
+            tv_fs4_Qty.setText(Constants.FS_4Gallons);
+            tv_fs4_Pulse.setText(Constants.FS_4Pulse);
+            tv_fs4_stop.setClickable(false);
+
+            if (Constants.FS_4Gallons.equals("") || Constants.FS_4Gallons.equals("0.00")) {
+                Constants.FS_4Gallons = String.valueOf("0.00");
+                Constants.FS_4Pulse = "00";
+                tv_fs4_Qty.setText("");
+                tv_fs4_Pulse.setText("");
+                linear_fs_4.setBackgroundResource(R.color.Dashboard_background);
+                tv_fs4_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                tv_NFS4.setTextColor(getResources().getColor(R.color.black));
+                tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.black));
+                tv_fs4_stop.setTextColor(getResources().getColor(R.color.black));
+                tv_fs4QTN.setTextColor(getResources().getColor(R.color.black));
+                tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                tv_fs4_Qty.setTextColor(getResources().getColor(R.color.black));
+                tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.black));
+                tv_fs4_stop.setClickable(false);
+
+            } else {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Constants.FS_4Gallons = String.valueOf("0.00");
+                        Constants.FS_4Pulse = "00";
+                        tv_fs4_Qty.setText("");
+                        tv_fs4_Pulse.setText("");
+                        linear_fs_4.setBackgroundResource(R.color.Dashboard_background);
+                        tv_fs4_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
+                        tv_NFS4.setTextColor(getResources().getColor(R.color.black));
+                        tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs4_stop.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs4QTN.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs4_Qty.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.black));
+                        tv_fs4_stop.setClickable(false);
+
+                    }
+                }, 6000);
+
+
+            }
+
+
+        } else {
+            tv_fs4_Qty.setText(Constants.FS_4Gallons);
+            tv_fs4_Pulse.setText(Constants.FS_4Pulse);
+            linear_fs_4.setBackgroundResource(R.color.colorPrimary);
+            tv_fs4_stop.setBackgroundResource(R.drawable.selector_button);
+            tv_NFS4.setTextColor(getResources().getColor(R.color.white));
+            tv_fs4_stop.setTextColor(getResources().getColor(R.color.white));
+            tv_fs4QTN.setTextColor(getResources().getColor(R.color.white));
+            tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.white));
+            tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.white));
+            tv_fs4_Qty.setTextColor(getResources().getColor(R.color.white));
+            tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.white));
+            tv_fs4_stop.setClickable(true);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            disconnectReader();
+        }
+        finish();
+
+    }
+
+    //==================Bluetooth Reader scan devices==================
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private synchronized void scanLeDevice(final boolean enable) {
+        if (enable) {
+            /* Stops scanning after a pre-defined scan period. */
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mScanning) {
+                        mScanning = false;
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+
+                    }
+                    invalidateOptionsMenu();
+                }
+            }, SCAN_PERIOD);
+
+            mScanning = true;
+            mBluetoothAdapter.startLeScan(mLeScanCallback);
+
+            invalidateOptionsMenu();
+        } else if (mScanning) {
+            mScanning = false;
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+
+            invalidateOptionsMenu();
+        }
+    }
+
+    /*
+* Create a GATT connection with the reader. And detect the connected reader
+* once service list is available.
+*/
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private boolean connectReader() {
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        if (bluetoothManager == null) {
+            Log.w("A_pin Btreader", "Unable to initialize BluetoothManager.");
+            return false;
+        }
+
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        if (bluetoothAdapter == null) {
+            Log.w("A_pin Btreader", "Unable to obtain a BluetoothAdapter.");
+            return false;
+        }
+
+
+
+        /* Create a new connection. */
+        final BluetoothDevice device = bluetoothAdapter
+                .getRemoteDevice(mDeviceAddress);
+
+        if (device == null) {
+            Log.w("A_pin Btreader", "Device not found. Unable to connect.");
+            return false;
+        }
+
+        /* Connect to GATT server. */
+        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+        return true;
+    }
+
+    /* Disconnects an established connection. */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void disconnectReader() {
+
+        System.out.println("BT NFC disconnected...........");
+
+        if (mBluetoothGatt == null) {
+            return;
+        }
+        mBluetoothGatt.disconnect();
+    }
+
+    /* Get the Bonding status string. */
+    private String getBondingStatusString(int bondingStatus) {
+        if (bondingStatus == BluetoothDevice.BOND_BONDED) {
+            return "BOND BONDED";
+        } else if (bondingStatus == BluetoothDevice.BOND_NONE) {
+            return "BOND NONE";
+        } else if (bondingStatus == BluetoothDevice.BOND_BONDING) {
+            return "BOND BONDING";
+        }
+        return "BOND UNKNOWN.";
+    }
+
+    /* Get the Error string. */
+    private String getErrorString(int errorCode) {
+        if (errorCode == BluetoothReader.ERROR_SUCCESS) {
+            return "";
+        } else if (errorCode == BluetoothReader.ERROR_INVALID_CHECKSUM) {
+            return "The checksum is invalid.";
+        } else if (errorCode == BluetoothReader.ERROR_INVALID_DATA_LENGTH) {
+            return "The data length is invalid.";
+        } else if (errorCode == BluetoothReader.ERROR_INVALID_COMMAND) {
+            return "The command is invalid.";
+        } else if (errorCode == BluetoothReader.ERROR_UNKNOWN_COMMAND_ID) {
+            return "The command ID is unknown.";
+        } else if (errorCode == BluetoothReader.ERROR_CARD_OPERATION) {
+            return "The card operation failed.";
+        } else if (errorCode == BluetoothReader.ERROR_AUTHENTICATION_REQUIRED) {
+            return "Authentication is required.";
+        } else if (errorCode == BluetoothReader.ERROR_LOW_BATTERY) {
+            return "The battery is low.";
+        } else if (errorCode == BluetoothReader.ERROR_CHARACTERISTIC_NOT_FOUND) {
+            return "Error characteristic is not found.";
+        } else if (errorCode == BluetoothReader.ERROR_WRITE_DATA) {
+            return "Write command to reader is failed.";
+        } else if (errorCode == BluetoothReader.ERROR_TIMEOUT) {
+            return "Timeout.";
+        } else if (errorCode == BluetoothReader.ERROR_AUTHENTICATION_FAILED) {
+            return "Authentication is failed.";
+        } else if (errorCode == BluetoothReader.ERROR_UNDEFINED) {
+            return "Undefined error.";
+        } else if (errorCode == BluetoothReader.ERROR_INVALID_DATA) {
+            return "Received data error.";
+        } else if (errorCode == BluetoothReader.ERROR_COMMAND_FAILED) {
+            return "The command failed.";
+        }
+        return "Unknown error.";
+    }
+
+    /* Get the Response string. */
+    private String getResponseString(byte[] response, int errorCode) {
+        if (errorCode == BluetoothReader.ERROR_SUCCESS) {
+            if (response != null && response.length > 0) {
+                return CommonUtils.toHexString(response);
+            }
+            return "";
+        }
+        return getErrorString(errorCode);
+    }
+
+    /* Get the Card status string. */
+    private String getCardStatusString(int cardStatus) {
+        if (cardStatus == BluetoothReader.CARD_STATUS_ABSENT) {
+            return "Absent.";
+        } else if (cardStatus == BluetoothReader.CARD_STATUS_PRESENT) {
+            return "Present.";
+        } else if (cardStatus == BluetoothReader.CARD_STATUS_POWERED) {
+            return "Powered.";
+        } else if (cardStatus == BluetoothReader.CARD_STATUS_POWER_SAVING_MODE) {
+            PowerOnCard();//power on cardreader.
+            return "Power saving mode.";
+        }
+        return "The card status is unknown.";
+    }
+
+    public void PowerOnCard() {
+
+        if (mBluetoothReader == null) {
+            System.out.println("card_reader_not_ready");
+            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mBluetoothReader.powerOnCard()) {
+            System.out.println("card_reader_not_ready");
+            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void Authentation() {
+
+        try {
+
+        /* Retrieve master key from edit box. */
+            byte masterKey[] = CommonUtils.toByteArray(CommonUtils.toHexString(DEFAULT_1255_MASTER_KEY.getBytes("UTF-8")));
+
+
+            if (masterKey != null && masterKey.length > 0) {
+
+                try {
+                    if (!mBluetoothReader.authenticate(masterKey)) {
+                        System.out.println("card_reader_not_ready");
+                        //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        System.out.println("Authenticating..");
+                        //Toast.makeText(getApplicationContext(), "Authenticating...", Toast.LENGTH_SHORT).show();
+
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println(e);
+                }
+            }
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void Startpolling() {
+
+
+        if (mBluetoothReader == null) {
+            System.out.println("card_reader_not_ready");
+            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mBluetoothReader.transmitEscapeCommand(AUTO_POLLING_START)) {
+            System.out.println("card_reader_not_ready");
+            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void TransmitApdu() {
+
+            /* Check for detected reader. */
+        if (mBluetoothReader == null) {
+            System.out.println("card_reader_not_ready");
+            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        /* Retrieve APDU command from APDU COMMAND. */
+        byte apduCommand[] = CommonUtils.toByteArray(DEFAULT_1255_APDU_COMMAND);
+
+        if (apduCommand != null && apduCommand.length > 0) {
+
+           /* Transmit APDU command. */
+            if (!mBluetoothReader.transmitApdu(apduCommand)) {
+                System.out.println("card_reader_not_ready");
+                //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            System.out.println("Character format error!");
+            //Toast.makeText(getApplicationContext(), "Character format error!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void transmitNOSLEEPCommand() {
+
+            /* Check for detected reader. */
+        if (mBluetoothReader == null) {
+            System.out.println("card_reader_not_ready");
+            return;
+        }
+
+                /* Retrieve escape command from edit box. */
+        byte escapeCommand[] = CommonUtils.toByteArray(DEFAULT_1255_ESCAPE_COMMAND_NO_SLEEP);
+
+        if (escapeCommand != null && escapeCommand.length > 0) {
+                    /* Clear response field for result of escape command. */
+
+
+                    /* Transmit escape command. */
+            if (!mBluetoothReader.transmitEscapeCommand(escapeCommand)) {
+                System.out.println("card_reader_not_ready");
+            } else {
+                System.out.println("No Data");
+            }
+        } else {
+            System.out.println("Character format error!");
+        }
+
+    }
+
+    public void ReconnectFobReader() {
+
+        t = new Timer();
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run() {
+
+                if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //Toast.makeText(getApplicationContext(),"Setting Bluetooth OFF & ON --> Reconnecting fob reader-->",Toast.LENGTH_LONG).show();
+                                recreate();
+                            }
+                        });
+
+                    } catch (Exception e) {
+
+                        System.out.println(e);
+                    }
+
+                }
+
+            }
+
+        };
+        t.schedule(tt, 3600000, 3600000);//3600000   ->5 min 300000
+
+
+    }
+
+    public class GetAndroidSSID extends AsyncTask<Void, Void, Void> {
+
+        String Email = null;
+        String latLong = null;
+        String response = null;
+
+        public GetAndroidSSID(String Email, String latLong) {
+            this.Email = Email;
+            this.latLong = latLong;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                ServerHandler serverHandler = new ServerHandler();
+                //----------------------------------------------------------------------------------
+                String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + Email + ":" + "AndroidSSID");
+                response = serverHandler.PostTextData(WelcomeActivity.this, AppConstants.webURL, latLong, authString);
+                //----------------------------------------------------------------------------------
+
+            } catch (Exception ex) {
+
+                CommonUtils.LogMessage(TAG, "AuthTestAsynTask ", ex);
+            }
+            return null;
+        }
+
     }
 
     public class GetSSIDUsingLocation extends AsyncTask<Void, Void, String> {
@@ -1764,259 +3146,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public boolean isNotNULL(String value) {
-
-        boolean flag = true;
-        if (value == null) {
-            flag = false;
-        } else if (value.trim().isEmpty()) {
-            flag = false;
-        } else if (value != null && value.trim().equalsIgnoreCase("null")) {
-            flag = false;
-        }
-
-        return flag;
-    }
-
-    public void alertSelectHoseList(String errMsg) {
-
-
-        final Dialog dialog = new Dialog(WelcomeActivity.this);
-        dialog.setTitle("Fuel Secure");
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_hose_list);
-        //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogSlideAnimation;
-
-        TextView tvNoFuelSites = (TextView) dialog.findViewById(R.id.tvNoFuelSites);
-        ListView lvHoseNames = (ListView) dialog.findViewById(R.id.lvHoseNames);
-        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
-
-        if (!errMsg.trim().isEmpty())
-            tvNoFuelSites.setText(errMsg);
-
-        if (serverSSIDList != null && serverSSIDList.size() > 0) {
-
-            lvHoseNames.setVisibility(View.VISIBLE);
-            tvNoFuelSites.setVisibility(View.GONE);
-
-        } else {
-            lvHoseNames.setVisibility(View.GONE);
-            tvNoFuelSites.setVisibility(View.VISIBLE);
-        }
-
-        SimpleAdapter adapter = new SimpleAdapter(WelcomeActivity.this, serverSSIDList, R.layout.item_hose, new String[]{"item"}, new int[]{R.id.tvSingleItem});
-        lvHoseNames.setAdapter(adapter);
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-
-        lvHoseNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //OnHoseSelected_OnClick(Integer.toString(position));
-
-                new GetConnectedDevicesIP().execute();//Refreshed donnected devices list on hose selection.
-                String IpAddress = "";
-                SelectedItemPos = position;
-                String selSSID = serverSSIDList.get(SelectedItemPos).get("WifiSSId");
-                String IsBusy = serverSSIDList.get(SelectedItemPos).get("IsBusy");
-                String selMacAddress = serverSSIDList.get(SelectedItemPos).get("MacAddress");
-                String selSiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
-                String hoseID = serverSSIDList.get(SelectedItemPos).get("HoseId");
-                AppConstants.CURRENT_SELECTED_SSID = selSSID;
-                AppConstants.CURRENT_HOSE_SSID = hoseID;
-                AppConstants.CURRENT_SELECTED_SITEID = selSiteId;
-                AppConstants.SELECTED_MACADDRESS = selMacAddress;
-                String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
-                String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
-                String PulserTimingAd = serverSSIDList.get(SelectedItemPos).get("PulserTimingAdjust");
-                AppConstants.PulserTimingAdjust = PulserTimingAd;
-
-                //Rename SSID while mac address updation
-                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                    AppConstants.NeedToRenameFS_ON_UPDATE_MAC = false;
-                    AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = "";
-                } else {
-                    AppConstants.NeedToRenameFS_ON_UPDATE_MAC = true;
-                    AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = ReplaceableHoseName;
-                }
-
-                if (selMacAddress.trim().equals("")) {  //MacAddress on server is null
-
-                    if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
-
-                        loading = new ProgressDialog(WelcomeActivity.this);
-                        loading.setCancelable(true);
-                        loading.setMessage("Updating mac address please wait..");
-                        loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        loading.setCancelable(false);
-                        loading.show();
-
-                        //Do not enable hotspot.
-                        Constants.hotspotstayOn = false;
-
-                        //AppConstants.colorToast(WelcomeActivity.this, "Updating mac address please wait..", Color.RED);
-                        wifiApManager.setWifiApEnabled(null, false);  //Hotspot disabled
-
-                        // Toast.makeText(getApplicationContext(),"Enabled WIFI connecting to "+AppConstants.CURRENT_SELECTED_SSID,Toast.LENGTH_LONG).show();
-
-                        WifiManager wifiManagerMM = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-                        if (!wifiManagerMM.isWifiEnabled()) {
-                            wifiManagerMM.setWifiEnabled(true);
-                        }
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //new ChangeSSIDofHubStation().execute(); //Connect to selected (SSID) and Rename UserName and password of Fs unit
-                                new WiFiConnectTask().execute(); //1)Connect to selected (SSID) wifi network and 2)change the ssid and password settings to connect to Hub's hotspot 3)Update MackAddress
-                            }
-                        }, 1000);
-
-
-                    } else {
-                        AppConstants.colorToastBigFont(WelcomeActivity.this, "Can't update mac address,Hose is busy please retry later.", Color.RED);
-                    }
-
-                } else {
-
-                    try {
-                        for (int i = 0; i < AppConstants.DetailsListOfConnectedDevices.size(); i++) {
-                            String MA_ConnectedDevices = AppConstants.DetailsListOfConnectedDevices.get(i).get("macAddress");
-                            if (selMacAddress.equalsIgnoreCase(MA_ConnectedDevices)) {
-                                IpAddress = AppConstants.DetailsListOfConnectedDevices.get(i).get("ipAddress");
-                            }
-                        }
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-
-                    if (IpAddress.equals("")) {
-                        tvSSIDName.setText("Can't select this Hose not connected");
-                        btnGo.setVisibility(View.GONE);
-
-                    } else {
-
-                        //Selected position
-                        //Toast.makeText(getApplicationContext(), "FS Position" + position, Toast.LENGTH_SHORT).show();
-                        AppConstants.FS_selected = String.valueOf(position);
-                        if (String.valueOf(position).equalsIgnoreCase("0")) {
-
-                            if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                                //Rename SSID from cloud
-                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS1 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS1 = "";
-                                } else {
-                                    AppConstants.NeedToRenameFS1 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS1 = ReplaceableHoseName;
-                                }
-
-                                Constants.AccPersonnelPIN = "";
-                                tvSSIDName.setText(selSSID);
-                                AppConstants.FS1_CONNECTED_SSID = selSSID;
-                                Constants.CurrentSelectedHose = "FS1";
-                                btnGo.setVisibility(View.VISIBLE);
-                            } else {
-                                tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
-
-                            }
-                        } else if (String.valueOf(position).equalsIgnoreCase("1")) {
-                            if (Constants.FS_2STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                                //Rename SSID from cloud
-                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS2 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS2 = "";
-                                } else {
-                                    AppConstants.NeedToRenameFS2 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS2 = ReplaceableHoseName;
-                                }
-
-                                Constants.AccPersonnelPIN = "";
-                                tvSSIDName.setText(selSSID);
-                                AppConstants.FS2_CONNECTED_SSID = selSSID;
-                                Constants.CurrentSelectedHose = "FS2";
-                                btnGo.setVisibility(View.VISIBLE);
-                            } else {
-                                tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
-                            }
-
-                        } else if (String.valueOf(position).equalsIgnoreCase("2")) {
-
-
-                            if (Constants.FS_3STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                                //Rename SSID from cloud
-                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS3 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS3 = "";
-                                } else {
-                                    AppConstants.NeedToRenameFS3 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS3 = ReplaceableHoseName;
-                                }
-
-                                Constants.AccPersonnelPIN = "";
-                                tvSSIDName.setText(selSSID);
-                                AppConstants.FS3_CONNECTED_SSID = selSSID;
-                                Constants.CurrentSelectedHose = "FS3";
-                                btnGo.setVisibility(View.VISIBLE);
-                            } else {
-                                tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
-                            }
-
-
-                        } else if (String.valueOf(position).equalsIgnoreCase("3")) {
-
-
-                            if (Constants.FS_4STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                                // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-                                //Rename SSID from cloud
-                                if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS4 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS4 = "";
-                                } else {
-                                    AppConstants.NeedToRenameFS4 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS4 = ReplaceableHoseName;
-                                }
-
-                                Constants.AccPersonnelPIN = "";
-                                tvSSIDName.setText(selSSID);
-                                AppConstants.FS4_CONNECTED_SSID = selSSID;
-                                Constants.CurrentSelectedHose = "FS4";
-                                btnGo.setVisibility(View.VISIBLE);
-                            } else {
-                                tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
-                            }
-                        } else {
-
-                            tvSSIDName.setText("Can't select this Hose for current version");
-                            btnGo.setVisibility(View.GONE);
-                        }
-                    }
-
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-        dialog.show();
-    }
-
     class WifiReceiver extends BroadcastReceiver {
         public void onReceive(Context c, Intent intent) {
 
@@ -2133,6 +3262,199 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
+   /* public void OnHoseSelected_OnClick(String position) {
+
+
+        new GetConnectedDevicesIP().execute();//Refreshed donnected devices list on hose selection.
+        String IpAddress = "";
+        SelectedItemPos = Integer.parseInt(position);
+        String selSSID = serverSSIDList.get(SelectedItemPos).get("WifiSSId");
+        String IsBusy = serverSSIDList.get(SelectedItemPos).get("IsBusy");
+        String selMacAddress = serverSSIDList.get(SelectedItemPos).get("MacAddress");
+        String selSiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
+        String hoseID = serverSSIDList.get(SelectedItemPos).get("HoseId");
+        AppConstants.CURRENT_SELECTED_SSID = selSSID;
+        AppConstants.CURRENT_HOSE_SSID = hoseID;
+        AppConstants.CURRENT_SELECTED_SITEID = selSiteId;
+        AppConstants.SELECTED_MACADDRESS = selMacAddress;
+        String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
+        String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
+
+        //Rename SSID while mac address updation
+        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+            AppConstants.NeedToRenameFS_ON_UPDATE_MAC = false;
+            AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = "";
+        } else {
+            AppConstants.NeedToRenameFS_ON_UPDATE_MAC = true;
+            AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = ReplaceableHoseName;
+        }
+
+        if (selMacAddress.trim().equals("")) {  //MacAddress on server is null
+
+            if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
+
+                loading = new ProgressDialog(WelcomeActivity.this);
+                loading.setCancelable(true);
+                loading.setMessage("Updating mac address please wait..");
+                loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                loading.setCancelable(false);
+                loading.show();
+
+                //Do not enable hotspot.
+                Constants.hotspotstayOn = false;
+
+                //AppConstants.colorToast(WelcomeActivity.this, "Updating mac address please wait..", Color.RED);
+                wifiApManager.setWifiApEnabled(null, false);  //Hotspot disabled
+
+                // Toast.makeText(getApplicationContext(),"Enabled WIFI connecting to "+AppConstants.CURRENT_SELECTED_SSID,Toast.LENGTH_LONG).show();
+
+                WifiManager wifiManagerMM = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                if (!wifiManagerMM.isWifiEnabled()) {
+                    wifiManagerMM.setWifiEnabled(true);
+                }
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //new ChangeSSIDofHubStation().execute(); //Connect to selected (SSID) and Rename UserName and password of Fs unit
+                        new WiFiConnectTask().execute(); //1)Connect to selected (SSID) wifi network and 2)change the ssid and password settings to connect to Hub's hotspot 3)Update MackAddress
+                    }
+                }, 1000);
+
+
+            } else {
+                AppConstants.colorToastBigFont(WelcomeActivity.this, "Can't update mac address,Hose is busy please retry later.", Color.RED);
+            }
+
+        } else {
+
+            try {
+                for (int i = 0; i < AppConstants.DetailsListOfConnectedDevices.size(); i++) {
+                    String MA_ConnectedDevices = AppConstants.DetailsListOfConnectedDevices.get(i).get("macAddress");
+                    if (selMacAddress.equalsIgnoreCase(MA_ConnectedDevices)) {
+                        IpAddress = AppConstants.DetailsListOfConnectedDevices.get(i).get("ipAddress");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            if (IpAddress.equals("")) {
+                tvSSIDName.setText("Can't select this Hose not connected");
+                btnGo.setVisibility(View.GONE);
+
+            } else {
+
+                //Selected position
+                //Toast.makeText(getApplicationContext(), "FS Position" + position, Toast.LENGTH_SHORT).show();
+                AppConstants.FS_selected = String.valueOf(position);
+                if (String.valueOf(position).equalsIgnoreCase("0")) {
+
+                    if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                        //Rename SSID from cloud
+                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                            AppConstants.NeedToRenameFS1 = false;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS1 = "";
+                        } else {
+                            AppConstants.NeedToRenameFS1 = true;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS1 = ReplaceableHoseName;
+                        }
+
+                        Constants.AccPersonnelPIN = "";
+                        tvSSIDName.setText(selSSID);
+                        AppConstants.FS1_CONNECTED_SSID = selSSID;
+                        Constants.CurrentSelectedHose = "FS1";
+                        btnGo.setVisibility(View.VISIBLE);
+                    } else {
+                        tvSSIDName.setText("Hose in use.\nPlease try again later");
+                        btnGo.setVisibility(View.GONE);
+
+                    }
+                } else if (String.valueOf(position).equalsIgnoreCase("1")) {
+                    if (Constants.FS_2STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                        //Rename SSID from cloud
+                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                            AppConstants.NeedToRenameFS2 = false;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS2 = "";
+                        } else {
+                            AppConstants.NeedToRenameFS2 = true;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS2 = ReplaceableHoseName;
+                        }
+
+                        Constants.AccPersonnelPIN = "";
+                        tvSSIDName.setText(selSSID);
+                        AppConstants.FS2_CONNECTED_SSID = selSSID;
+                        Constants.CurrentSelectedHose = "FS2";
+                        btnGo.setVisibility(View.VISIBLE);
+                    } else {
+                        tvSSIDName.setText("Hose in use.\nPlease try again later");
+                        btnGo.setVisibility(View.GONE);
+                    }
+
+                } else if (String.valueOf(position).equalsIgnoreCase("2")) {
+
+
+                    if (Constants.FS_3STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+                        //Rename SSID from cloud
+                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                            AppConstants.NeedToRenameFS3 = false;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS3 = "";
+                        } else {
+                            AppConstants.NeedToRenameFS3 = true;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS3 = ReplaceableHoseName;
+                        }
+
+                        Constants.AccPersonnelPIN = "";
+                        tvSSIDName.setText(selSSID);
+                        AppConstants.FS3_CONNECTED_SSID = selSSID;
+                        Constants.CurrentSelectedHose = "FS3";
+                        btnGo.setVisibility(View.VISIBLE);
+                    } else {
+                        tvSSIDName.setText("Hose in use.\nPlease try again later");
+                        btnGo.setVisibility(View.GONE);
+                    }
+
+
+                } else if (String.valueOf(position).equalsIgnoreCase("3")) {
+
+
+                    if (Constants.FS_4STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
+                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                        //Rename SSID from cloud
+                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
+                            AppConstants.NeedToRenameFS4 = false;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS4 = "";
+                        } else {
+                            AppConstants.NeedToRenameFS4 = true;
+                            AppConstants.REPLACEBLE_WIFI_NAME_FS4 = ReplaceableHoseName;
+                        }
+
+                        Constants.AccPersonnelPIN = "";
+                        tvSSIDName.setText(selSSID);
+                        AppConstants.FS4_CONNECTED_SSID = selSSID;
+                        Constants.CurrentSelectedHose = "FS4";
+                        btnGo.setVisibility(View.VISIBLE);
+                    } else {
+                        tvSSIDName.setText("Hose in use.\nPlease try again later");
+                        btnGo.setVisibility(View.GONE);
+                    }
+                } else {
+
+                    tvSSIDName.setText("Can't select this Hose for current version");
+                    btnGo.setVisibility(View.GONE);
+                }
+            }
+
+        }
+        //dialog.dismiss();
+
+    }*/
 
     public class CommandsPOST extends AsyncTask<String, Void, String> {
 
@@ -2223,37 +3545,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    private void UpdateSSIDStatusToServer() {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                //Update SSID rename statu to server
-                if (AppConstants.NeedToRenameFS_ON_UPDATE_MAC) {
-                    String userEmail = CommonUtils.getCustomerDetails(WelcomeActivity.this).PersonEmail;
-
-                    String authString = "Basic " + AppConstants.convertStingToBase64(AppConstants.getIMEI(WelcomeActivity.this) + ":" + userEmail + ":" + "SetHoseNameReplacedFlag");
-
-
-                    RenameHose rhose = new RenameHose();
-                    rhose.SiteId = AppConstants.CURRENT_SELECTED_SITEID;
-                    rhose.HoseId = AppConstants.CURRENT_HOSE_SSID;
-                    rhose.IsHoseNameReplaced = "Y";
-
-                    Gson gson = new Gson();
-                    String jsonData = gson.toJson(rhose);
-
-
-                    new SetHoseNameReplacedFlagO_Mac().execute(jsonData, authString);
-
-                }
-                ;
-            }
-        }, 5000);
-
-
-    }
+    //-------------------Bluetooth Reader------------
 
     public class CommandsPOST_ChangeHotspotSettings extends AsyncTask<String, Void, String> {
 
@@ -2493,72 +3785,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    //Connect to wifi with Password
-    public void connectToWifiMarsh(String networkSSID) {
-
-
-        try {
-            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(android.content.Context.WIFI_SERVICE);
-            WifiConfiguration wc = new WifiConfiguration();
-
-
-            wc.SSID = "\"" + networkSSID + "\"";
-            wc.preSharedKey = "\"" + Constants.CurrFsPass + "\"";
-
-            wc.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-            wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-
-
-            wifiManager.setWifiEnabled(true);
-            int netId = getExistingNetworkId(networkSSID);
-
-            if (netId == -1) {
-                netId = wifiManager.addNetwork(wc);
-            }
-
-            wifiManager.disconnect();
-            wifiManager.enableNetwork(netId, true);
-            wifiManager.reconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private int getExistingNetworkId(String SSID) {
-
-        SSID = "\"" + SSID + "\"";
-
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        List<WifiConfiguration> configuredNetworks = wifiManager.getConfiguredNetworks();
-        if (configuredNetworks != null) {
-            for (WifiConfiguration existingConfig : configuredNetworks) {
-                if (existingConfig.SSID != null && existingConfig.SSID.equals(SSID)) {
-                    return existingConfig.networkId;
-                }
-            }
-        }
-        return -1;
-    }
-
-    public void AlertSettings(final Context ctx, String message) {
-        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(ctx);
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setCancelable(false);
-
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int arg1) {
-                        dialog.dismiss();
-                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                    }
-                }
-
-        );
-
-        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
     public class UpdateMacAsynTask extends AsyncTask<String, Void, String> {
 
 
@@ -2622,175 +3848,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
             }
         }
-    }
-
-    public boolean setHotspotNamePassword(Context context) {//String newName, String newKey,
-        try {
-            WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
-            Method getConfigMethod = wifiManager.getClass().getMethod("getWifiApConfiguration");
-            WifiConfiguration wifiConfig = (WifiConfiguration) getConfigMethod.invoke(wifiManager);
-
-
-            //Temp###########
-           /* String CurrentHotspotName = wifiConfig.SSID;
-            String CurrentHotspotPassword = wifiConfig.preSharedKey;
-            if (CurrentHotspotName.equals("FS_AP_TEST") && CurrentHotspotPassword.equals("12345678")) {
-                //Do nothing
-            } else {
-
-                wifiConfig.SSID = "FS_AP_TEST";
-                wifiConfig.preSharedKey = "12345678";
-
-               *//* //Disable hotspot
-                wifiApManager.setWifiApEnabled(null, false);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        //Enable Hotsopt
-                        wifiApManager.setWifiApEnabled(null, true);
-
-                    }
-                }, 100);*//*
-
-                AppConstants.AlertDialogFinish(WelcomeActivity.this, "Configured Hotspot, Please restart the application");
-
-            }*/
-
-            //Temp##########
-
-            AppConstants.HubGeneratedpassword = PasswordGeneration();
-            String CurrentHotspotName = wifiConfig.SSID;
-            String CurrentHotspotPassword = wifiConfig.preSharedKey;
-            if (CurrentHotspotName.equals(AppConstants.HubName) && CurrentHotspotPassword.equals(AppConstants.HubGeneratedpassword)) {
-                //No need to change hotspot username password
-
-            } else {
-
-                wifiConfig.SSID = AppConstants.HubName;
-                wifiConfig.preSharedKey = AppConstants.HubGeneratedpassword;
-
-            }
-
-            Method setConfigMethod = wifiManager.getClass().getMethod("setWifiApConfiguration", WifiConfiguration.class);
-            setConfigMethod.invoke(wifiManager, wifiConfig);
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static String PasswordGeneration() {
-
-        String FinalPass;
-        String hubName = AppConstants.HubName;//"HUB00000001";
-        String numb = hubName.substring(hubName.length() - 8);
-        String numb1 = numb.substring(0, 4);
-        String numb2 = hubName.substring(hubName.length() - 4);
-
-        String result1 = "";
-        String result2 = "";
-
-        //Result one
-        for (int i = 0; i < numb1.length(); i++) {
-
-            String xp = String.valueOf(numb1.charAt(i));
-            int p = Integer.parseInt(xp);
-
-            if (p >= 5) {
-                p = p - 2;
-                result1 = result1 + p;
-
-            } else {
-                p = p + i + 1;
-                result1 = result1 + p;
-            }
-
-        }
-
-        //Result Two
-        String rev_numb2 = new StringBuilder(numb2).reverse().toString();
-        String res = "";
-        for (int j = 0; j < rev_numb2.length(); j++) {
-
-            String xps = String.valueOf(rev_numb2.charAt(j));
-            int q = Integer.parseInt(xps);
-
-            if (q >= 5) {
-                q = q - 2;
-                res = res + q;
-
-            } else {
-                q = q + j + 1;
-                res = res + q;
-            }
-            result2 = new StringBuilder(res).reverse().toString();
-
-        }
-        FinalPass = "HUB" + result1 + result2;
-        System.out.println("FinalPass" + FinalPass);
-
-        return FinalPass;
-    }
-
-    //=========================Stop button functionality for each hose==============
-
-    //=======FS UNIT 1 =========
-    public void stopButtonFunctionality_FS1() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS1().execute(URL_RELAY_FS1, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS1().execute(URL_GET_PULSAR_FS1).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs1(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs1();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
     }
 
     public class CommandsPOST_FS1 extends AsyncTask<String, Void, String> {
@@ -2900,78 +3957,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void convertCountToQuantity_fs1(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs1() {
-
-        new CommandsPOST_FS1().execute(URL_SET_PULSAR_FS1, jsonPulsarOff);
-
-    }
-
-    //=======FS UNIT 2 =========
-    public void stopButtonFunctionality_FS2() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS2().execute(URL_RELAY_FS2, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS2().execute(URL_GET_PULSAR_FS2).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs2(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs2();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
-    }
-
     public class CommandsPOST_FS2 extends AsyncTask<String, Void, String> {
 
         public String resp = "";
@@ -3077,80 +4062,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             }
 
         }
-    }
-
-    public void convertCountToQuantity_fs2(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs2() {
-
-
-        new CommandsPOST_FS2().execute(URL_SET_PULSAR_FS2, jsonPulsarOff);
-
-
-    }
-
-    //=======FS UNIT 3 =========
-    public void stopButtonFunctionality_FS3() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS3().execute(URL_RELAY_FS3, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS3().execute(URL_GET_PULSAR_FS3).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs3(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs3();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
     }
 
     public class CommandsPOST_FS3 extends AsyncTask<String, Void, String> {
@@ -3260,78 +4171,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void convertCountToQuantity_fs3(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs3() {
-
-        new CommandsPOST_FS3().execute(URL_SET_PULSAR_FS3, jsonPulsarOff);
-
-    }
-
-    //=======FS UNIT 4 =========
-    public void stopButtonFunctionality_FS4() {
-
-        //it stops pulsar logic------
-        stopTimer = false;
-
-
-        new CommandsPOST_FS4().execute(URL_RELAY_FS4, jsonRelayOff);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    String cntA = "0", cntB = "0", cntC = "0";
-
-                    for (int i = 0; i < 3; i++) {
-
-                        String result = new GETFINALPulsar_FS4().execute(URL_GET_PULSAR_FS4).get();
-
-
-                        if (result.contains("pulsar_status")) {
-
-                            JSONObject jsonObject = new JSONObject(result);
-                            JSONObject joPulsarStat = jsonObject.getJSONObject("pulsar_status");
-                            String counts = joPulsarStat.getString("counts");
-                            //String pulsar_status = joPulsarStat.getString("pulsar_status");
-                            //String pulsar_secure_status = joPulsarStat.getString("pulsar_secure_status");
-
-                            convertCountToQuantity_fs4(counts);
-
-
-                            if (i == 2) {
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finalLastStep_fs4();
-                                    }
-                                }, 1000);
-
-
-                            }
-
-
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        }, 1000);
-
-
-    }
-
     public class CommandsPOST_FS4 extends AsyncTask<String, Void, String> {
 
         public String resp = "";
@@ -3439,285 +4278,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void convertCountToQuantity_fs4(String counts) {
-
-        outputQuantity = counts;
-        fillqty = Double.parseDouble(outputQuantity);
-        fillqty = fillqty / numPulseRatio;//convert to gallons
-
-        fillqty = AppConstants.roundNumber(fillqty, 2);
-
-    }
-
-    public void finalLastStep_fs4() {
-
-        new CommandsPOST_FS4().execute(URL_SET_PULSAR_FS4, jsonPulsarOff);
-
-    }
-
-    public void DisplayDashboardEveSecond() {
-        // Toast.makeText(getApplicationContext(),"FS_Count"+FS_Count,Toast.LENGTH_SHORT).show();
-        if (Constants.FS_1STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs1_Qty.setText(Constants.FS_1Gallons);
-            tv_fs1_Pulse.setText(Constants.FS_1Pulse);
-            tv_fs1_stop.setClickable(false);
-
-            if (Constants.FS_1Gallons.equals("") || Constants.FS_1Gallons.equals("0.00")) {
-                Constants.FS_1Gallons = String.valueOf("0.00");
-                Constants.FS_1Pulse = "00";
-                tv_fs1_Qty.setText("");
-                tv_fs1_Pulse.setText("");
-                linear_fs_1.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs1_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS1.setTextColor(getResources().getColor(R.color.black));
-                tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs1_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_1Gallons = String.valueOf("0.00");
-                        Constants.FS_1Pulse = "00";
-                        tv_fs1_Qty.setText("");
-                        tv_fs1_Pulse.setText("");
-                        linear_fs_1.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs1_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS1.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs1_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-        } else {
-
-            tv_fs1_Qty.setText(Constants.FS_1Gallons);
-            tv_fs1_Pulse.setText(Constants.FS_1Pulse);
-            linear_fs_1.setBackgroundResource(R.color.colorPrimary);
-            tv_fs1_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS1.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_FS1_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs1_stop.setClickable(true);
-        }
-
-        if (Constants.FS_2STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs2_Qty.setText(Constants.FS_2Gallons);
-            tv_fs2_Pulse.setText(Constants.FS_2Pulse);
-            tv_fs2_stop.setClickable(false);
-
-            if (Constants.FS_2Gallons.equals("") || Constants.FS_2Gallons.equals("0.00")) {
-                Constants.FS_2Gallons = String.valueOf("0.00");
-                Constants.FS_2Pulse = "00";
-                tv_fs2_Qty.setText("");
-                tv_fs2_Pulse.setText("");
-                linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS2.setTextColor(getResources().getColor(R.color.black));
-                tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs2_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_2Gallons = String.valueOf("0.00");
-                        Constants.FS_2Pulse = "00";
-                        tv_fs2_Qty.setText("");
-                        tv_fs2_Pulse.setText("");
-                        linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS2.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-
-        } else {
-            tv_fs2_Qty.setText(Constants.FS_2Gallons);
-            tv_fs2_Pulse.setText(Constants.FS_2Pulse);
-            linear_fs_2.setBackgroundResource(R.color.colorPrimary);
-            tv_fs2_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS2.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs2_stop.setClickable(true);
-        }
-
-        if (Constants.FS_3STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs3_Qty.setText(Constants.FS_3Gallons);
-            tv_fs3_Pulse.setText(Constants.FS_3Pulse);
-            tv_fs3_stop.setClickable(false);
-
-            if (Constants.FS_3Gallons.equals("") || Constants.FS_3Gallons.equals("0.00")) {
-                Constants.FS_3Gallons = String.valueOf("0.00");
-                Constants.FS_3Pulse = "00";
-                tv_fs3_Qty.setText("");
-                tv_fs3_Pulse.setText("");
-                linear_fs_3.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs3_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS3.setTextColor(getResources().getColor(R.color.black));
-                tv_FS3_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs3_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_3Gallons = String.valueOf("0.00");
-                        Constants.FS_3Pulse = "00";
-                        tv_fs2_Qty.setText("");
-                        tv_fs2_Pulse.setText("");
-                        linear_fs_2.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs2_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS2.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS2_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs2_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-
-        } else {
-            tv_fs3_Qty.setText(Constants.FS_3Gallons);
-            tv_fs3_Pulse.setText(Constants.FS_3Pulse);
-            linear_fs_3.setBackgroundResource(R.color.colorPrimary);
-            tv_fs3_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS3.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_FS3_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs3_stop.setClickable(true);
-        }
-
-        if (Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
-
-            tv_fs4_Qty.setText(Constants.FS_4Gallons);
-            tv_fs4_Pulse.setText(Constants.FS_4Pulse);
-            tv_fs4_stop.setClickable(false);
-
-            if (Constants.FS_4Gallons.equals("") || Constants.FS_4Gallons.equals("0.00")) {
-                Constants.FS_4Gallons = String.valueOf("0.00");
-                Constants.FS_4Pulse = "00";
-                tv_fs4_Qty.setText("");
-                tv_fs4_Pulse.setText("");
-                linear_fs_4.setBackgroundResource(R.color.Dashboard_background);
-                tv_fs4_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                tv_NFS4.setTextColor(getResources().getColor(R.color.black));
-                tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_stop.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4QTN.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_Qty.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.black));
-                tv_fs4_stop.setClickable(false);
-
-            } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Constants.FS_4Gallons = String.valueOf("0.00");
-                        Constants.FS_4Pulse = "00";
-                        tv_fs4_Qty.setText("");
-                        tv_fs4_Pulse.setText("");
-                        linear_fs_4.setBackgroundResource(R.color.Dashboard_background);
-                        tv_fs4_stop.setBackgroundResource(R.color.Dashboard_presstostop_btn);
-                        tv_NFS4.setTextColor(getResources().getColor(R.color.black));
-                        tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_stop.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4QTN.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_Qty.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.black));
-                        tv_fs4_stop.setClickable(false);
-
-                    }
-                }, 6000);
-
-
-            }
-
-
-        } else {
-            tv_fs4_Qty.setText(Constants.FS_4Gallons);
-            tv_fs4_Pulse.setText(Constants.FS_4Pulse);
-            linear_fs_4.setBackgroundResource(R.color.colorPrimary);
-            tv_fs4_stop.setBackgroundResource(R.drawable.selector_button);
-            tv_NFS4.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_stop.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4QTN.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_pulseTxt.setTextColor(getResources().getColor(R.color.white));
-            tv_FS4_hoseName.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_Qty.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_Pulse.setTextColor(getResources().getColor(R.color.white));
-            tv_fs4_stop.setClickable(true);
-        }
-    }
-
     public class ChangeBusyStatus extends AsyncTask<String, Void, String> {
 
 
@@ -3771,32 +4331,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void RenameLink() {
-
-        HTTP_URL = "http://192.168.4.1/";
-        String URL_WIFI = HTTP_URL + "config?command=wifi";
-        jsonRename = "{\"Request\":{\"SoftAP\":{\"Connect_SoftAP\":{\"authmode\":\"WPAPSK/WPA2PSK\",\"channel\":6,\"ssid\":\"" + AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC + "\",\"password\":\"123456789\"}}}}";
-
-        if (AppConstants.NeedToRenameFS_ON_UPDATE_MAC) {
-
-            consoleString += "RENAME:\n" + jsonRename;
-
-            new CommandsPOST().execute(URL_WIFI, jsonRename);
-
-        }
-
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            disconnectReader();
-        }
-        finish();
-
-    }
-
     public class SetHoseNameReplacedFlagO_Mac extends AsyncTask<String, Void, String> {
 
 
@@ -3845,605 +4379,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
 
 
-    }
-
-    public void OnHoseSelected_OnClick(String position) {
-
-
-        new GetConnectedDevicesIP().execute();//Refreshed donnected devices list on hose selection.
-        String IpAddress = "";
-        SelectedItemPos = Integer.parseInt(position);
-        String selSSID = serverSSIDList.get(SelectedItemPos).get("WifiSSId");
-        String IsBusy = serverSSIDList.get(SelectedItemPos).get("IsBusy");
-        String selMacAddress = serverSSIDList.get(SelectedItemPos).get("MacAddress");
-        String selSiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
-        String hoseID = serverSSIDList.get(SelectedItemPos).get("HoseId");
-        AppConstants.CURRENT_SELECTED_SSID = selSSID;
-        AppConstants.CURRENT_HOSE_SSID = hoseID;
-        AppConstants.CURRENT_SELECTED_SITEID = selSiteId;
-        AppConstants.SELECTED_MACADDRESS = selMacAddress;
-        String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
-        String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
-
-        //Rename SSID while mac address updation
-        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-            AppConstants.NeedToRenameFS_ON_UPDATE_MAC = false;
-            AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = "";
-        } else {
-            AppConstants.NeedToRenameFS_ON_UPDATE_MAC = true;
-            AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = ReplaceableHoseName;
-        }
-
-        if (selMacAddress.trim().equals("")) {  //MacAddress on server is null
-
-            if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
-
-                loading = new ProgressDialog(WelcomeActivity.this);
-                loading.setCancelable(true);
-                loading.setMessage("Updating mac address please wait..");
-                loading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                loading.setCancelable(false);
-                loading.show();
-
-                //Do not enable hotspot.
-                Constants.hotspotstayOn = false;
-
-                //AppConstants.colorToast(WelcomeActivity.this, "Updating mac address please wait..", Color.RED);
-                wifiApManager.setWifiApEnabled(null, false);  //Hotspot disabled
-
-                // Toast.makeText(getApplicationContext(),"Enabled WIFI connecting to "+AppConstants.CURRENT_SELECTED_SSID,Toast.LENGTH_LONG).show();
-
-                WifiManager wifiManagerMM = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-                if (!wifiManagerMM.isWifiEnabled()) {
-                    wifiManagerMM.setWifiEnabled(true);
-                }
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //new ChangeSSIDofHubStation().execute(); //Connect to selected (SSID) and Rename UserName and password of Fs unit
-                        new WiFiConnectTask().execute(); //1)Connect to selected (SSID) wifi network and 2)change the ssid and password settings to connect to Hub's hotspot 3)Update MackAddress
-                    }
-                }, 1000);
-
-
-            } else {
-                AppConstants.colorToastBigFont(WelcomeActivity.this, "Can't update mac address,Hose is busy please retry later.", Color.RED);
-            }
-
-        } else {
-
-            try {
-                for (int i = 0; i < AppConstants.DetailsListOfConnectedDevices.size(); i++) {
-                    String MA_ConnectedDevices = AppConstants.DetailsListOfConnectedDevices.get(i).get("macAddress");
-                    if (selMacAddress.equalsIgnoreCase(MA_ConnectedDevices)) {
-                        IpAddress = AppConstants.DetailsListOfConnectedDevices.get(i).get("ipAddress");
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-
-            if (IpAddress.equals("")) {
-                tvSSIDName.setText("Can't select this Hose not connected");
-                btnGo.setVisibility(View.GONE);
-
-            } else {
-
-                //Selected position
-                //Toast.makeText(getApplicationContext(), "FS Position" + position, Toast.LENGTH_SHORT).show();
-                AppConstants.FS_selected = String.valueOf(position);
-                if (String.valueOf(position).equalsIgnoreCase("0")) {
-
-                    if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS1 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS1 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS1 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS1 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS1_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS1";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-
-                    }
-                } else if (String.valueOf(position).equalsIgnoreCase("1")) {
-                    if (Constants.FS_2STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS2 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS2 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS2 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS2 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS2_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS2";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-                    }
-
-                } else if (String.valueOf(position).equalsIgnoreCase("2")) {
-
-
-                    if (Constants.FS_3STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS3 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS3 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS3 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS3 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS3_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS3";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-                    }
-
-
-                } else if (String.valueOf(position).equalsIgnoreCase("3")) {
-
-
-                    if (Constants.FS_4STATUS.equalsIgnoreCase("FREE") && IsBusy.equalsIgnoreCase("N")) {
-                        // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-                        //Rename SSID from cloud
-                        if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                            AppConstants.NeedToRenameFS4 = false;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS4 = "";
-                        } else {
-                            AppConstants.NeedToRenameFS4 = true;
-                            AppConstants.REPLACEBLE_WIFI_NAME_FS4 = ReplaceableHoseName;
-                        }
-
-                        Constants.AccPersonnelPIN = "";
-                        tvSSIDName.setText(selSSID);
-                        AppConstants.FS4_CONNECTED_SSID = selSSID;
-                        Constants.CurrentSelectedHose = "FS4";
-                        btnGo.setVisibility(View.VISIBLE);
-                    } else {
-                        tvSSIDName.setText("Hose in use.\nPlease try again later");
-                        btnGo.setVisibility(View.GONE);
-                    }
-                } else {
-
-                    tvSSIDName.setText("Can't select this Hose for current version");
-                    btnGo.setVisibility(View.GONE);
-                }
-            }
-
-        }
-        //dialog.dismiss();
-
-    }
-
-    //==================Bluetooth Reader scan devices==================
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private synchronized void scanLeDevice(final boolean enable) {
-        if (enable) {
-            /* Stops scanning after a pre-defined scan period. */
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mScanning) {
-                        mScanning = false;
-                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-
-                    }
-                    invalidateOptionsMenu();
-                }
-            }, SCAN_PERIOD);
-
-            mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
-
-            invalidateOptionsMenu();
-        } else if (mScanning) {
-            mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-
-            invalidateOptionsMenu();
-        }
-    }
-
-    /* Device scan callback. */
-    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
-
-        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi,
-                             byte[] scanRecord) {
-
-            try {
-                if (device.getName().equalsIgnoreCase(AppConstants.BT_READER_NAME)) {
-
-                    //Toast.makeText(getApplicationContext(), "Device found: "+AppConstants.BT_READER_NAME, Toast.LENGTH_SHORT).show();
-
-                    AppConstants.WriteinFile("WelcomeActivity~~~~~~~~~" + "BT_READER_DEVICE_NAME " + device.getName());
-                    AppConstants.WriteinFile("WelcomeActivity~~~~~~~~~" + "BT_READER_DEVICE_ADDRESS " + String.valueOf(device));
-                    scanLeDevice(false);
-
-                    mDeviceName = device.getName();
-                    mDeviceAddress = String.valueOf(device);
-
-                   /* try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            setBluetooth(false);//Off Bluetooth
-                        }
-                    }, 1000);
-
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            setBluetooth(true);
-                        }
-                    }, 4000);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            connectReader();
-                        }
-                    }, 6000);
-
-                    /*// Connect the reader.
-                    if(connectReader()) {
-                        transmitEscapeCommend();
-                    }*/
-
-                }
-            }catch (NullPointerException e){
-                System.out.println(e);
-            }
-
-        }
-    };
-
-    //-------------------Bluetooth Reader------------
-
-    /*
-* Create a GATT connection with the reader. And detect the connected reader
-* once service list is available.
-*/
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private boolean connectReader() {
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        if (bluetoothManager == null) {
-            Log.w("A_pin Btreader", "Unable to initialize BluetoothManager.");
-            return false;
-        }
-
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-        if (bluetoothAdapter == null) {
-            Log.w("A_pin Btreader", "Unable to obtain a BluetoothAdapter.");
-            return false;
-        }
-
-
-
-        /* Create a new connection. */
-        final BluetoothDevice device = bluetoothAdapter
-                .getRemoteDevice(mDeviceAddress);
-
-        if (device == null) {
-            Log.w("A_pin Btreader", "Device not found. Unable to connect.");
-            return false;
-        }
-
-        /* Connect to GATT server. */
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
-        return true;
-    }
-
-    /* Disconnects an established connection. */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void disconnectReader() {
-
-        System.out.println("BT NFC disconnected...........");
-
-        if (mBluetoothGatt == null) {
-            return;
-        }
-        mBluetoothGatt.disconnect();
-    }
-
-
-    /* Get the Bonding status string. */
-    private String getBondingStatusString(int bondingStatus) {
-        if (bondingStatus == BluetoothDevice.BOND_BONDED) {
-            return "BOND BONDED";
-        } else if (bondingStatus == BluetoothDevice.BOND_NONE) {
-            return "BOND NONE";
-        } else if (bondingStatus == BluetoothDevice.BOND_BONDING) {
-            return "BOND BONDING";
-        }
-        return "BOND UNKNOWN.";
-    }
-
-
-    /* Get the Error string. */
-    private String getErrorString(int errorCode) {
-        if (errorCode == BluetoothReader.ERROR_SUCCESS) {
-            return "";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_CHECKSUM) {
-            return "The checksum is invalid.";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_DATA_LENGTH) {
-            return "The data length is invalid.";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_COMMAND) {
-            return "The command is invalid.";
-        } else if (errorCode == BluetoothReader.ERROR_UNKNOWN_COMMAND_ID) {
-            return "The command ID is unknown.";
-        } else if (errorCode == BluetoothReader.ERROR_CARD_OPERATION) {
-            return "The card operation failed.";
-        } else if (errorCode == BluetoothReader.ERROR_AUTHENTICATION_REQUIRED) {
-            return "Authentication is required.";
-        } else if (errorCode == BluetoothReader.ERROR_LOW_BATTERY) {
-            return "The battery is low.";
-        } else if (errorCode == BluetoothReader.ERROR_CHARACTERISTIC_NOT_FOUND) {
-            return "Error characteristic is not found.";
-        } else if (errorCode == BluetoothReader.ERROR_WRITE_DATA) {
-            return "Write command to reader is failed.";
-        } else if (errorCode == BluetoothReader.ERROR_TIMEOUT) {
-            return "Timeout.";
-        } else if (errorCode == BluetoothReader.ERROR_AUTHENTICATION_FAILED) {
-            return "Authentication is failed.";
-        } else if (errorCode == BluetoothReader.ERROR_UNDEFINED) {
-            return "Undefined error.";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_DATA) {
-            return "Received data error.";
-        } else if (errorCode == BluetoothReader.ERROR_COMMAND_FAILED) {
-            return "The command failed.";
-        }
-        return "Unknown error.";
-    }
-
-    /* Get the Response string. */
-    private String getResponseString(byte[] response, int errorCode) {
-        if (errorCode == BluetoothReader.ERROR_SUCCESS) {
-            if (response != null && response.length > 0) {
-                return CommonUtils.toHexString(response);
-            }
-            return "";
-        }
-        return getErrorString(errorCode);
-    }
-
-    /* Get the Card status string. */
-    private String getCardStatusString(int cardStatus) {
-        if (cardStatus == BluetoothReader.CARD_STATUS_ABSENT) {
-            return "Absent.";
-        } else if (cardStatus == BluetoothReader.CARD_STATUS_PRESENT) {
-            return "Present.";
-        } else if (cardStatus == BluetoothReader.CARD_STATUS_POWERED) {
-            return "Powered.";
-        } else if (cardStatus == BluetoothReader.CARD_STATUS_POWER_SAVING_MODE) {
-            PowerOnCard();//power on cardreader.
-            return "Power saving mode.";
-        }
-        return "The card status is unknown.";
-    }
-
-    public void PowerOnCard() {
-
-        if (mBluetoothReader == null) {
-            System.out.println("card_reader_not_ready");
-            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!mBluetoothReader.powerOnCard()) {
-            System.out.println("card_reader_not_ready");
-            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    public void Authentation() {
-
-        try {
-
-        /* Retrieve master key from edit box. */
-            byte masterKey[] = CommonUtils.toByteArray(CommonUtils.toHexString(DEFAULT_1255_MASTER_KEY.getBytes("UTF-8")));
-
-
-            if (masterKey != null && masterKey.length > 0) {
-
-                try {
-                    if (!mBluetoothReader.authenticate(masterKey)) {
-                        System.out.println("card_reader_not_ready");
-                        //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        System.out.println("Authenticating..");
-                        //Toast.makeText(getApplicationContext(), "Authenticating...", Toast.LENGTH_SHORT).show();
-
-                    }
-                } catch (NullPointerException e) {
-                    System.out.println(e);
-                }
-            }
-
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void Startpolling() {
-
-
-        if (mBluetoothReader == null) {
-            System.out.println("card_reader_not_ready");
-            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!mBluetoothReader.transmitEscapeCommand(AUTO_POLLING_START)) {
-            System.out.println("card_reader_not_ready");
-            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    public void TransmitApdu() {
-
-            /* Check for detected reader. */
-        if (mBluetoothReader == null) {
-            System.out.println("card_reader_not_ready");
-            //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        /* Retrieve APDU command from APDU COMMAND. */
-        byte apduCommand[] = CommonUtils.toByteArray(DEFAULT_1255_APDU_COMMAND);
-
-        if (apduCommand != null && apduCommand.length > 0) {
-
-           /* Transmit APDU command. */
-            if (!mBluetoothReader.transmitApdu(apduCommand)) {
-                System.out.println("card_reader_not_ready");
-                //Toast.makeText(getApplicationContext(), "card_reader_not_ready", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            System.out.println("Character format error!");
-            //Toast.makeText(getApplicationContext(), "Character format error!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    public void transmitNOSLEEPCommand(){
-
-            /* Check for detected reader. */
-        if (mBluetoothReader == null) {
-            System.out.println("card_reader_not_ready");
-            return;
-        }
-
-                /* Retrieve escape command from edit box. */
-        byte escapeCommand[] =  CommonUtils.toByteArray(DEFAULT_1255_ESCAPE_COMMAND_NO_SLEEP);
-
-        if (escapeCommand != null && escapeCommand.length > 0) {
-                    /* Clear response field for result of escape command. */
-
-
-                    /* Transmit escape command. */
-            if (!mBluetoothReader.transmitEscapeCommand(escapeCommand)) {
-                System.out.println("card_reader_not_ready");
-            }
-            else
-            {
-                System.out.println("No Data");
-            }
-        } else {
-            System.out.println("Character format error!");
-        }
-
-    }
-
-    public void transmitEscapeCommend(){
-
-            /* Check for detected reader. */
-        if (mBluetoothReader == null) {
-            System.out.println("card_reader_not_ready");
-            return;
-        }
-
-                /* Retrieve escape command from edit box. */
-        byte escapeCommand[] =  CommonUtils.toByteArray(DEFAULT_1255_ESCAPE_COMMAND);
-
-        if (escapeCommand != null && escapeCommand.length > 0) {
-                    /* Clear response field for result of escape command. */
-            System.out.println("No Data");
-
-                    /* Transmit escape command. */
-            if (!mBluetoothReader.transmitEscapeCommand(escapeCommand)) {
-                System.out.println("card_reader_not_ready");
-            }
-        } else {
-            System.out.println("Character format error!");
-        }
-
-    }
-
-    public void ReconnectFobReader(){
-
-        t = new Timer();
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run() {
-
-                if (Constants.FS_1STATUS.equalsIgnoreCase("FREE") && Constants.FS_2STATUS.equalsIgnoreCase("FREE") && Constants.FS_3STATUS.equalsIgnoreCase("FREE") && Constants.FS_4STATUS.equalsIgnoreCase("FREE")) {
-
-                    try {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                               //Toast.makeText(getApplicationContext(),"Setting Bluetooth OFF & ON --> Reconnecting fob reader-->",Toast.LENGTH_LONG).show();
-                               recreate();
-                            }
-                        });
-
-                    } catch (Exception e) {
-
-                        System.out.println(e);
-                    }
-
-                }
-
-            }
-
-            ;
-        };
-        t.schedule(tt, 3600000, 3600000);//3600000   ->5 min 300000
-
-
-    }
-
-    public static boolean setBluetooth(boolean enable) {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        boolean isEnabled = bluetoothAdapter.isEnabled();
-        if (enable && !isEnabled) {
-            return bluetoothAdapter.enable();
-        }
-        else if(!enable && isEnabled) {
-            return bluetoothAdapter.disable();
-        }
-        // No need to change bluetooth state
-        return true;
     }
 
 

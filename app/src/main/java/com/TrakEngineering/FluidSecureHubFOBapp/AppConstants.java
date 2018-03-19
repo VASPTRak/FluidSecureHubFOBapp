@@ -6,14 +6,9 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
@@ -37,7 +32,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Administrator on 5/19/2016.
@@ -187,67 +181,6 @@ public class AppConstants {
 
         }
         return mobileDataEnabled;
-    }
-
-    public static void disconnectWiFi(Context ctx) {
-
-
-        WifiManager wifiManager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
-
-        if (wifiManager.isWifiEnabled()) {
-
-            //wifiManager.disconnect();
-
-            wifiManager.setWifiEnabled(false);
-        }
-
-    }
-
-
-    public static void dontConnectWiFi(Context ctx) {
-
-
-        WifiManager wifiManager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
-
-        if (wifiManager.isWifiEnabled()) {
-
-            wifiManager.disconnect();
-
-            wifiManager.setWifiEnabled(true);
-
-        }
-
-    }
-
-    public static void forgetWiFi(Context ctx) {
-        WifiManager wifiManager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
-
-        List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
-        for (WifiConfiguration i : list) {
-
-            int nwID = i.networkId;
-            String ssID = i.SSID;
-            ssID = ssID.replace("\"", "");
-            System.out.println("sssss--" + nwID);
-            System.out.println("sssss--" + ssID);
-
-            if (AppConstants.LAST_CONNECTED_SSID.equalsIgnoreCase(ssID)) {
-                wifiManager.removeNetwork(nwID);
-                wifiManager.saveConfiguration();
-
-            }
-        }
-    }
-
-    public static String getConnectedWifiName(Context context) {
-        String name = "";
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        name = wifiInfo.getSSID();
-
-        System.out.println("connected ssid--" + name);
-
-        return name;
     }
 
 
@@ -465,12 +398,6 @@ public class AppConstants {
             WriteinFile("WriteinFile Exception" + e);
 
         }
-    }
-
-    public static void startWelcomeActivity(Context ctx) {
-        Intent i = new Intent(ctx, WelcomeActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        ctx.startActivity(i);
     }
 
 

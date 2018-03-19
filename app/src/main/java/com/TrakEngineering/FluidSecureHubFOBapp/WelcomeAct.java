@@ -11,9 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -93,10 +93,6 @@ public class WelcomeAct extends AppCompatActivity {
     private BluetoothReaderGattCallback mGattCallback;
 
     private ProgressDialog mProgressDialog;
-
-    /* Bluetooth GATT client. */
-    private BluetoothGatt mBluetoothGatt;
-
     /*
      * Listen to Bluetooth bond status change event. And turns on reader's
      * notifications once the card reader is bonded.
@@ -179,8 +175,8 @@ public class WelcomeAct extends AppCompatActivity {
         }
 
     };
-
-
+    /* Bluetooth GATT client. */
+    private BluetoothGatt mBluetoothGatt;
 
     /*
      * Update listener
@@ -673,99 +669,6 @@ public class WelcomeAct extends AppCompatActivity {
         }
         updateConnectionState(BluetoothReader.STATE_DISCONNECTING);
         mBluetoothGatt.disconnect();
-    }
-
-    /* Get the Battery level string. */
-    private String getBatteryLevelString(int batteryLevel) {
-        if (batteryLevel < 0 || batteryLevel > 100) {
-            return "Unknown.";
-        }
-        return String.valueOf(batteryLevel) + "%";
-    }
-
-    /* Get the Battery status string. */
-    private String getBatteryStatusString(int batteryStatus) {
-        if (batteryStatus == BluetoothReader.BATTERY_STATUS_NONE) {
-            return "No battery.";
-        } else if (batteryStatus == BluetoothReader.BATTERY_STATUS_FULL) {
-            return "The battery is full.";
-        } else if (batteryStatus == BluetoothReader.BATTERY_STATUS_USB_PLUGGED) {
-            return "The USB is plugged.";
-        }
-        return "The battery is low.";
-    }
-
-    /* Get the Bonding status string. */
-    private String getBondingStatusString(int bondingStatus) {
-        if (bondingStatus == BluetoothDevice.BOND_BONDED) {
-            return "BOND BONDED";
-        } else if (bondingStatus == BluetoothDevice.BOND_NONE) {
-            return "BOND NONE";
-        } else if (bondingStatus == BluetoothDevice.BOND_BONDING) {
-            return "BOND BONDING";
-        }
-        return "BOND UNKNOWN.";
-    }
-
-    /* Get the Card status string. */
-    private String getCardStatusString(int cardStatus) {
-        if (cardStatus == BluetoothReader.CARD_STATUS_ABSENT) {
-            return "Absent.";
-        } else if (cardStatus == BluetoothReader.CARD_STATUS_PRESENT) {
-            return "Present.";
-        } else if (cardStatus == BluetoothReader.CARD_STATUS_POWERED) {
-            return "Powered.";
-        } else if (cardStatus == BluetoothReader.CARD_STATUS_POWER_SAVING_MODE) {
-            return "Power saving mode.";
-        }
-        return "The card status is unknown.";
-    }
-
-    /* Get the Error string. */
-    private String getErrorString(int errorCode) {
-        if (errorCode == BluetoothReader.ERROR_SUCCESS) {
-            return "";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_CHECKSUM) {
-            return "The checksum is invalid.";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_DATA_LENGTH) {
-            return "The data length is invalid.";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_COMMAND) {
-            return "The command is invalid.";
-        } else if (errorCode == BluetoothReader.ERROR_UNKNOWN_COMMAND_ID) {
-            return "The command ID is unknown.";
-        } else if (errorCode == BluetoothReader.ERROR_CARD_OPERATION) {
-            return "The card operation failed.";
-        } else if (errorCode == BluetoothReader.ERROR_AUTHENTICATION_REQUIRED) {
-            return "Authentication is required.";
-        } else if (errorCode == BluetoothReader.ERROR_LOW_BATTERY) {
-            return "The battery is low.";
-        } else if (errorCode == BluetoothReader.ERROR_CHARACTERISTIC_NOT_FOUND) {
-            return "Error characteristic is not found.";
-        } else if (errorCode == BluetoothReader.ERROR_WRITE_DATA) {
-            return "Write command to reader is failed.";
-        } else if (errorCode == BluetoothReader.ERROR_TIMEOUT) {
-            return "Timeout.";
-        } else if (errorCode == BluetoothReader.ERROR_AUTHENTICATION_FAILED) {
-            return "Authentication is failed.";
-        } else if (errorCode == BluetoothReader.ERROR_UNDEFINED) {
-            return "Undefined error.";
-        } else if (errorCode == BluetoothReader.ERROR_INVALID_DATA) {
-            return "Received data error.";
-        } else if (errorCode == BluetoothReader.ERROR_COMMAND_FAILED) {
-            return "The command failed.";
-        }
-        return "Unknown error.";
-    }
-
-    /* Get the Response string. */
-    private String getResponseString(byte[] response, int errorCode) {
-        if (errorCode == BluetoothReader.ERROR_SUCCESS) {
-            if (response != null && response.length > 0) {
-                return CommonUtils.toHexString(response);
-            }
-            return "";
-        }
-        return getErrorString(errorCode);
     }
 
     /* Update the display of Connection status string. */

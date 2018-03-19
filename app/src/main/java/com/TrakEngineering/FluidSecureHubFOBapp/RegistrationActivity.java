@@ -29,16 +29,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private Pattern EMAIL_PATTERN;
-    private Pattern US_PHONE_PATTERN;
     EditText etFName, etMobile, etCompany;
     AutoCompleteTextView etEmail;
     Button btnSubmit;
+    private Pattern EMAIL_PATTERN;
+    private Pattern US_PHONE_PATTERN;
+
+    public static void redToast(Context ctx, String MSg) {
+        Toast toast = Toast.makeText(ctx, " " + MSg + " ", Toast.LENGTH_LONG);
+        toast.getView().setBackgroundColor(Color.RED);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,24 +130,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-
-    public static void redToast(Context ctx, String MSg) {
-        Toast toast = Toast.makeText(ctx, " " + MSg + " ", Toast.LENGTH_LONG);
-        toast.getView().setBackgroundColor(Color.RED);
-        toast.setGravity(Gravity.CENTER,0,0);
-        toast.show();
-    }
-
-
-    private boolean isValidEmail(String email) {
-        //String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-        Pattern pattern = Pattern.compile(emailPattern);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 
     public void storeINFO(Context context, String name, String mobile, String email, String IMEInum) {

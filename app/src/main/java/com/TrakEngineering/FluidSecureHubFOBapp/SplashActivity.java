@@ -2,7 +2,6 @@ package com.TrakEngineering.FluidSecureHubFOBapp;
 
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,9 +11,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -54,27 +50,44 @@ import java.util.concurrent.TimeUnit;
 
 public class SplashActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final String TAG = "SplashActivity";
     private static final int REQUEST_LOCATION = 2;
-    private ConnectionDetector cd;
-    private double latitude;
-    private double longitude;
-    private GPSTracker gps;
     private static final int PERMISSION_REQUEST_CODE_READ_phone = 1;
     private static final int PERMISSION_REQUEST_CODE_READ = 3;
     private static final int PERMISSION_REQUEST_CODE_WRITE = 2;
     private static final int PERMISSION_REQUEST_CODE_CORSE_LOCATION = 4;
     private static final int CODE_WRITE_SETTINGS_PERMISSION = 55;
-
     GoogleApiClient mGoogleApiClient;
-
-
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-
-
     WifiApManager wifiApManager;
     ConnectivityManager connection_manager;
+    private ConnectionDetector cd;
+    private double latitude;
+    private double longitude;
+    private GPSTracker gps;
 
+    public static void showMessageDilaog(final Activity context, String title, String message) {
+
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(context);
+        // set title
+
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder
+                .setMessage(message)
+                .setCancelable(false)
+                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        context.finish();
+                        dialog.cancel();
+                    }
+                });
+        // create alert dialog
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,17 +329,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
     }
 
-    public class checkPermissionTask extends AsyncTask<Void, Void, Void> {
-        boolean isValue = false;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            isValue = TestPermissions();
-            return null;
-        }
-    }
-
     private boolean TestPermissions() {
         boolean isValue = false;
 
@@ -383,15 +385,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
     private boolean checkPermission(Activity context, String permission) {
         int result = ContextCompat.checkSelfPermission(context, permission);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
     /*private void showSettingsAlert() {
@@ -523,57 +517,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-
-    public class CheckApproved extends AsyncTask<Void, Void, String> {
-
-        public String resp = "";
-
-        protected String doInBackground(Void... arg0){
-
-
-            try {
-
-
-                MediaType TEXT = MediaType.parse("application/x-www-form-urlencoded");
-
-                OkHttpClient client = new OkHttpClient();
-                client.setConnectTimeout(10, TimeUnit.SECONDS);
-                client.setReadTimeout(10, TimeUnit.SECONDS);
-                client.setWriteTimeout(10, TimeUnit.SECONDS);
-
-                String imieNumber = AppConstants.getIMEI(SplashActivity.this);
-                RequestBody body = RequestBody.create(TEXT, "Authenticate:A");
-                Request request = new Request.Builder()
-                        .url(AppConstants.webURL)
-                        .post(body)
-                        .addHeader("Authorization", "Basic " + AppConstants.convertStingToBase64(imieNumber + ":abc:Other"))
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                resp = response.body().string();
-
-            } catch (SocketTimeoutException e) {
-
-            }
-            catch (Exception e) {
-
-            }
-
-
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-
-            if (response!=null&&response.startsWith("{"))
-            actionOnResult(response);
-            else
-                //AppConstants.alertBigFinishActivity(SplashActivity.this,"Please check your Internet data");
-                recreate();
-        }
-    }
-
     public void AlertDialogBox(final Context ctx, String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
         alertDialogBuilder.setMessage(message);
@@ -592,7 +535,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -678,52 +620,64 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
     }
 
+    public class checkPermissionTask extends AsyncTask<Void, Void, Void> {
+        boolean isValue = false;
 
-    public static void showMessageDilaog(final Activity context, String title, String message) {
+        @Override
+        protected Void doInBackground(Void... params) {
 
-        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(context);
-        // set title
-
-        alertDialogBuilder.setTitle(title);
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder
-                .setMessage(message)
-                .setCancelable(false)
-                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        context.finish();
-                        dialog.cancel();
-                    }
-                });
-        // create alert dialog
-        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-        // show it
-        alertDialog.show();
+            isValue = TestPermissions();
+            return null;
+        }
     }
 
-    @TargetApi(21)
-    public void setGlobalMobileDatConnection() {
+    public class CheckApproved extends AsyncTask<Void, Void, String> {
 
-        NetworkRequest.Builder requestbuilder = new NetworkRequest.Builder();
-        requestbuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        public String resp = "";
 
-        connection_manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        protected String doInBackground(Void... arg0) {
 
 
-        connection_manager.requestNetwork(requestbuilder.build(), new ConnectivityManager.NetworkCallback() {
-            @Override
-            public void onAvailable(Network network) {
+            try {
 
 
-                System.out.println(" network......." + network);
+                MediaType TEXT = MediaType.parse("application/x-www-form-urlencoded");
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    connection_manager.bindProcessToNetwork(network);
+                OkHttpClient client = new OkHttpClient();
+                client.setConnectTimeout(10, TimeUnit.SECONDS);
+                client.setReadTimeout(10, TimeUnit.SECONDS);
+                client.setWriteTimeout(10, TimeUnit.SECONDS);
 
-                }
+                String imieNumber = AppConstants.getIMEI(SplashActivity.this);
+                RequestBody body = RequestBody.create(TEXT, "Authenticate:A");
+                Request request = new Request.Builder()
+                        .url(AppConstants.webURL)
+                        .post(body)
+                        .addHeader("Authorization", "Basic " + AppConstants.convertStingToBase64(imieNumber + ":abc:Other"))
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                resp = response.body().string();
+
+            } catch (SocketTimeoutException e) {
+
+            } catch (Exception e) {
+
             }
-        });
+
+
+            return resp;
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+
+            if (response != null && response.startsWith("{"))
+                actionOnResult(response);
+            else
+                //AppConstants.alertBigFinishActivity(SplashActivity.this,"Please check your Internet data");
+                recreate();
+        }
     }
 
 

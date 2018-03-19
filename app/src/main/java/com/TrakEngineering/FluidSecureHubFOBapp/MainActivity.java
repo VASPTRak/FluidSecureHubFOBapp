@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -144,18 +142,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         return isOkay;
-    }
-
-    public boolean isConnectingToInternet() {
-        boolean isConnected = false;
-
-        ConnectivityManager connectivity = (ConnectivityManager) MainActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-
-            NetworkInfo activeNetwork = connectivity.getActiveNetworkInfo();
-            isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        }
-        return isConnected;
     }
 
     private void InItGUI() {

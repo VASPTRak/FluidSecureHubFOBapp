@@ -20,35 +20,5 @@ public class ClientScanResult {
         this.isReachable = isReachable;
     }
 
-    public String getIpAddr() {
-        return IpAddr;
-    }
-    public void setIpAddr(String ipAddr) {
-        IpAddr = ipAddr;
-    }
-
-
-    public String getHWAddr() {
-        return HWAddr;
-    }
-    public void setHWAddr(String hWAddr) {
-        HWAddr = hWAddr;
-    }
-
-
-    public String getDevice() {
-        return Device;
-    }
-    public void setDevice(String device) {
-        Device = device;
-    }
-
-
-    public boolean isReachable() {
-        return isReachable;
-    }
-    public void setReachable(boolean isReachable) {
-        this.isReachable = isReachable;
-    }
 
 }

@@ -1,6 +1,5 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,50 +44,6 @@ public class DBController extends SQLiteOpenHelper {
         onCreate(database);
     }
 
-    public long insertTransactions(HashMap<String, String> queryValues) {
-
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("jsonData", queryValues.get("jsonData"));
-        values.put("authString", queryValues.get("authString"));
-
-        long insertedID=database.insert("Tbl_FSTrak", null, values);
-        database.close();
-
-        return  insertedID;
-    }
-
-    public int updateTransactions(HashMap<String, String>  queryValues) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("jsonData", queryValues.get("jsonData"));
-        values.put("authString", queryValues.get("authString"));
-
-        return database.update("Tbl_FSTrak", values, "Id" + " = ?", new String[] { queryValues.get("sqliteId") });
-    }
-
-    public void deleteTransStatusByTransID(String TransID) {
-        Log.d(LOGCAT, "delete");
-        SQLiteDatabase database = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM  Tbl_FSTransStatus where transId='" + TransID + "'";
-        Log.d("query", deleteQuery);
-        database.execSQL(deleteQuery);
-    }
-
-    public long insertTransStatus(HashMap<String, String> queryValues) {
-
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("transId", queryValues.get("transId"));
-        values.put("transStatus", queryValues.get("transStatus"));
-
-        long insertedID=database.insert("Tbl_FSTransStatus", null, values);
-
-        database.close();
-
-        return  insertedID;
-    }
-
     public void deleteTransactions(String id) {
         Log.d(LOGCAT, "delete");
         SQLiteDatabase database = this.getWritableDatabase();
@@ -118,17 +73,6 @@ public class DBController extends SQLiteOpenHelper {
     }
 
     //=========================Update Transaction Status================
-
-    public void insertIntoUpdateTranStatus (HashMap<String, String> queryValues) {
-
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("jsonData", queryValues.get("jsonData"));
-        values.put("authString", queryValues.get("authString"));
-
-        database.insert("Tb2_FSTrak", null, values);
-        database.close();
-    }
 
     public void deleteTranStatus(String id) {
         Log.d(LOGCAT, "delete");
