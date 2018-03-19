@@ -60,8 +60,8 @@ public class AppConstants {
     public static final String HubId = "HubId";
 
 
-    //public static String webIP = "http://103.8.126.241:89/";//test
-     public static String webIP = "http://fluidsecure.cloudapp.net/"; //live
+    public static String webIP = "http://103.8.126.241:89/";//test
+    // public static String webIP = "http://fluidsecure.cloudapp.net/"; //live
     //public static String webIP = "http://103.8.126.241:93/";//New link for FS_AP
     //public static String webIP = "http://103.8.126.241:8988/";//new for hotspot changes
 
@@ -167,9 +167,9 @@ public class AppConstants {
         TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             return telephonyManager.getDeviceId();
-        }catch (SecurityException e) {
-            e.printStackTrace();
-            return "00000";
+        } catch (SecurityException ex) {
+        ex.printStackTrace();
+        return "";
         }
     }
 
@@ -183,8 +183,8 @@ public class AppConstants {
             method.setAccessible(true);
             // get the setting for "mobile data"
             mobileDataEnabled = (Boolean) method.invoke(cm);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+
         }
         return mobileDataEnabled;
     }
@@ -290,6 +290,30 @@ public class AppConstants {
             @Override
             public void onClick(View v) {
                 ctx.finish();
+            }
+        });
+
+
+        dialogObj.show();
+    }
+
+    public static void alertBigActivity(final Activity ctx, String msg) {
+        final Dialog dialogObj;
+        dialogObj = new Dialog(ctx);
+        dialogObj.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogObj.setContentView(R.layout.dialog_alert_big_finish);
+        dialogObj.setCancelable(false);
+
+        TextView tvAlertMsg = (TextView) dialogObj.findViewById(R.id.tvAlertMsg);
+        Button btnDialogOk = (Button) dialogObj.findViewById(R.id.btnDailogOk);
+
+
+        tvAlertMsg.setText(msg);
+
+        btnDialogOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogObj.dismiss();
             }
         });
 
@@ -443,14 +467,47 @@ public class AppConstants {
         }
     }
 
+    public static void startWelcomeActivity(Context ctx) {
+        Intent i = new Intent(ctx, WelcomeActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        ctx.startActivity(i);
+    }
+
 
     public static void ClearEdittextFielsOnBack(Context ctx) {
+
+        if (Constants.CurrentSelectedHose.equals("FS1")) {
+            Constants.AccVehicleNumber_FS1 = "";
+            Constants.AccOdoMeter_FS1 = 0;
+            Constants.AccDepartmentNumber_FS1 = "";
+            Constants.AccPersonnelPIN_FS1 = "";
+            Constants.AccOther_FS1 = "";
+
+        } else if (Constants.CurrentSelectedHose.equals("FS2")) {
 
             Constants.AccVehicleNumber = "";
             Constants.AccOdoMeter = 0;
             Constants.AccDepartmentNumber = "";
             Constants.AccPersonnelPIN = "";
             Constants.AccOther = "";
+
+        } else if (Constants.CurrentSelectedHose.equals("FS3")) {
+
+            Constants.AccVehicleNumber_FS3 = "";
+            Constants.AccOdoMeter_FS3 = 0;
+            Constants.AccDepartmentNumber_FS3 = "";
+            Constants.AccPersonnelPIN_FS3 = "";
+            Constants.AccOther_FS3 = "";
+
+        } else {
+
+            Constants.AccVehicleNumber_FS4 = "";
+            Constants.AccOdoMeter_FS4 = 0;
+            Constants.AccDepartmentNumber_FS4 = "";
+            Constants.AccPersonnelPIN_FS4 = "";
+            Constants.AccOther_FS4 = "";
+
+        }
     }
 
 }
