@@ -165,7 +165,12 @@ public class AppConstants {
     public static String getIMEI(Context ctx) {
 
         TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
+        try {
+            return telephonyManager.getDeviceId();
+        }catch (SecurityException e) {
+            e.printStackTrace();
+            return "00000";
+        }
     }
 
     public static boolean isMobileDataAvailable(Context ctx) {
@@ -178,8 +183,8 @@ public class AppConstants {
             method.setAccessible(true);
             // get the setting for "mobile data"
             mobileDataEnabled = (Boolean) method.invoke(cm);
-        } catch (Exception e) {
-
+        } catch(Exception e) {
+            e.printStackTrace();
         }
         return mobileDataEnabled;
     }
@@ -285,30 +290,6 @@ public class AppConstants {
             @Override
             public void onClick(View v) {
                 ctx.finish();
-            }
-        });
-
-
-        dialogObj.show();
-    }
-
-    public static void alertBigActivity(final Activity ctx, String msg) {
-        final Dialog dialogObj;
-        dialogObj = new Dialog(ctx);
-        dialogObj.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogObj.setContentView(R.layout.dialog_alert_big_finish);
-        dialogObj.setCancelable(false);
-
-        TextView tvAlertMsg = (TextView) dialogObj.findViewById(R.id.tvAlertMsg);
-        Button btnDialogOk = (Button) dialogObj.findViewById(R.id.btnDailogOk);
-
-
-        tvAlertMsg.setText(msg);
-
-        btnDialogOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogObj.dismiss();
             }
         });
 
@@ -462,12 +443,6 @@ public class AppConstants {
         }
     }
 
-    public static void startWelcomeActivity(Context ctx) {
-        Intent i = new Intent(ctx, WelcomeActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        ctx.startActivity(i);
-    }
-
 
     public static void ClearEdittextFielsOnBack(Context ctx) {
 
@@ -476,59 +451,6 @@ public class AppConstants {
             Constants.AccDepartmentNumber = "";
             Constants.AccPersonnelPIN = "";
             Constants.AccOther = "";
-    }
-
-    public static void showHideActivityBySharedPref(Activity actctx) {
-        SharedPreferences sharedPrefODO = actctx.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String IsPersonnelPINRequire = sharedPrefODO.getString(AppConstants.IsPersonnelPINRequire, "");
-        String IsHoursRequire = sharedPrefODO.getString(AppConstants.IsHoursRequire, "");
-        String IsDepartmentRequire = sharedPrefODO.getString(AppConstants.IsDepartmentRequire, "");
-        String IsOtherRequire = sharedPrefODO.getString(AppConstants.IsOtherRequire, "");
-
-        if (IsPersonnelPINRequire.equalsIgnoreCase("True")) {
-            if (actctx instanceof AcceptPinActivity) {
-                AcceptServiceCall asc = new AcceptServiceCall();
-                asc.activity = actctx;
-                asc.checkAllFields();
-            } else {
-                Intent intent = new Intent(actctx, AcceptPinActivity.class);
-                actctx.startActivity(intent);
-            }
-        } else if (IsHoursRequire.equalsIgnoreCase("True")) {
-            if (actctx instanceof AcceptHoursAcitvity) {
-                AcceptServiceCall asc = new AcceptServiceCall();
-                asc.activity = actctx;
-                asc.checkAllFields();
-            } else {
-                Intent intent = new Intent(actctx, AcceptHoursAcitvity.class);
-                actctx.startActivity(intent);
-            }
-        } else if (IsDepartmentRequire.equalsIgnoreCase("True")) {
-
-            if (actctx instanceof AcceptDeptActivity) {
-                AcceptServiceCall asc = new AcceptServiceCall();
-                asc.activity = actctx;
-                asc.checkAllFields();
-            } else {
-                Intent intent = new Intent(actctx, AcceptDeptActivity.class);
-                actctx.startActivity(intent);
-            }
-        } else if (IsOtherRequire.equalsIgnoreCase("True")) {
-            if (actctx instanceof AcceptOtherActivity) {
-                AcceptServiceCall asc = new AcceptServiceCall();
-                asc.activity = actctx;
-                asc.checkAllFields();
-            } else {
-                Intent intent = new Intent(actctx, AcceptOtherActivity.class);
-                actctx.startActivity(intent);
-            }
-        } else {
-
-            AcceptServiceCall asc = new AcceptServiceCall();
-            asc.activity = actctx;
-            asc.checkAllFields();
-        }
-
     }
 
 }

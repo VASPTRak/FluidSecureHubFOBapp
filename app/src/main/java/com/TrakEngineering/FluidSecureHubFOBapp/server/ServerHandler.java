@@ -114,35 +114,6 @@ public class ServerHandler {
         return response.body().string();
     }
 
-    public String put(Activity actvity, String url, String marchandId) throws IOException, Exception {
-        String xtoken = getXtoken(actvity);
-        RequestBody body = RequestBody.create(JSON, marchandId);
-        Request request = new Request.Builder()
-                .url(url)
-                .put(body)
-                .addHeader("x-auth-token", xtoken)
-                .build();
-        Response response;
-        response = client.newCall(request).execute();
-        return response.body().string();
-
-    }
-
-    public String Delete(Activity actvity, String url, String marchandId) throws IOException, Exception {
-
-        String xtoken = getXtoken(actvity);
-        url = url + marchandId;
-        Request request = new Request.Builder()
-                .url(url)
-                .delete()
-                .addHeader("x-auth-token", xtoken)
-                .build();
-        Response response;
-        response = client.newCall(request).execute();
-        return response.body().string();
-
-    }
-
     public Response get(Activity activity, String url, String authTokan) throws IOException, Exception {
 
 
@@ -154,19 +125,6 @@ public class ServerHandler {
         response = client.newCall(request).execute();
         return response;
 
-    }
-
-    private String getXtoken(Activity actvity) {
-        String xtoken = null;
-        try {
-            //sh_Pref = actvity.getSharedPreferences(Constants.prefLoginName, actvity.MODE_PRIVATE);
-            //xtoken=sh_Pref.getString(Constants.accessToken, "invalid");
-
-        } catch (Exception e) {
-
-            Log.e(TAG, e.getMessage());
-        }
-        return xtoken;
     }
 
 }

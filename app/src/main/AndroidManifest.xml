@@ -75,15 +75,6 @@
             android:fitsSystemWindows="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptOdoActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.DisplayMeterActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.RegistrationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
@@ -122,9 +113,6 @@
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService"
             android:enabled="true" />
         <service
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundFOBReader"
-            android:enabled="true" />
-        <service
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundService_AP"
             android:enabled="true" />
         <service
@@ -140,46 +128,6 @@
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundServiceHotspotCheck"
             android:enabled="true" />
 
-        <receiver android:name="com.TrakEngineering.FluidSecureHubFOBapp.MobileDataReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.TrakEngineering.FluidSecureHubFOBapp.WifiReceiver">
-            <intent-filter android:priority="100">
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.TrakEngineering.FluidSecureHubFOBapp.OnBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptFieldActivity" />
-        <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptPinActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptDeptActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptOtherActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptCheckAll" />
-        <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptHoursAcitvity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.SelectFSActivity" />
-        <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.ActivityFobKeyReader" />
         <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeAct"></activity>
     </application>
 

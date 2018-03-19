@@ -89,10 +89,6 @@ public class SmartPoster implements ParsedNdefRecord {
         mType = type;
     }
 
-    public UriRecord getUriRecord() {
-        return mUriRecord;
-    }
-
     /**
      * Returns the title of the smart poster. This may be {@code null}.
      */

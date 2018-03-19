@@ -54,13 +54,6 @@ public class TextRecord implements ParsedNdefRecord {
         return mText;
     }
 
-    /**
-     * Returns the ISO/IANA language code associated with this text element.
-     */
-    public String getLanguageCode() {
-        return mLanguageCode;
-    }
-
     // TODO: deal with text fields which span multiple NdefRecords
     public static TextRecord parse(NdefRecord record) {
         Preconditions.checkArgument(record.getTnf() == NdefRecord.TNF_WELL_KNOWN);

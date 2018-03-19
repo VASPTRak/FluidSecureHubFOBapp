@@ -101,10 +101,6 @@ public class UriRecord implements ParsedNdefRecord {
         return text;
     }
 
-    public Uri getUri() {
-        return mUri;
-    }
-
     /**
      * Convert {@link android.nfc.NdefRecord} into a {@link android.net.Uri}.
      * This will handle both TNF_WELL_KNOWN / RTD_URI and TNF_ABSOLUTE_URI.
