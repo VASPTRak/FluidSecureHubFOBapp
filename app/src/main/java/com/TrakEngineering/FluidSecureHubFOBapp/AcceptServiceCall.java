@@ -19,7 +19,7 @@ public class AcceptServiceCall {
 
     public Activity activity;
     String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequire = "", IsOtherRequire = "";
-    private ConnectionDetector cd;
+    //private ConnectionDetector cd;
 
     public void checkAllFields() {
 
@@ -67,7 +67,7 @@ public class AcceptServiceCall {
             authEntityClass.AppInfo =  " Version " + CommonUtils.getVersionCode(activity) + " "+ AppConstants.getDeviceName().toLowerCase() + " " ;
 
 
-            cd = new ConnectionDetector(activity);
+            ConnectionDetector cd = new ConnectionDetector(activity);
             if (cd.isConnectingToInternet()) {
 
 

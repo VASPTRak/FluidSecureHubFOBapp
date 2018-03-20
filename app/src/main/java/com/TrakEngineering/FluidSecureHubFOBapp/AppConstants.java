@@ -1,5 +1,6 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -156,14 +157,16 @@ public class AppConstants {
         return base64;
     }
 
+    //Yes, we do want IMEI, and not other IDs
+    @SuppressLint("HardwareIds")
     public static String getIMEI(Context ctx) {
 
         TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             return telephonyManager.getDeviceId();
         } catch (SecurityException ex) {
-        ex.printStackTrace();
-        return "";
+            ex.printStackTrace();
+            return "";
         }
     }
 
