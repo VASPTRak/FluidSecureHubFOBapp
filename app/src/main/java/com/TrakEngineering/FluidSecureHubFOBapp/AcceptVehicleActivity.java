@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.TrakEngineering.FluidSecureHubFOBapp.enity.VehicleFobEntity;
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.VehicleRequireEntity;
 import com.TrakEngineering.FluidSecureHubFOBapp.server.ServerHandler;
 import com.google.gson.Gson;
@@ -465,6 +466,8 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
 
             VehicleRequireEntity objEntityClass = new VehicleRequireEntity();
+            //SW: use once server changes
+            //VehicleRequireEntity objEntityClass = new VehicleFobEntity();
             objEntityClass.IMEIUDID = AppConstants.getIMEI(AcceptVehicleActivity.this);
             objEntityClass.VehicleNumber = vehicleNumber;
             objEntityClass.WifiSSId = AppConstants.LAST_CONNECTED_SSID;
@@ -677,6 +680,9 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         public String response = null;
         VehicleRequireEntity vrentity = null;
 
+        //SW: I will use this once server does
+        VehicleFobEntity vfentity = null;
+
         public CheckVehicleRequireOdometerEntryAndRequireHourEntry(VehicleRequireEntity vrentity) {
             this.vrentity = vrentity;
         }
@@ -696,6 +702,12 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                 String authString = "Basic " + AppConstants.convertStingToBase64(vrentity.IMEIUDID + ":" + userEmail + ":" + "CheckVehicleRequireOdometerEntryAndRequireHourEntry");
                 response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
                 //----------------------------------------------------------------------------------
+
+                //SW: Use once server changes
+//                //----------------------------------------------------------------------------------
+//                String authString = "Basic " + AppConstants.convertStingToBase64(vrentity.IMEIUDID + ":" + userEmail + ":" + "CheckVehicleFobOnly");
+//                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
+//                //----------------------------------------------------------------------------------
 
             } catch (Exception ex) {
 
