@@ -27,8 +27,8 @@ import java.util.HashMap;
 
 public class BackgroundService extends Service {
 
-    ServerHandler serverHandler = new ServerHandler();
-        DBController controller = new DBController(BackgroundService.this);
+    private ServerHandler serverHandler = new ServerHandler();
+    private DBController controller = new DBController(BackgroundService.this);
 
 
     @Nullable

@@ -4,7 +4,7 @@ package com.TrakEngineering.FluidSecureHubFOBapp.enity;
  * Created by Administrator on 1/18/2017.
  */
 
-public class TrazComp {
+class TrazComp {
 
     public String PersonId;
     public String SiteId;

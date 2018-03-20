@@ -38,13 +38,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private static final String TAG = "MainActivity";
-    Button setWifi;
-    WifiManager wifiManager;
-    WifiReceiver receiverWifi;
-    List<ScanResult> wifiList;
-    List<WifiEntityClass> listOfProvider;
-    ListAdapter adapter;
-    GridView listViwProvider;
+    private Button setWifi;
+    private WifiManager wifiManager;
+    private WifiReceiver receiverWifi;
+    private List<ScanResult> wifiList;
+    private List<WifiEntityClass> listOfProvider;
+    private ListAdapter adapter;
+    private GridView listViwProvider;
     private ProgressDialog pd;
     private ConnectionDetector cd;
 
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         });
     }
 
-    public boolean discoonectToWifi() {
+    private boolean discoonectToWifi() {
         boolean isOkay = false;
         WifiManager wifiManager = (WifiManager)  getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager.isWifiEnabled() == true) {

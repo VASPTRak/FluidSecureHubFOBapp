@@ -22,13 +22,12 @@ import java.io.InputStream;
 
 public class ServerHandler {
 
+    public static final MediaType TEXT = MediaType.parse("application/text;charset=UTF-8");//("application/x-www-form-urlencoded");
+    private static final MediaType JSON = MediaType.parse("application/json;charset=UTF-8");//("application/x-www-form-urlencoded");
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
-    public static final MediaType JSON = MediaType.parse("application/json;charset=UTF-8");//("application/x-www-form-urlencoded");
-
-    public static final MediaType TEXT = MediaType.parse("application/text;charset=UTF-8");//("application/x-www-form-urlencoded");
-    public OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client = new OkHttpClient();
     private SharedPreferences sh_Pref;
     private String TAG = "ServerHandler : ";
 
@@ -37,7 +36,7 @@ public class ServerHandler {
 
     }
 
-    public String PostFromService(Context activity, String serverUrl, String JsonData, String authTokan) throws IOException, Exception {
+    public String PostFromService(Context activity, String serverUrl, String JsonData, String authTokan) throws Exception {
 
 
 
@@ -56,7 +55,7 @@ public class ServerHandler {
     }
 
     // This post method useful for only post to getting pump numbers and
-    public String PostTextData(Context activity, String serverUrl, String JsonData, String authTokan) throws IOException, Exception {
+    public String PostTextData(Context activity, String serverUrl, String JsonData, String authTokan) throws Exception {
 
 
 
@@ -74,7 +73,7 @@ public class ServerHandler {
 
     }
 
-    public Response Post(Context activity, String serverUrl, String JsonData, String authTokan) throws IOException, Exception {
+    public Response Post(Context activity, String serverUrl, String JsonData, String authTokan) throws Exception {
 
         RequestBody body = RequestBody.create(JSON, JsonData);
         Request request = new Request.Builder()
@@ -114,7 +113,7 @@ public class ServerHandler {
         return response.body().string();
     }
 
-    public String put(Activity actvity, String url, String marchandId) throws IOException, Exception {
+    public String put(Activity actvity, String url, String marchandId) throws Exception {
         String xtoken = getXtoken(actvity);
         RequestBody body = RequestBody.create(JSON, marchandId);
         Request request = new Request.Builder()
@@ -128,7 +127,7 @@ public class ServerHandler {
 
     }
 
-    public String Delete(Activity actvity, String url, String marchandId) throws IOException, Exception {
+    public String Delete(Activity actvity, String url, String marchandId) throws Exception {
 
         String xtoken = getXtoken(actvity);
         url = url + marchandId;
@@ -143,7 +142,7 @@ public class ServerHandler {
 
     }
 
-    public Response get(Activity activity, String url, String authTokan) throws IOException, Exception {
+    public Response get(Activity activity, String url, String authTokan) throws Exception {
 
 
         Request request = new Request.Builder()

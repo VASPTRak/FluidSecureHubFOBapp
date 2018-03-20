@@ -10,11 +10,11 @@ import java.util.Date;
 /**
  * Created by VASP-LAP on 21-09-2015.
  */
-public class CountDownRunner implements Runnable {
+class CountDownRunner implements Runnable {
     private static final String TAG = "CountDownRunner";
-    Activity context;
-    TextView textTime;
-    MenuItem NetworkmenuItem;
+    private Activity context;
+    private TextView textTime;
+    private MenuItem NetworkmenuItem;
     // @Override
     public CountDownRunner(Activity context, TextView textTime)
     {   this.NetworkmenuItem=NetworkmenuItem;
@@ -36,7 +36,7 @@ public class CountDownRunner implements Runnable {
     }
 
 
-    public void doWork(final Activity context, final TextView textTime) {
+    private void doWork(final Activity context, final TextView textTime) {
         context.runOnUiThread(new Runnable() {
             public void run() {
                 try {

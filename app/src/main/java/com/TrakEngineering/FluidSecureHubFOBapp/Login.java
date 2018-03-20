@@ -22,8 +22,9 @@ import org.json.JSONObject;
 
 public class Login extends AppCompatActivity {
 
-    EditText etUserId, etPass;
-    Button btnLogin;
+    private EditText etUserId;
+    private EditText etPass;
+    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

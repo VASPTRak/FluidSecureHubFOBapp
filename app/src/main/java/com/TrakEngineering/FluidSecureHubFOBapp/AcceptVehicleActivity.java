@@ -37,17 +37,29 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     private static final String TAG = "AcceptVehicleActivity";
     public static String SITE_ID = "0";
-    String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequire = "",IsPersonnelPINRequireForHub ="", IsOtherRequire = "";
-    Button btnCancel, btn_fob_Reader, btnSave;
-    RelativeLayout footer_keybord;
-    LinearLayout Linear_layout_Save_back_buttons;
-    TextView tv_return, tv_swipekeybord, tv_fob_number, tv_vehicle_no_below, tv_dont_have_fob, tv_enter_vehicle_no;
-    LinearLayout Linear_layout_vehicleNumber;
-    String TimeOutinMinute;
-    boolean Istimeout_Sec = true;
-    long screenTimeOut;
-    Timer t, ScreenOutTimeVehicle;
-    boolean started_process = false;
+    private String IsOdoMeterRequire = "";
+    private String IsDepartmentRequire = "";
+    private String IsPersonnelPINRequire = "";
+    private String IsPersonnelPINRequireForHub = "";
+    private String IsOtherRequire = "";
+    private Button btnCancel;
+    private Button btn_fob_Reader;
+    private Button btnSave;
+    private RelativeLayout footer_keybord;
+    private LinearLayout Linear_layout_Save_back_buttons;
+    private TextView tv_return;
+    private TextView tv_swipekeybord;
+    private TextView tv_fob_number;
+    private TextView tv_vehicle_no_below;
+    private TextView tv_dont_have_fob;
+    private TextView tv_enter_vehicle_no;
+    private LinearLayout Linear_layout_vehicleNumber;
+    private String TimeOutinMinute;
+    private boolean Istimeout_Sec = true;
+    private long screenTimeOut;
+    private Timer t;
+    private Timer ScreenOutTimeVehicle;
+    private boolean started_process = false;
     private EditText editVehicleNumber;
 
     @Override
@@ -214,7 +226,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     }
 
 
-    public String parseSiteData(String dataSite) {
+    private String parseSiteData(String dataSite) {
         String ssiteId = "";
         try {
             if (dataSite != null) {
@@ -281,11 +293,11 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         onBackPressed();
     }
 
-    public void saveButtonAction() {
+    public void saveButtonAction(View v) {
         CallSaveButtonFunctionality();
     }
 
-    public void CallSaveButtonFunctionality() {
+    private void CallSaveButtonFunctionality() {
 
 
         try {
@@ -440,7 +452,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         }
     }
 
-    public void GetVehicleNuOnFobKeyDetection() {
+    private void GetVehicleNuOnFobKeyDetection() {
 
         try {
 
@@ -556,7 +568,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         finish();
     }
 
-    public void TimeoutVehicleScreen() {
+    private void TimeoutVehicleScreen() {
 
         SharedPreferences sharedPrefODO = AcceptVehicleActivity.this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
@@ -607,7 +619,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     }
 
-    public void DisplayScreenInit() {
+    private void DisplayScreenInit() {
 
         //showKeybord();
         //AppConstants.APDU_FOB_KEY = "";
@@ -631,7 +643,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         hideKeybord();
     }
 
-    public void DisplayScreenFobReadSuccess() {
+    private void DisplayScreenFobReadSuccess() {
 
         tv_enter_vehicle_no.setVisibility(View.VISIBLE);
         tv_fob_number.setVisibility(View.VISIBLE);
@@ -643,7 +655,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     }
 
-    public void hideKeybord() {
+    private void hideKeybord() {
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);

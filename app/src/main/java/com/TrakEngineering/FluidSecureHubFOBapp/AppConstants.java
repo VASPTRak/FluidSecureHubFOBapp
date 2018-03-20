@@ -53,47 +53,31 @@ public class AppConstants {
     public static final String OtherLabel = "OtherLabel";
     public static final String TimeOut = "TimeOut";
     public static final String HubId = "HubId";
-
-
-    public static String webIP = "http://103.8.126.241:89/";//test
+    public static String APDU_FOB_KEY = "";
     // public static String webIP = "http://fluidsecure.cloudapp.net/"; //live
     //public static String webIP = "http://103.8.126.241:93/";//New link for FS_AP
     //public static String webIP = "http://103.8.126.241:8988/";//new for hotspot changes
-
-
-    public static String APDU_FOB_KEY = "";
     public static String FS_selected;
     public static String BT_READER_NAME;
-
-    public static String webURL = webIP + "HandlerTrak.ashx";
-    public static String LoginURL = webIP + "LoginHandler.ashx";
-
-
     public static String Title = "";
     public static String HubName;
     public static String HubGeneratedpassword;
     public static String Login_Email;
-
     public static String RES_MESSAGE = "ResponceMessage";
     public static String RES_DATA_SSID = "SSIDDataObj";
     public static String RES_DATA_USER = "objUserData";
     public static String RES_TEXT = "ResponceText";
-
     public static String FOB_KEY_VEHICLE = "";
     public static String HUB_ID = "";
-
-
     public static String LAST_CONNECTED_SSID;
     public static String CURRENT_SELECTED_SSID;
     public static String CURRENT_SELECTED_SITEID;
     public static String UPDATE_MACADDRESS;
-
-
     public static boolean BUSY_STATUS;
-
-
     public static ArrayList<HashMap<String, String>> DetailsListOfConnectedDevices;
-
+    private static String webIP = "http://103.8.126.241:89/";//test
+    public static String webURL = webIP + "HandlerTrak.ashx";
+    public static String LoginURL = webIP + "LoginHandler.ashx";
 
     public static String convertStingToBase64(String text) {
         String base64 = "";

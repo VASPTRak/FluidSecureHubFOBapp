@@ -15,7 +15,7 @@ import org.json.JSONObject;
  * Created by Administrator on 6/19/2017.
  */
 
-public class AcceptServiceCall {
+class AcceptServiceCall {
 
     public Activity activity;
     //private ConnectionDetector cd;
@@ -176,7 +176,7 @@ public class AcceptServiceCall {
         }
     }
 
-    public String SplitLocation(String CurrentString) {
+    private String SplitLocation(String CurrentString) {
 
         String LocationStr = "";
         if (!CurrentString.equalsIgnoreCase("")) {

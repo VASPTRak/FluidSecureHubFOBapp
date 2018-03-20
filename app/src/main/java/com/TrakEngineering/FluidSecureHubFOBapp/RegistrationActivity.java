@@ -33,13 +33,15 @@ import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    EditText etFName, etMobile, etCompany;
-    AutoCompleteTextView etEmail;
-    Button btnSubmit;
+    private EditText etFName;
+    private EditText etMobile;
+    private EditText etCompany;
+    private AutoCompleteTextView etEmail;
+    private Button btnSubmit;
     private Pattern EMAIL_PATTERN;
     private Pattern US_PHONE_PATTERN;
 
-    public static void redToast(Context ctx, String MSg) {
+    private static void redToast(Context ctx, String MSg) {
         Toast toast = Toast.makeText(ctx, " " + MSg + " ", Toast.LENGTH_LONG);
         toast.getView().setBackgroundColor(Color.RED);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -132,7 +134,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    public void storeINFO(Context context, String name, String mobile, String email, String IMEInum) {
+    private void storeINFO(Context context, String name, String mobile, String email, String IMEInum) {
         SharedPreferences pref;
 
         SharedPreferences.Editor editor;
@@ -151,7 +153,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void AlertDialogBox(final Context ctx, String message) {
+    private void AlertDialogBox(final Context ctx, String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setCancelable(false);

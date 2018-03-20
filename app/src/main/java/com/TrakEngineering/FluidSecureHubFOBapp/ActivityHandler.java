@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by Administrator on 7/5/2017.
  */
 
-public class ActivityHandler{
+class ActivityHandler {
     public static HashMap<Integer, Activity> screenStack;
 
     // Add activity

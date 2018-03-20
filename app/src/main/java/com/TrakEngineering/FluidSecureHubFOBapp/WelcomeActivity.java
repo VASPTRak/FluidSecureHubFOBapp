@@ -89,7 +89,7 @@ import static com.TrakEngineering.FluidSecureHubFOBapp.R.id.textView;
 
 public class WelcomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
     /* Stops scanning after 10 seconds. */
     private static final long SCAN_PERIOD = 3000;
     /* Default master key. */
@@ -100,38 +100,48 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     private static final String DEFAULT_1255_ESCAPE_COMMAND_NO_SLEEP = "E0 00 00 48 04";//NO SLEEP
     private static final byte[] AUTO_POLLING_START = {(byte) 0xE0, 0x00, 0x00, 0x40, 0x01};
     private static final byte[] AUTO_POLLING_STOP = {(byte) 0xE0, 0x00, 0x00, 0x40, 0x00};
-    public static int SelectedItemPos;
     static WifiApManager wifiApManager;
+    private static int SelectedItemPos;
     ProgressDialog dialog1;
     Button btn_disconnect;
-    TextView tvSSIDName, tv_NFS1, tv_NFS2, tv_NFS3, tv_NFS4;//tv_fs1_pulse
+    TextView tv_NFS1;
+    TextView tv_NFS2;
+    TextView tv_NFS3;
+    TextView tv_NFS4;//tv_fs1_pulse
     LinearLayout linearHose, linear_fs_1, linear_fs_2, linear_fs_3, linear_fs_4;
-    WifiManager mainWifi;
-    StringBuilder sb = new StringBuilder();
-    ArrayList<HashMap<String, String>> serverSSIDList = new ArrayList<>();
-    ArrayList<HashMap<String, String>> ListOfConnectedDevices = new ArrayList<>();
-    GoogleApiClient mGoogleApiClient;
-    TextView tvLatLng;
-    boolean isTCancelled = false;
-    int RetryOneAtemptConnectToSelectedSSSID = 0;
-    String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequireForHub = "", IsPersonnelPINRequire = "", IsOtherRequire = "";
+    String IsOdoMeterRequire = "";
     //FS For Stopbutton
     String PhoneNumber;
-    String consoleString = "", outputQuantity = "0";
+    String outputQuantity = "0";
     boolean stopTimer = true;
     double minFuelLimit = 0, numPulseRatio = 0;
     double fillqty = 0;
-    ProgressDialog loading = null;
-    String HTTP_URL = "";//"http://192.168.43.153:80/";//for pipe
     String URL_GET_PULSAR_FS1, URL_SET_PULSAR_FS1, URL_WIFI_FS1, URL_RELAY_FS1, URL_GET_PULSAR_FS2, URL_SET_PULSAR_FS2, URL_WIFI_FS2, URL_RELAY_FS2, URL_GET_PULSAR_FS3, URL_SET_PULSAR_FS3, URL_WIFI_FS3, URL_RELAY_FS3, URL_GET_PULSAR_FS4, URL_SET_PULSAR_FS4, URL_WIFI_FS4, URL_RELAY_FS4;
     String HTTP_URL_FS_1 = "", HTTP_URL_FS_2 = "", HTTP_URL_FS_3 = "", HTTP_URL_FS_4 = "";
     String jsonRename;
     String jsonRelayOff = "{\"relay_request\":{\"Password\":\"12345678\",\"Status\":0}}";
     String jsonPulsar = "{\"pulsar_request\":{\"counter_set\":1}}";
     String jsonPulsarOff = "{\"pulsar_request\":{\"counter_set\":0}}";
-    String URL_INFO = "";
-    String URL_UPDATE_FS_INFO = "";
-    Timer t,ScreenOutTime;
+    Timer ScreenOutTime;
+    private TextView tvSSIDName;
+    private WifiManager mainWifi;
+    private StringBuilder sb = new StringBuilder();
+    private ArrayList<HashMap<String, String>> serverSSIDList = new ArrayList<>();
+    private ArrayList<HashMap<String, String>> ListOfConnectedDevices = new ArrayList<>();
+    private GoogleApiClient mGoogleApiClient;
+    private TextView tvLatLng;
+    private boolean isTCancelled = false;
+    private int RetryOneAtemptConnectToSelectedSSSID = 0;
+    private String IsDepartmentRequire = "";
+    private String IsPersonnelPINRequireForHub = "";
+    private String IsPersonnelPINRequire = "";
+    private String IsOtherRequire = "";
+    private String consoleString = "";
+    private ProgressDialog loading = null;
+    private String HTTP_URL = "";//"http://192.168.43.153:80/";//for pipe
+    private String URL_INFO = "";
+    private String URL_UPDATE_FS_INFO = "";
+    private Timer t;
     private String TAG = " WelcomeActivity ";
     private float density;
     private TextView textDateTime, tv_fs1_Qty, tv_fs2_Qty, tv_fs3_Qty, tv_fs4_Qty, tv_FS1_hoseName, tv_FS2_hoseName, tv_FS3_hoseName,
@@ -302,7 +312,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     };
 
-    public static String PasswordGeneration() {
+    private static String PasswordGeneration() {
 
         String FinalPass;
         String hubName = AppConstants.HubName;//"HUB00000001";
@@ -358,7 +368,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     //_---------------Bluetooth reader using Gatt------------------------
 
-    public static boolean setBluetooth(boolean enable) {
+    private static boolean setBluetooth(boolean enable) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         boolean isEnabled = bluetoothAdapter.isEnabled();
         if (enable && !isEnabled) {
@@ -809,7 +819,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-    public void EnableHotspotBackgService() {
+    private void EnableHotspotBackgService() {
 
 
         Calendar cal = Calendar.getInstance();
@@ -832,7 +842,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void UpdateFSUI_seconds() {
+    private void UpdateFSUI_seconds() {
 
         Thread t = new Thread() {
 
@@ -1330,7 +1340,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void refreshWiFiList() {
+    private void refreshWiFiList() {
         new GetSSIDUsingLocation().execute();
     }
 
@@ -1377,7 +1387,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public boolean isNotNULL(String value) {
+    private boolean isNotNULL(String value) {
 
         boolean flag = true;
         if (value == null) {
@@ -1391,7 +1401,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         return flag;
     }
 
-    public void alertSelectHoseList(String errMsg) {
+    private void alertSelectHoseList(String errMsg) {
 
 
         final Dialog dialog = new Dialog(WelcomeActivity.this);
@@ -1604,7 +1614,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     }
 
     //Connect to wifi with Password
-    public void connectToWifiMarsh(String networkSSID) {
+    private void connectToWifiMarsh(String networkSSID) {
 
 
         try {
@@ -1650,7 +1660,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         return -1;
     }
 
-    public void AlertSettings(final Context ctx, String message) {
+    private void AlertSettings(final Context ctx, String message) {
         android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(ctx);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setCancelable(false);
@@ -1669,7 +1679,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         alertDialog.show();
     }
 
-    public boolean setHotspotNamePassword(Context context) {//String newName, String newKey,
+    private boolean setHotspotNamePassword(Context context) {//String newName, String newKey,
         try {
             WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
             Method getConfigMethod = wifiManager.getClass().getMethod("getWifiApConfiguration");
@@ -1888,7 +1898,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         return "The card status is unknown.";
     }
 
-    public void PowerOnCard() {
+    private void PowerOnCard() {
 
         if (mBluetoothReader == null) {
             System.out.println("card_reader_not_ready");
@@ -1902,7 +1912,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-    public void Authentation() {
+    private void Authentation() {
 
         try {
 
@@ -1933,7 +1943,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-    public void Startpolling() {
+    private void Startpolling() {
 
 
         if (mBluetoothReader == null) {
@@ -1948,7 +1958,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-    public void TransmitApdu() {
+    private void TransmitApdu() {
 
             /* Check for detected reader. */
         if (mBluetoothReader == null) {
@@ -1974,7 +1984,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-    public void transmitNOSLEEPCommand() {
+    private void transmitNOSLEEPCommand() {
 
             /* Check for detected reader. */
         if (mBluetoothReader == null) {
@@ -2001,7 +2011,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-    public void ReconnectFobReader() {
+    private void ReconnectFobReader() {
 
         t = new Timer();
         TimerTask tt = new TimerTask() {
