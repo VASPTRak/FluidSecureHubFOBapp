@@ -1442,21 +1442,14 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                 String selSiteId = serverSSIDList.get(SelectedItemPos).get("SiteId");
                 String hoseID = serverSSIDList.get(SelectedItemPos).get("HoseId");
                 AppConstants.CURRENT_SELECTED_SSID = selSSID;
-                AppConstants.CURRENT_HOSE_SSID = hoseID;
                 AppConstants.CURRENT_SELECTED_SITEID = selSiteId;
-                AppConstants.SELECTED_MACADDRESS = selMacAddress;
                 String IsHoseNameReplaced = serverSSIDList.get(SelectedItemPos).get("IsHoseNameReplaced");
                 String ReplaceableHoseName = serverSSIDList.get(SelectedItemPos).get("ReplaceableHoseName");
                 String PulserTimingAd = serverSSIDList.get(SelectedItemPos).get("PulserTimingAdjust");
-                AppConstants.PulserTimingAdjust = PulserTimingAd;
 
                 //Rename SSID while mac address updation
                 if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                    AppConstants.NeedToRenameFS_ON_UPDATE_MAC = false;
-                    AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = "";
                 } else {
-                    AppConstants.NeedToRenameFS_ON_UPDATE_MAC = true;
-                    AppConstants.REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC = ReplaceableHoseName;
                 }
 
                 if (selMacAddress.trim().equals("")) {  //MacAddress on server is null
@@ -1525,16 +1518,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
                                 //Rename SSID from cloud
                                 if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS1 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS1 = "";
                                 } else {
-                                    AppConstants.NeedToRenameFS1 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS1 = ReplaceableHoseName;
                                 }
 
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
-                                AppConstants.FS1_CONNECTED_SSID = selSSID;
                                 Constants.CurrentSelectedHose = "FS1";
                                 btnGo.setVisibility(View.VISIBLE);
                             } else {
@@ -1548,16 +1536,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
                                 //Rename SSID from cloud
                                 if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS2 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS2 = "";
                                 } else {
-                                    AppConstants.NeedToRenameFS2 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS2 = ReplaceableHoseName;
                                 }
 
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
-                                AppConstants.FS2_CONNECTED_SSID = selSSID;
                                 Constants.CurrentSelectedHose = "FS2";
                                 btnGo.setVisibility(View.VISIBLE);
                             } else {
@@ -1573,16 +1556,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
                                 //Rename SSID from cloud
                                 if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS3 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS3 = "";
                                 } else {
-                                    AppConstants.NeedToRenameFS3 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS3 = ReplaceableHoseName;
                                 }
 
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
-                                AppConstants.FS3_CONNECTED_SSID = selSSID;
                                 Constants.CurrentSelectedHose = "FS3";
                                 btnGo.setVisibility(View.VISIBLE);
                             } else {
@@ -1598,16 +1576,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                                 // linear_fs_1.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                                 //Rename SSID from cloud
                                 if (IsHoseNameReplaced.equalsIgnoreCase("Y")) {
-                                    AppConstants.NeedToRenameFS4 = false;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS4 = "";
                                 } else {
-                                    AppConstants.NeedToRenameFS4 = true;
-                                    AppConstants.REPLACEBLE_WIFI_NAME_FS4 = ReplaceableHoseName;
                                 }
 
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
-                                AppConstants.FS4_CONNECTED_SSID = selSSID;
                                 Constants.CurrentSelectedHose = "FS4";
                                 btnGo.setVisibility(View.VISIBLE);
                             } else {
@@ -2223,7 +2196,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                                 if (ResponceMessage.equalsIgnoreCase("success")) {
                                     if (isNotNULL(SiteId) && isNotNULL(HoseId) && isNotNULL(WifiSSId)) {
                                         serverSSIDList.add(map);
-                                        AppConstants.DetailsServerSSIDList = serverSSIDList;
                                     }
                                 } else {
                                     errMsg = ResponceText;
@@ -2395,7 +2367,6 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                                 if (ResponceMessage.equalsIgnoreCase("success")) {
                                     if (isNotNULL(SiteId) && isNotNULL(HoseId) && isNotNULL(WifiSSId)) {
                                         serverSSIDList.add(map);
-                                        AppConstants.DetailsServerSSIDList = serverSSIDList;
 
                                         //#73--Only one FS unit display
                                         /*if (serverSSIDList != null && serverSSIDList.size() == 0) {

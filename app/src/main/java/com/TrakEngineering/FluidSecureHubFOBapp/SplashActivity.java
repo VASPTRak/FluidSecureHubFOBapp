@@ -460,7 +460,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
                         if (IsLoginRequire.trim().equalsIgnoreCase("True")) {
                             AppConstants.Login_Email = userEmail;
-                            AppConstants.Login_IMEI = IMEI_UDID;
                             startActivity(new Intent(SplashActivity.this, Login.class));
                             finish();
                         } else {

@@ -124,19 +124,15 @@ public class Login extends AppCompatActivity {
 
                     if (CommonUtils.isMobileDataEnabled(Login.this)) {
                         System.out.println("MobileDataEnabled.....");
-                        AppConstants.IS_DATA_ON = true;
                     } else {
                         System.out.println("MobileDataOffff.....");
-                        AppConstants.IS_DATA_ON = false;
                     }
 
 
                     if (CommonUtils.isWiFiEnabled(Login.this)) {
                         System.out.println("WiFiWiFiEnabled.....");
-                        AppConstants.IS_WIFI_ON = true;
                     } else {
                         System.out.println("WiFiOffff.....");
-                        AppConstants.IS_WIFI_ON = false;
                     }
 
                     Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();

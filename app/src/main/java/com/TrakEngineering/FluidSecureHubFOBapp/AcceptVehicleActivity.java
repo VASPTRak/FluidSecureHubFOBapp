@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,10 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.TrakEngineering.FluidSecureHubFOBapp.enity.AuthEntityClass;
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.VehicleRequireEntity;
 import com.TrakEngineering.FluidSecureHubFOBapp.server.ServerHandler;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -41,19 +37,14 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     private static final String TAG = "AcceptVehicleActivity";
     public static String SITE_ID = "0";
-    public static double CurrentLat = 0, CurrentLng = 0;
     String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequire = "",IsPersonnelPINRequireForHub ="", IsOtherRequire = "";
     Button btnCancel, btn_fob_Reader, btnSave;
-    GoogleApiClient mGoogleApiClient;
     RelativeLayout footer_keybord;
     LinearLayout Linear_layout_Save_back_buttons;
     TextView tv_return, tv_swipekeybord, tv_fob_number, tv_vehicle_no_below, tv_dont_have_fob, tv_enter_vehicle_no;
     LinearLayout Linear_layout_vehicleNumber;
-    EditText editFobNumber;
     String TimeOutinMinute;
     boolean Istimeout_Sec = true;
-    int FobReadingCount = 0;
-    int FobRetryCount = 0;
     long screenTimeOut;
     Timer t, ScreenOutTimeVehicle;
     boolean started_process = false;
@@ -233,15 +224,6 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                     JSONObject jo = jsonArray.getJSONObject(i);
 
                     String SiteId = jo.getString("SiteId");
-                    String SiteNumber = jo.getString("SiteNumber");
-                    String SiteName = jo.getString("SiteName");
-                    String SiteAddress = jo.getString("SiteAddress");
-                    String Latitude = jo.getString("Latitude");
-                    String Longitude = jo.getString("Longitude");
-                    String HoseId = jo.getString("HoseId");
-                    String HoseNumber = jo.getString("HoseNumber");
-                    String WifiSSId = jo.getString("WifiSSId");
-                    String UserName = jo.getString("UserName");
                     String Password = jo.getString("Password");
 
                     System.out.println("Wifi Password...." + Password);
@@ -292,25 +274,6 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //============SoftKeyboard enable/disable Detection======
-    private boolean isKeyboardShown(View rootView) {
-    /* 128dp = 32dp * 4, minimum button height 32dp and generic 4 rows soft keyboard */
-        final int SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD = 128;
-
-        Rect r = new Rect();
-        rootView.getWindowVisibleDisplayFrame(r);
-        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
-    /* heightDiff = rootView height - status bar height (r.top) - visible frame height (r.bottom - r.top) */
-        int heightDiff = rootView.getBottom() - r.bottom;
-    /* Threshold size: dp to pixels, multiply with display density */
-        boolean isKeyboardShown = heightDiff > SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD * dm.density;
-
-        Log.d(TAG, "isKeyboardShown ? " + isKeyboardShown + ", heightDiff:" + heightDiff + ", density:" + dm.density
-                + "root view height:" + rootView.getHeight() + ", rect:" + r);
-
-        return isKeyboardShown;
-    }
-
 
     public void cancelAction(View v) {
 
@@ -318,7 +281,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         onBackPressed();
     }
 
-    public void saveButtonAction(View view) {
+    public void saveButtonAction() {
         CallSaveButtonFunctionality();
     }
 
@@ -380,7 +343,6 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
                         IsOdoMeterRequire = jsonObject.getString("IsOdoMeterRequire");
                         String IsHoursRequire = jsonObject.getString("IsHoursRequire");
-                        String VehicleNumber = jsonObject.getString("VehicleNumber");
                         String PreviousOdo = jsonObject.getString("PreviousOdo");
                         String OdoLimit = jsonObject.getString("OdoLimit");
                         String OdometerReasonabilityConditions = jsonObject.getString("OdometerReasonabilityConditions");
@@ -594,33 +556,6 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         finish();
     }
 
-    public void Readfobkey() {
-
-        //for (int i = 0; i < 2; i++) {AppConstants.colorToastBigFont(AcceptVehicleActivity.this, "  Please hold fob up to Reader  ", Color.BLUE);}
-        tv_enter_vehicle_no.setText("Please Hold FOB to Reader");
-        tv_enter_vehicle_no.setTextColor(Color.parseColor("#ff0000"));
-
-
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void FobBtnEnable() {
-
-        btn_fob_Reader.setBackgroundColor(Color.parseColor("#3F51B5"));
-        btn_fob_Reader.setEnabled(true);
-        btn_fob_Reader.setTextColor(Color.parseColor("#FFFFFF"));
-
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void FobBtnDisable() {
-
-        btn_fob_Reader.setBackgroundColor(Color.parseColor("#f5f1f0"));
-        btn_fob_Reader.setEnabled(false);
-        btn_fob_Reader.setTextColor(R.color.black);
-
-    }
-
     public void TimeoutVehicleScreen() {
 
         SharedPreferences sharedPrefODO = AcceptVehicleActivity.this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -719,51 +654,10 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     }
 
-    public void showKeybord() {
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         AppConstants.APDU_FOB_KEY = "";
-    }
-
-    public class AuthTestAsynTask extends AsyncTask<Void, Void, Void> {
-
-        public String response = null;
-        AuthEntityClass authEntityClass = null;
-
-        public AuthTestAsynTask(AuthEntityClass authEntityClass) {
-            this.authEntityClass = authEntityClass;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            try {
-                ServerHandler serverHandler = new ServerHandler();
-
-                Gson gson = new Gson();
-                String jsonData = gson.toJson(authEntityClass);
-                String userEmail = CommonUtils.getCustomerDetails(AcceptVehicleActivity.this).Email;
-
-
-                //----------------------------------------------------------------------------------
-                String authString = "Basic " + AppConstants.convertStingToBase64(authEntityClass.IMEIUDID + ":" + userEmail + ":" + "AuthorizationSequence");
-                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
-                //----------------------------------------------------------------------------------
-
-            } catch (Exception ex) {
-
-                CommonUtils.LogMessage(TAG, "AuthTestAsynTask ", ex);
-                ex.printStackTrace();
-            }
-            return null;
-        }
-
     }
 
     public class CheckVehicleRequireOdometerEntryAndRequireHourEntry extends AsyncTask<Void, Void, Void> {

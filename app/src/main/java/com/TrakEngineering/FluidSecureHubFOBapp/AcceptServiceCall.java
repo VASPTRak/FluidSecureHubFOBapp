@@ -18,7 +18,6 @@ import org.json.JSONObject;
 public class AcceptServiceCall {
 
     public Activity activity;
-    String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequire = "", IsOtherRequire = "";
     //private ConnectionDetector cd;
 
     public void checkAllFields() {
@@ -109,8 +108,6 @@ public class AcceptServiceCall {
                         String PersonName = jsonObjectRD.getString("PersonName");
                         String PrinterMacAddress = jsonObjectRD.getString("PrinterMacAddress");
                         String PrinterName = jsonObjectRD.getString("PrinterName");
-                        AppConstants.BLUETOOTH_PRINTER_NAME = PrinterName;
-                        AppConstants.PrinterMacAddress = PrinterMacAddress;
                         System.out.println("iiiiii" + IntervalToStopFuel);
 
                         CommonUtils.SaveVehiFuelInPref(activity, TransactionId, VehicleId, PhoneNumber, PersonId, PulseRatio, MinLimit, FuelTypeId, ServerDate, IntervalToStopFuel,PrintDate,Company,Location,PersonName,PrinterMacAddress,PrinterName,vehicleNumber,accOther);

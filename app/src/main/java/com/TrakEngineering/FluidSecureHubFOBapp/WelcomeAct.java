@@ -29,6 +29,7 @@ import com.acs.bluetooth.BluetoothReaderGattCallback;
 import com.acs.bluetooth.BluetoothReaderManager;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class WelcomeAct extends AppCompatActivity {
 
@@ -272,7 +273,7 @@ public class WelcomeAct extends AppCompatActivity {
                             @Override
                             public void run() {
 
-                                System.out.println("result APDU " + apdu);
+                                System.out.println("result APDU " + Arrays.toString(apdu));
 
                             }
                         });

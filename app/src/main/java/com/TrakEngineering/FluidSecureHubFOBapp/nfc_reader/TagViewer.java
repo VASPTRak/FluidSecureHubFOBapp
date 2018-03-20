@@ -28,16 +28,11 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.TrakEngineering.FluidSecureHubFOBapp.AppConstants;
 
 import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -45,7 +40,6 @@ import java.util.Locale;
  */
 public class TagViewer extends Activity {
 
-    private static final DateFormat TIME_FORMAT = SimpleDateFormat.getDateTimeInstance();
     private LinearLayout mTagContent;
 
     private NfcAdapter mAdapter;
@@ -53,8 +47,6 @@ public class TagViewer extends Activity {
     private NdefMessage mNdefPushMessage;
 
     private AlertDialog mDialog;
-
-    private List<Tag> mTags = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,35 +163,6 @@ public class TagViewer extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (mTags.size() == 0) {
-//            Toast.makeText(this, R.string.nothing_scanned, Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-//        switch (item.getItemId()) {
-//        case R.id.menu_main_clear:
-//            clearTags();
-//            return true;
-//        case R.id.menu_copy_hex:
-//            copyIds(getIdsHex());
-//            return true;
-//        case R.id.menu_copy_reversed_hex:
-//            copyIds(getIdsReversedHex());
-//            return true;
-//        case R.id.menu_copy_dec:
-//            copyIds(getIdsDec());
-//            return true;
-//        case R.id.menu_copy_reversed_dec:
-//            copyIds(getIdsReversedDec());
-//            return true;
-//        default:
-            return super.onOptionsItemSelected(item);
-//        }
     }
 
     /*    @Override
