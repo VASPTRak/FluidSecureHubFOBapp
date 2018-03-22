@@ -124,7 +124,64 @@
 
             </LinearLayout>
 
+            <EditText
+                android:id="@+id/etVehicle"
+                android:layout_width="350dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="55dp"
+                android:layout_marginLeft="55dp"
+                android:background="@color/colorFluid"
+                android:layout_gravity="center_horizontal"
+                android:imeOptions="actionDone"
+                android:inputType="number|text"
+                android:gravity="center"
+                android:maxLength="10"
+                android:hint="Vehicle Number"
+                android:padding="5sp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textColorHint="#fff"
+                android:textSize="@dimen/edit_text" />
 
+            <EditText
+                android:id="@+id/etVehicleFob"
+                android:layout_width="350dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="55dp"
+                android:layout_marginLeft="55dp"
+                android:background="@color/colorFluid"
+                android:layout_gravity="center_horizontal"
+                android:imeOptions="actionDone"
+                android:hint="FOB"
+                android:gravity="center"
+                android:padding="5sp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textColorHint="#fff"
+                android:textSize="@dimen/edit_text" />
+
+            <Button
+                android:id="@+id/btnAssignFOB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="25dp"
+                android:layout_weight="1"
+                android:text="Assign FOB"
+                android:textSize="@dimen/go_button_text" />
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="25dp"
+                android:layout_weight="1"
+                android:text="Clear Fields"
+                android:textSize="@dimen/go_button_text" />
 
             <LinearLayout
                 android:layout_width="match_parent"

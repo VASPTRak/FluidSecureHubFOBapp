@@ -1,6 +1,7 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.AuthEntityClass;
+import com.TrakEngineering.FluidSecureHubFOBapp.enity.FobAssign;
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.VehicleRequireEntity;
 import com.TrakEngineering.FluidSecureHubFOBapp.server.ServerHandler;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,6 +60,8 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     Timer t, ScreenOutTimeVehicle;
     boolean started_process = false;
     private EditText editVehicleNumber;
+    private EditText etVehicle,etVehicleFob;
+    Button btnAssignFOB,btnClear;
 
     @Override
     protected void onResume() {
@@ -76,12 +80,36 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     //do something
-                    System.out.println("Vehi FOK_KEY" + AppConstants.APDU_FOB_KEY);
+                    System.out.println("Vehi FOK_KEY1" + AppConstants.APDU_FOB_KEY);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if(etVehicleFob!=null) {
+
+
+                                if(AppConstants.APDU_FOB_KEY.length()>5) {
+                                    etVehicleFob.setText(AppConstants.APDU_FOB_KEY);
+                                    btnAssignFOB.performClick();
+                                    AppConstants.APDU_FOB_KEY="";
+                                }
+
+                            }
+
+
+                        }
+                    });
+
+
                     if (!AppConstants.APDU_FOB_KEY.equalsIgnoreCase("") && AppConstants.APDU_FOB_KEY.length() > 6 && !started_process) {
                         started_process = true;
                         try {
 
 
+
+
+                            /*
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -100,8 +128,9 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
                                 }
                             });
+                            */
 
-                            t.cancel();
+                           // t.cancel();
                         } catch (Exception e) {
 
                             System.out.println(e);
@@ -139,6 +168,11 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.fs_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        etVehicle=(EditText)findViewById(R.id.etVehicle);
+        etVehicleFob=(EditText)findViewById(R.id.etVehicleFob);
+        btnAssignFOB=(Button) findViewById(R.id.btnAssignFOB);
+        btnClear=(Button) findViewById(R.id.btnClear);
 
         InItGUI();
 
@@ -220,6 +254,34 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         tv_swipekeybord.setEnabled(false);
         tv_swipekeybord.setVisibility(View.GONE);
         hideKeybord();
+
+
+        btnAssignFOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FobAssign fb= new FobAssign();
+
+                fb.IMEIUDID=AppConstants.getIMEI(AcceptVehicleActivity.this);
+                fb.FOBNumber=etVehicleFob.getText().toString().trim();
+                fb.VehicleNumber=etVehicle.getText().toString().trim();
+
+
+                new CheckVehicleFobOnly(fb).execute();
+            }
+        });
+
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                etVehicle.setText("");
+                etVehicleFob.setText("");
+                AppConstants.APDU_FOB_KEY="";
+
+            }
+        });
     }
 
 
@@ -651,7 +713,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                                 AppConstants.ClearEdittextFielsOnBack(AcceptVehicleActivity.this);
                                 Intent intent = new Intent(AcceptVehicleActivity.this, WelcomeActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                //startActivity(intent);
                             }
                         });
 
@@ -801,5 +863,86 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     }
 
+
+    public class CheckVehicleFobOnly extends AsyncTask<String, Void, String> {
+
+        public String response = null;
+        FobAssign vrentity = null;
+
+        public CheckVehicleFobOnly(FobAssign vrentity) {
+            this.vrentity = vrentity;
+        }
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(AcceptVehicleActivity.this);
+            pd.setMessage("Please wait...");
+            pd.setCancelable(true);
+            pd.setCancelable(false);
+            pd.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... voids) {
+
+            try {
+                ServerHandler serverHandler = new ServerHandler();
+
+                Gson gson = new Gson();
+                String jsonData = gson.toJson(vrentity);
+                String userEmail = CommonUtils.getCustomerDetails(AcceptVehicleActivity.this).PersonEmail;
+
+                System.out.println("jsonDatajsonDatajsonData" + jsonData);
+                //----------------------------------------------------------------------------------
+                String authString = "Basic " + AppConstants.convertStingToBase64(vrentity.IMEIUDID + ":" + userEmail + ":" + "CheckVehicleFobOnly");
+                response = serverHandler.PostTextData(AcceptVehicleActivity.this, AppConstants.webURL, jsonData, authString);
+                //----------------------------------------------------------------------------------
+
+            } catch (Exception ex) {
+
+                CommonUtils.LogMessage(TAG, "CheckVehicleFobOnly ", ex);
+                ex.printStackTrace();
+            }
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String resp) {
+            pd.dismiss();
+
+            if(resp.startsWith("{"))
+            {
+                if (resp != null) {
+
+                    System.out.println(resp);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(resp);
+
+                        String ResponceMessage = jsonObject.getString("ResponceMessage");
+                        String ResponceText = jsonObject.getString("ResponceText");
+                        String FOBNumber = jsonObject.getString("FOBNumber");
+                        String VehicleNumber = jsonObject.getString("VehicleNumber");
+
+                        if(ResponceMessage.equalsIgnoreCase("success"))
+                        {
+                            etVehicle.setText(VehicleNumber);
+                            //etVehicleFob.setText(FOBNumber);
+                        }
+
+                        AppConstants.AlertDialogBox(AcceptVehicleActivity.this, ResponceText);
+                    }catch (Exception e)
+                    {}
+
+                }
+                }
+
+
+        }
+    }
 
 }
