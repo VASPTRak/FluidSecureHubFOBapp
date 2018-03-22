@@ -1,7 +1,5 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,10 +10,12 @@ import android.widget.TextView;
 
 import com.TrakEngineering.FluidSecureHubFOBapp.enity.WifiEntityClass;
 
+import java.util.List;
 
-public class ListAdapter extends ArrayAdapter<WifiEntityClass> {
-    Activity mActivity;
-    List<WifiEntityClass> wifiName;
+
+class ListAdapter extends ArrayAdapter<WifiEntityClass> {
+    private Activity mActivity;
+    private List<WifiEntityClass> wifiName;
     private LayoutInflater inflater;
 
     public ListAdapter(Activity a, List<WifiEntityClass> wifiName) {
@@ -53,7 +53,7 @@ public class ListAdapter extends ArrayAdapter<WifiEntityClass> {
 
         } else {
 
-            gridView = (View) convertView;
+            gridView = convertView;
         }
 
         return gridView;

@@ -15,11 +15,10 @@ import org.json.JSONObject;
  * Created by Administrator on 6/19/2017.
  */
 
-public class AcceptServiceCall {
+class AcceptServiceCall {
 
     public Activity activity;
-    String IsOdoMeterRequire = "", IsDepartmentRequire = "", IsPersonnelPINRequire = "", IsOtherRequire = "";
-    private ConnectionDetector cd;
+    //private ConnectionDetector cd;
 
     public void checkAllFields() {
 
@@ -67,7 +66,7 @@ public class AcceptServiceCall {
             authEntityClass.AppInfo =  " Version " + CommonUtils.getVersionCode(activity) + " "+ AppConstants.getDeviceName().toLowerCase() + " " ;
 
 
-            cd = new ConnectionDetector(activity);
+            ConnectionDetector cd = new ConnectionDetector(activity);
             if (cd.isConnectingToInternet()) {
 
 
@@ -109,8 +108,6 @@ public class AcceptServiceCall {
                         String PersonName = jsonObjectRD.getString("PersonName");
                         String PrinterMacAddress = jsonObjectRD.getString("PrinterMacAddress");
                         String PrinterName = jsonObjectRD.getString("PrinterName");
-                        AppConstants.BLUETOOTH_PRINTER_NAME = PrinterName;
-                        AppConstants.PrinterMacAddress = PrinterMacAddress;
                         System.out.println("iiiiii" + IntervalToStopFuel);
 
                         CommonUtils.SaveVehiFuelInPref(activity, TransactionId, VehicleId, PhoneNumber, PersonId, PulseRatio, MinLimit, FuelTypeId, ServerDate, IntervalToStopFuel,PrintDate,Company,Location,PersonName,PrinterMacAddress,PrinterName,vehicleNumber,accOther);
@@ -179,7 +176,7 @@ public class AcceptServiceCall {
         }
     }
 
-    public String SplitLocation(String CurrentString) {
+    private String SplitLocation(String CurrentString) {
 
         String LocationStr = "";
         if (!CurrentString.equalsIgnoreCase("")) {

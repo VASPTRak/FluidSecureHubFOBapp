@@ -46,7 +46,7 @@ import static android.content.Context.WIFI_SERVICE;
 /**
  * Created by VASP-LAP on 08-09-2015.
  */
-public class CommonUtils {
+class CommonUtils {
     private static String TAG = "CommonUtils";
     private static File mypath; /*'---------------------------------------------------------------------------------------- Implemet logger functionality here....*/
 
@@ -78,7 +78,7 @@ public class CommonUtils {
         }
     }
 
-    public static String getTodaysDateInString() {
+    private static String getTodaysDateInString() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String CurrantDate = df.format(c.getTime());
@@ -103,9 +103,7 @@ public class CommonUtils {
     }
 
 
-
-
-    public static String GetDateString(Long dateinms) {
+    private static String GetDateString(Long dateinms) {
         try {
             Time myDate = new Time();
             myDate.set(dateinms);
@@ -432,7 +430,7 @@ public class CommonUtils {
      * only, <code>false</code> otherwise.
      * @throws NullPointerException if <code>string == null</code>.
      */
-    public static boolean isHexNumber(String string) {
+    private static boolean isHexNumber(String string) {
         if (string == null)
             throw new NullPointerException("string was null");
 
@@ -468,7 +466,7 @@ public class CommonUtils {
      * @throws NullPointerException     if <code>string == null</code>.
      * @throws NumberFormatException    if <code>string</code> cannot be parsed as a byte value.
      */
-    public static byte[] hexString2Bytes(String string) {
+    private static byte[] hexString2Bytes(String string) {
         if (string == null)
             throw new NullPointerException("string was null");
 

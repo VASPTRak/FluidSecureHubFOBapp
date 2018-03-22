@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DBController extends SQLiteOpenHelper {
+class DBController extends SQLiteOpenHelper {
     private static final String LOGCAT = null;
 
     public DBController(Context applicationcontext) {

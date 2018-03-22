@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SplashActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final String TAG = "SplashActivity";
     private static final int REQUEST_LOCATION = 2;
     private static final int PERMISSION_REQUEST_CODE_READ_phone = 1;
@@ -58,15 +58,15 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
     private static final int PERMISSION_REQUEST_CODE_WRITE = 2;
     private static final int PERMISSION_REQUEST_CODE_CORSE_LOCATION = 4;
     private static final int CODE_WRITE_SETTINGS_PERMISSION = 55;
-    GoogleApiClient mGoogleApiClient;
-    WifiApManager wifiApManager;
     ConnectivityManager connection_manager;
+    private GoogleApiClient mGoogleApiClient;
+    private WifiApManager wifiApManager;
     private ConnectionDetector cd;
     private double latitude;
     private double longitude;
     private GPSTracker gps;
 
-    public static void showMessageDilaog(final Activity context, String title, String message) {
+    private static void showMessageDilaog(final Activity context, String title, String message) {
 
         android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(context);
         // set title
@@ -172,7 +172,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    public void turnGPSOn() {
+    private void turnGPSOn() {
 
 
         LocationRequest mLocationRequest = new LocationRequest();
@@ -460,7 +460,6 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
                         if (IsLoginRequire.trim().equalsIgnoreCase("True")) {
                             AppConstants.Login_Email = userEmail;
-                            AppConstants.Login_IMEI = IMEI_UDID;
                             startActivity(new Intent(SplashActivity.this, Login.class));
                             finish();
                         } else {
@@ -517,7 +516,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    public void AlertDialogBox(final Context ctx, String message) {
+    private void AlertDialogBox(final Context ctx, String message) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setCancelable(false);

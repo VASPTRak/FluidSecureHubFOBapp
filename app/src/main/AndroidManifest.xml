@@ -78,6 +78,12 @@
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.RegistrationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptCheckAll"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.ConnectionActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+        <activity
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:windowSoftInputMode="stateHidden">
@@ -114,6 +120,9 @@
             android:enabled="true" />
         <service
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.BackgroundServiceHotspotCheck"
+            android:enabled="true" />
+        <service
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.server.GPSTracker"
             android:enabled="true" />
 
         <activity android:name="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeAct"></activity>

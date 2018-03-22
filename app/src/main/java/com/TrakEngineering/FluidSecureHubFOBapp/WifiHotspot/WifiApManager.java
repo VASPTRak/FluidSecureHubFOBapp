@@ -51,7 +51,7 @@ public class WifiApManager {
      * @return {@link WIFI_AP_STATE}
      * @see #isWifiApEnabled()
      */
-    public WIFI_AP_STATE getWifiApState() {
+    private WIFI_AP_STATE getWifiApState() {
         try {
             Method method = mWifiManager.getClass().getMethod("getWifiApState");
 

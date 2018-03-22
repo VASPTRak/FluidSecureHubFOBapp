@@ -29,14 +29,15 @@ import com.acs.bluetooth.BluetoothReaderGattCallback;
 import com.acs.bluetooth.BluetoothReaderManager;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class WelcomeAct extends AppCompatActivity {
 
     //----------
 
-    public static final String TAG = MainActivity.class.getSimpleName();
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DEFAULT_1255_MASTER_KEY = "ACR1255U-J1 Auth";
     /* Default master key. */
     private static final String DEFAULT_3901_MASTER_KEY = "FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF";
@@ -272,7 +273,7 @@ public class WelcomeAct extends AppCompatActivity {
                             @Override
                             public void run() {
 
-                                System.out.println("result APDU " + apdu);
+                                System.out.println("result APDU " + Arrays.toString(apdu));
 
                             }
                         });

@@ -16,22 +16,27 @@ import java.net.Socket;
 
 public class TestSocket extends AppCompatActivity {
 
-    Button btnSocketOn, btnSocketOff, btnturnonrelay, btnbeginfueling, btnquantity, btnturnoffrelay, btnrecordcheck, btnConnect;
-    TextView tvResult;
-
     private static final int SERVER_PORT = 2901;
     private static final String SERVER_IP = "192.168.4.1";
+    private Button btnSocketOn;
+    private Button btnSocketOff;
+    private Button btnturnonrelay;
+    private Button btnbeginfueling;
+    private Button btnquantity;
+    private Button btnturnoffrelay;
+    private Button btnrecordcheck;
+    private Button btnConnect;
+    private TextView tvResult;
+    private String TURNONRELAY = "turn on relay";
+    private String BEGINFUEL = "begin fueling";
+    private String PULSORCOUNT = "quantity";
+    private String TURNOFFRELAY = "turn off relay";
+    private String GETHISTORY = "record check";
 
-    String TURNONRELAY = "turn on relay";
-    String BEGINFUEL = "begin fueling";
-    String PULSORCOUNT = "quantity";
-    String TURNOFFRELAY = "turn off relay";
-    String GETHISTORY = "record check";
 
+    private String TAG = "TestSocket...";
 
-    String TAG = "TestSocket...";
-
-    Socket socketFS;
+    private Socket socketFS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

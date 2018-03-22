@@ -1,5 +1,6 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -52,95 +53,31 @@ public class AppConstants {
     public static final String OtherLabel = "OtherLabel";
     public static final String TimeOut = "TimeOut";
     public static final String HubId = "HubId";
-
-
-    public static String webIP = "http://103.8.126.241:89/";//test
+    public static String APDU_FOB_KEY = "";
     // public static String webIP = "http://fluidsecure.cloudapp.net/"; //live
     //public static String webIP = "http://103.8.126.241:93/";//New link for FS_AP
     //public static String webIP = "http://103.8.126.241:8988/";//new for hotspot changes
-
-
-    public static String APDU_FOB_KEY = "";
     public static String FS_selected;
-    public static String BLUETOOTH_PRINTER_NAME;
-    public static String PrinterMacAddress;
     public static String BT_READER_NAME;
-    public static String PulserTimingAdjust;
-
-    public static String webURL = webIP + "HandlerTrak.ashx";
-    public static String LoginURL = webIP + "LoginHandler.ashx";
-
-
     public static String Title = "";
     public static String HubName;
     public static String HubGeneratedpassword;
     public static String Login_Email;
-    public static String Login_IMEI;
-
     public static String RES_MESSAGE = "ResponceMessage";
-    public static String RES_DATA = "ResponceData";
     public static String RES_DATA_SSID = "SSIDDataObj";
     public static String RES_DATA_USER = "objUserData";
     public static String RES_TEXT = "ResponceText";
-
-    public static String FOB_KEY_PERSON = "";
     public static String FOB_KEY_VEHICLE = "";
     public static String HUB_ID = "";
-
-
-    public static String FS1_CONNECTED_SSID;
-    public static String FS2_CONNECTED_SSID;
-    public static String FS3_CONNECTED_SSID;
-    public static String FS4_CONNECTED_SSID;
-
-    public static String REPLACEBLE_WIFI_NAME_FS_ON_UPDATE_MAC;
-    public static String REPLACEBLE_WIFI_NAME_FS1;
-    public static String REPLACEBLE_WIFI_NAME_FS2;
-    public static String REPLACEBLE_WIFI_NAME_FS3;
-    public static String REPLACEBLE_WIFI_NAME_FS4;
-
-    public static boolean NeedToRenameFS_ON_UPDATE_MAC;
-    public static boolean NeedToRenameFS1;
-    public static boolean NeedToRenameFS2;
-    public static boolean NeedToRenameFS3;
-    public static boolean NeedToRenameFS4;
-
-
-    public static String REPLACEBLE_WIFI_NAME;
     public static String LAST_CONNECTED_SSID;
-    public static String SELECTED_MACADDRESS;
     public static String CURRENT_SELECTED_SSID;
-    public static String CURRENT_HOSE_SSID;
     public static String CURRENT_SELECTED_SITEID;
     public static String UPDATE_MACADDRESS;
-    public static String R_HOSE_ID;
-    public static String R_SITE_ID;
-
-
-    public static String WIFI_PASSWORD = "";
-
-
-    public static boolean NeedToRename;
     public static boolean BUSY_STATUS;
-
-
-    public static boolean IS_WIFI_ON;
-    public static boolean IS_DATA_ON;
-    public static boolean IS_HOTSPOT_ON;
-
-    public static ArrayList<HashMap<String, String>> DetailsServerSSIDList;
     public static ArrayList<HashMap<String, String>> DetailsListOfConnectedDevices;
-
-
-    public static double roundNumber(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
-
+    private static String webIP = "http://103.8.126.241:89/";//test
+    public static String webURL = webIP + "HandlerTrak.ashx";
+    public static String LoginURL = webIP + "LoginHandler.ashx";
 
     public static String convertStingToBase64(String text) {
         String base64 = "";
@@ -156,14 +93,16 @@ public class AppConstants {
         return base64;
     }
 
+    //Yes, we do want IMEI, and not other IDs
+    @SuppressLint("HardwareIds")
     public static String getIMEI(Context ctx) {
 
         TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             return telephonyManager.getDeviceId();
         } catch (SecurityException ex) {
-        ex.printStackTrace();
-        return "";
+            ex.printStackTrace();
+            return "";
         }
     }
 
@@ -223,30 +162,6 @@ public class AppConstants {
             @Override
             public void onClick(View v) {
                 ctx.finish();
-            }
-        });
-
-
-        dialogObj.show();
-    }
-
-    public static void alertBigActivity(final Activity ctx, String msg) {
-        final Dialog dialogObj;
-        dialogObj = new Dialog(ctx);
-        dialogObj.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogObj.setContentView(R.layout.dialog_alert_big_finish);
-        dialogObj.setCancelable(false);
-
-        TextView tvAlertMsg = (TextView) dialogObj.findViewById(R.id.tvAlertMsg);
-        Button btnDialogOk = (Button) dialogObj.findViewById(R.id.btnDailogOk);
-
-
-        tvAlertMsg.setText(msg);
-
-        btnDialogOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogObj.dismiss();
             }
         });
 
