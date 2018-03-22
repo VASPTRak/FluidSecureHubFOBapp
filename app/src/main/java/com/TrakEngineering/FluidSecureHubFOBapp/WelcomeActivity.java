@@ -1076,10 +1076,10 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         try {
                             cd = new ConnectionDetector(WelcomeActivity.this);
                             if (cd.isConnectingToInternet()) {
-                                Constants.AccPersonnelPIN = "";
-                                Constants.AccVehicleNumber = "";
-                                handleGetAndroidSSID("FS_UNIT51");
-                                AppConstants.LAST_CONNECTED_SSID = "FS_UNIT51";
+//                                Constants.AccPersonnelPIN = "";
+//                                Constants.AccVehicleNumber = "";
+//                                handleGetAndroidSSID("FS_UNIT51");
+//                                AppConstants.LAST_CONNECTED_SSID = "FS_UNIT51";
                                 Intent intent = new Intent(WelcomeActivity.this, AcceptVehicleActivity.class);
                                 startActivity(intent);
 
