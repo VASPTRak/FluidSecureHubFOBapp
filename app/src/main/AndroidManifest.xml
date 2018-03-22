@@ -62,7 +62,15 @@
 
         <activity
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.nfc_reader.TagViewer">
-            <intent-filter>
+            <intent-filter android:priority="99999">
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+            <intent-filter android:priority="99999">
                 <action android:name="android.nfc.action.TAG_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
@@ -74,11 +82,20 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:fitsSystemWindows="true"
             android:windowSoftInputMode="adjustResize" />
+        <!-- <intent-filter android:priority="99999">
+             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+             <category android:name="android.intent.category.DEFAULT"/>
+             <data android:mimeType="*/*" />
+         </intent-filter>
+         <meta-data android:name="android.nfc.action.TECH_DISCOVERED"
+             android:resource="@xml/nfc_tech_filter" />
+         <intent-filter android:priority="99999">
+             <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+             <category android:name="android.intent.category.DEFAULT"/>
+         </intent-filter>
+     </activity>-->
         <activity
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.RegistrationActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
-        <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptCheckAll"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.ConnectionActivity"

@@ -340,7 +340,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
                     if (ResponceMessage.equalsIgnoreCase("success")) {
 
-                        SharedPreferences sharedPrefODO = AcceptVehicleActivity.this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                       /* SharedPreferences sharedPrefODO = AcceptVehicleActivity.this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
                         IsDepartmentRequire = sharedPrefODO.getString(AppConstants.IsDepartmentRequire, "");
                         IsPersonnelPINRequire = sharedPrefODO.getString(AppConstants.IsPersonnelPINRequire, "");
@@ -363,8 +363,11 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                         editor.putString("OdoLimit", OdoLimit);
                         editor.putString("OdometerReasonabilityConditions", OdometerReasonabilityConditions);
                         editor.putString("CheckOdometerReasonable", CheckOdometerReasonable);
-                        editor.commit();
+                        editor.commit();*/
 
+                        Istimeout_Sec = false;
+                        AppConstants.APDU_FOB_KEY = "";
+                        finish();
 
 /*
                         if (IsOdoMeterRequire.equalsIgnoreCase("True")) {
@@ -394,11 +397,11 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                             startActivity(intent);
 
                         } else {
-*/
+
                             AcceptServiceCall asc = new AcceptServiceCall();
                             asc.activity = AcceptVehicleActivity.this;
                             asc.checkAllFields();
-                        //}
+                        //}*/
 
                     } else {
                         String ResponceText = jsonObject.getString("ResponceText");

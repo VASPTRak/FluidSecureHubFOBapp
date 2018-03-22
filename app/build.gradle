@@ -13,8 +13,8 @@ android {
         applicationId "com.TrakEngineering.FluidSecureHubFOBapp"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 47
-        versionName "0.47.9"
+        versionCode 1
+        versionName "0.1.0"
         multiDexEnabled true
     }
     buildTypes {

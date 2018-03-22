@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.TrakEngineering.FluidSecureHubFOBapp.nfc_reader;
 
 import android.app.Activity;
@@ -38,6 +39,7 @@ import java.util.Locale;
 /**
  * An {@link Activity} which handles a broadcast of a new tag that the device just discovered.
  */
+
 public class TagViewer extends Activity {
 
     private LinearLayout mTagContent;
@@ -164,15 +166,17 @@ public class TagViewer extends Activity {
 //        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
-    /*    @Override
+/*
+    @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
         resolveIntent(intent);
     }*/
-//Is a tag discovered?
+
+    //Is a tag discovered?
 @Override
 public void onNewIntent(Intent intent) {
+//    String uri = intent.getDataString();
     resolveIntent(intent);
 }
 }
