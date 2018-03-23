@@ -61,6 +61,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     private boolean started_process = false;
     private EditText editVehicleNumber;
 
+
     @Override
     protected void onResume() {
         super.onResume();
