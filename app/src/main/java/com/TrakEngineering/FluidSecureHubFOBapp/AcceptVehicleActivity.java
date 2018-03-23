@@ -1,9 +1,14 @@
 package com.TrakEngineering.FluidSecureHubFOBapp;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +34,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,11 +68,20 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     private boolean started_process = false;
     private EditText editVehicleNumber;
 
+    private NfcAdapter mAdapter;
+    private PendingIntent mPendingIntent;
+    private NdefMessage mNdefPushMessage;
 
     @Override
     protected void onResume() {
         super.onResume();
         try {
+
+            //Set up the adaptors
+            if (mAdapter != null) {
+                mAdapter.enableForegroundDispatch(this, mPendingIntent, null, null);
+                mAdapter.enableForegroundNdefPush(this, mNdefPushMessage);
+            }
 
             editVehicleNumber.setText(Constants.AccVehicleNumber);
 
@@ -136,6 +152,15 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (mAdapter != null) {
+
+            mPendingIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord(
+                    "Message from NFC Reader :-)", Locale.ENGLISH, true)});
+        }
+
         ActivityHandler.addActivities(1, AcceptVehicleActivity.this);
         setContentView(R.layout.activity_accept_vehicle);
 
@@ -197,7 +222,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         tv_return.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeybord();
+                hideKeyboard();
             }
         });
 
@@ -222,7 +247,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         btnSave.setVisibility(View.GONE);
         tv_swipekeybord.setEnabled(false);
         tv_swipekeybord.setVisibility(View.GONE);
-        hideKeybord();
+        hideKeyboard();
     }
 
 
@@ -289,7 +314,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     public void cancelAction(View v) {
 
-        hideKeybord();
+        hideKeyboard();
         onBackPressed();
     }
 
@@ -589,7 +614,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                hideKeybord();
+                                hideKeyboard();
                                 Istimeout_Sec = false;
                                 AppConstants.ClearEdittextFielsOnBack(AcceptVehicleActivity.this);
                                 Intent intent = new Intent(AcceptVehicleActivity.this, WelcomeActivity.class);
@@ -636,7 +661,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         btnSave.setVisibility(View.GONE);
         tv_swipekeybord.setEnabled(false);
         tv_swipekeybord.setVisibility(View.GONE);
-        hideKeybord();
+        hideKeyboard();
     }
 
     private void DisplayScreenFobReadSuccess() {
@@ -651,7 +676,7 @@ public class AcceptVehicleActivity extends AppCompatActivity {
 
     }
 
-    private void hideKeybord() {
+    private void hideKeyboard() {
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -666,6 +691,62 @@ public class AcceptVehicleActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         AppConstants.APDU_FOB_KEY = "";
+        //required
+        if (mAdapter != null) {
+            mAdapter.disableForegroundDispatch(this);
+            mAdapter.disableForegroundNdefPush(this);
+        }
+    }
+
+    private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
+        byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
+
+        Charset utfEncoding = encodeInUtf8 ? Charset.forName("UTF-8") : Charset.forName("UTF-16");
+        byte[] textBytes = text.getBytes(utfEncoding);
+
+        int utfBit = encodeInUtf8 ? 0 : (1 << 7);
+        char status = (char) (utfBit + langBytes.length);
+
+        byte[] data = new byte[1 + langBytes.length + textBytes.length];
+        data[0] = (byte) status;
+        System.arraycopy(langBytes, 0, data, 1, langBytes.length);
+        System.arraycopy(textBytes, 0, data, 1 + langBytes.length, textBytes.length);
+
+        return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
+    }
+
+    private String toReversedHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; ++i) {
+            if (i > 0) {
+                sb.append(" ");
+            }
+            int b = bytes[i] & 0xff;
+            if (b < 0x10)
+                sb.append('0');
+            sb.append(Integer.toHexString(b));
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+//    String uri = intent.getDataString();
+        String action = intent.getAction();
+        System.out.println("saw intent");
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            System.out.println("saw nfc");
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            byte[] id = tag.getId();
+            String FobKey = toReversedHex(id);
+            System.out.println("read nfc " + FobKey);
+            if (FobKey.length() > 6) {
+                AppConstants.APDU_FOB_KEY = FobKey + " 90 00 ";
+            }
+        }
     }
 
     public class CheckVehicleFobOnly extends AsyncTask<Void, Void, Void> {
@@ -711,6 +792,4 @@ public class AcceptVehicleActivity extends AppCompatActivity {
         }
 
     }
-
-
 }
