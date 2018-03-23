@@ -56,13 +56,13 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity"
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity_FOB"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:windowSoftInputMode="stateHidden" />
 
 
         <activity
-            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptVehicleActivity"
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptVehicleActivity_FOB"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:fitsSystemWindows="true"
             android:windowSoftInputMode="adjustResize">

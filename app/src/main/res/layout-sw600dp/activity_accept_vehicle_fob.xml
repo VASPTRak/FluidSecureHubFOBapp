@@ -8,10 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:scrollbars="none"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,58 +45,58 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/Linear_layout_vehicleNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/Linear_layout_vehicleNumber"
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_enter_vehicle_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_enter_vehicle_no"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="25dp"
                     android:gravity="center"
-                    android:textStyle="bold"
                     android:paddingLeft="100dp"
                     android:paddingRight="100dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="20dp"
                     android:text="Fob Read Successfully"
-                    android:textColor="@color/Red"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="35dp" />
+                    android:textColor="@color/Red"
+                    android:textSize="35dp"
+                    android:textStyle="bold" />
 
 
                 <TextView
+                    android:id="@+id/tv_vehicle_no_below"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:id="@+id/tv_vehicle_no_below"
-                    android:gravity="left"
                     android:layout_marginLeft="20dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
+                    android:gravity="left"
                     android:text="Vehicle Number:"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="35dp" />
+                    android:textColor="@color/black"
+                    android:textSize="35dp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_fob_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/tv_fob_number"
                     android:gravity="left"
                     android:text="FOB#:"
                     android:textSize="@dimen/date_text" />
 
 
                 <TextView
+                    android:id="@+id/tv_dont_have_fob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_dont_have_fob"
+                    android:layout_marginLeft="75dp"
+                    android:layout_marginRight="75dp"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:layout_marginLeft="75dp"
-                    android:layout_marginRight="75dp"
                     android:text="If you don't have a Vehicle Fob then, enter Vehicle Number below on keypad"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="20dp" />
@@ -106,13 +106,13 @@
                     android:id="@+id/editVehicleNumber"
                     android:layout_width="350dp"
                     android:layout_height="60dp"
-                    android:layout_marginRight="55dp"
-                    android:layout_marginLeft="55dp"
-                    android:background="@color/colorFluid"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginRight="55dp"
+                    android:background="@color/colorFluid"
+                    android:gravity="center"
                     android:imeOptions="actionDone"
                     android:inputType="number|text"
-                    android:gravity="center"
                     android:maxLength="10"
                     android:padding="5sp"
                     android:singleLine="true"
@@ -127,13 +127,13 @@
 
 
             <LinearLayout
+                android:id="@+id/Linear_layout_Save_back_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:id="@+id/Linear_layout_Save_back_buttons"
-                android:layout_marginTop="50dp"
-                android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="50dp"
 
                 android:orientation="horizontal">
 
@@ -142,12 +142,12 @@
                     android:id="@+id/btnCancel"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
-                    android:layout_marginRight="25dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5sp"
-                     android:onClick="cancelAction"
+                    android:layout_marginRight="25dp"
                     android:layout_weight="1"
                     android:background="@color/backbtn"
+                    android:onClick="cancelAction"
                     android:text="Back"
                     android:textColor="@color/black"
                     android:textSize="@dimen/go_button_text" />

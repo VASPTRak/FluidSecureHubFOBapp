@@ -312,7 +312,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
 
            /*
             if (latitude == 0 && longitude == 0) {
-                AppConstants.AlertDialogFinish(WelcomeActivity.this, "Unable to get current location.\nPlease try again later!");
+                AppConstants.AlertDialogFinish(WelcomeActivity_FOB.this, "Unable to get current location.\nPlease try again later!");
             }
             */
 
@@ -464,7 +464,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleApiClient
                             finish();
                         } else {
 
-                            startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));//
+                            startActivity(new Intent(SplashActivity.this, WelcomeActivity_FOB.class));//
                             finish();
 
                             /*startActivity(new Intent(SplashActivity.this, DisplayTest.class));

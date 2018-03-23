@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity">
+    tools:context="com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity_FOB">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,9 +38,9 @@
 
 
                 <Button
+                    android:id="@+id/btn_disconnect"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:id="@+id/btn_disconnect"
                     android:text="Disconnect" />
 
                 <ImageView
@@ -91,12 +91,12 @@
                 android:layout_marginRight="40dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/colorFluid"
-                android:visibility="gone"
                 android:clickable="true"
                 android:text="Reconnect to WiFI"
                 android:textColor="#fff"
                 android:textSize="@dimen/go_button_text"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tvLatLng"
@@ -195,8 +195,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:orientation="vertical"
                 android:padding="20dp">
 

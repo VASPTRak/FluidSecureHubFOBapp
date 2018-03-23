@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-
-import static com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity.wifiApManager;
+import static com.TrakEngineering.FluidSecureHubFOBapp.WelcomeActivity_FOB.wifiApManager;
 
 /**
  * Created by User on 11/8/2017.
