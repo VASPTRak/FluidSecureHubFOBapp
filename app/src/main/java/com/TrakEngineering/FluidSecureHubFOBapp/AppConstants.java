@@ -68,6 +68,7 @@ public class AppConstants {
     public static String RES_DATA_USER = "objUserData";
     public static String RES_TEXT = "ResponceText";
     public static String FOB_KEY_VEHICLE = "";
+    public static String FOB_KEY_PERSON = "";
     public static String HUB_ID = "";
     public static String LAST_CONNECTED_SSID;
     public static String CURRENT_SELECTED_SSID;

@@ -134,7 +134,8 @@
     <string name="message_picc_rf_config_error_length">The RF configuration length is not equal to 19.</string>
     <string name="dialog_message_sleep_timeout">Enter the value between 4 and 20:</string>
     <string name="dialog_message_custom_id">Enter the text (maximum 10 characters):</string>
-    <string name="FobAssignButton">Tap here to start FOB assignment</string>
+    <string name="FobAssignButtonVeh">Tap here to start Vehicle FOB assignment</string>
+    <string name="FobAssignButtonPer">Tap here to start Personnel FOB assignment</string>
 
 
 </resources>

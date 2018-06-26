@@ -148,7 +148,7 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
             tv_FS4_hoseName, tv_fs1_stop, tv_fs2_stop, tv_fs3_stop, tv_fs4_stop, tv_fs1QTN, tv_fs2QTN, tv_fs3QTN, tv_fs4QTN, tv_fs1_pulseTxt, tv_fs2_pulseTxt, tv_fs3_pulseTxt, tv_fs4_pulseTxt, tv_fs1_Pulse, tv_fs2_Pulse, tv_fs3_Pulse, tv_fs4_Pulse;
     private ImageView imgFuelLogo;
     private TextView tvTitle;
-    private Button btnGo, btnRetryWifi;
+    private Button btnGoVeh, btnGoPer, btnRetryWifi;
     //================================================
 
     //---------------Bluetooth reader using Gatt------------------------
@@ -1061,7 +1061,8 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
         tv_fs3_stop.setOnClickListener(this);
         tv_fs4_stop.setOnClickListener(this);
 */
-        btnGo = (Button) findViewById(R.id.btnGo);
+        btnGoVeh = (Button) findViewById(R.id.btnGoVeh);
+        btnGoPer = (Button) findViewById(R.id.btnGoPer);
         btnRetryWifi = (Button) findViewById(R.id.btnRetryWifi);
     }
 
@@ -1086,6 +1087,29 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
                             } else {
                                 CommonUtils.showNoInternetDialog(WelcomeActivity_FOB.this);
                             }
+
+
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+        }
+    }
+
+    public void goButtonActionPersonnel(View view) {
+
+
+        try {
+            cd = new ConnectionDetector(WelcomeActivity_FOB.this);
+            if (cd.isConnectingToInternet()) {
+//                                Constants.AccPersonnelPIN = "";
+//                                Constants.AccVehicleNumber = "";
+//                                handleGetAndroidSSID("FS_UNIT51");
+//                                AppConstants.LAST_CONNECTED_SSID = "FS_UNIT51";
+                Intent intent = new Intent(WelcomeActivity_FOB.this, AcceptPersonnelActivity_FOB.class);
+                startActivity(intent);
+
+            } else {
+                CommonUtils.showNoInternetDialog(WelcomeActivity_FOB.this);
+            }
 
 
         } catch (Exception ex) {
@@ -1514,7 +1538,8 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
 
                     if (IpAddress.equals("")) {
                         tvSSIDName.setText("Can't select this Hose not connected");
-                        btnGo.setVisibility(View.GONE);
+                        btnGoVeh.setVisibility(View.GONE);
+                        btnGoPer.setVisibility(View.GONE);
 
                     } else {
 
@@ -1534,10 +1559,12 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
                                 Constants.CurrentSelectedHose = "FS1";
-                                btnGo.setVisibility(View.VISIBLE);
+                                btnGoVeh.setVisibility(View.VISIBLE);
+                                btnGoPer.setVisibility(View.VISIBLE);
                             } else {
                                 tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
+                                btnGoVeh.setVisibility(View.GONE);
+                                btnGoPer.setVisibility(View.GONE);
 
                             }
                         } else if (String.valueOf(position).equalsIgnoreCase("1")) {
@@ -1552,10 +1579,12 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
                                 Constants.CurrentSelectedHose = "FS2";
-                                btnGo.setVisibility(View.VISIBLE);
+                                btnGoVeh.setVisibility(View.VISIBLE);
+                                btnGoPer.setVisibility(View.VISIBLE);
                             } else {
                                 tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
+                                btnGoVeh.setVisibility(View.GONE);
+                                btnGoPer.setVisibility(View.GONE);
                             }
 
                         } else if (String.valueOf(position).equalsIgnoreCase("2")) {
@@ -1572,10 +1601,12 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
                                 Constants.CurrentSelectedHose = "FS3";
-                                btnGo.setVisibility(View.VISIBLE);
+                                btnGoVeh.setVisibility(View.VISIBLE);
+                                btnGoPer.setVisibility(View.VISIBLE);
                             } else {
                                 tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
+                                btnGoVeh.setVisibility(View.GONE);
+                                btnGoPer.setVisibility(View.GONE);
                             }
 
 
@@ -1592,15 +1623,18 @@ public class WelcomeActivity_FOB extends AppCompatActivity implements GoogleApiC
                                 Constants.AccPersonnelPIN = "";
                                 tvSSIDName.setText(selSSID);
                                 Constants.CurrentSelectedHose = "FS4";
-                                btnGo.setVisibility(View.VISIBLE);
+                                btnGoVeh.setVisibility(View.VISIBLE);
+                                btnGoPer.setVisibility(View.VISIBLE);
                             } else {
                                 tvSSIDName.setText("Hose in use.\nPlease try again later");
-                                btnGo.setVisibility(View.GONE);
+                                btnGoVeh.setVisibility(View.GONE);
+                                btnGoPer.setVisibility(View.GONE);
                             }
                         } else {
 
                             tvSSIDName.setText("Can't select this Hose for current version");
-                            btnGo.setVisibility(View.GONE);
+                            btnGoVeh.setVisibility(View.GONE);
+                            btnGoPer.setVisibility(View.GONE);
                         }
                     }
 

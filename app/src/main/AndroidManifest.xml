@@ -71,6 +71,19 @@
              <category android:name="android.intent.category.DEFAULT"/>
          </intent-filter>
         </activity>
+
+
+        <activity
+            android:name="com.TrakEngineering.FluidSecureHubFOBapp.AcceptPersonnelActivity_FOB"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter android:priority="99999">
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.TrakEngineering.FluidSecureHubFOBapp.RegistrationActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />

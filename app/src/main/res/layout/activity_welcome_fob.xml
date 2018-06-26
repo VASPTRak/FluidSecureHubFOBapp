@@ -67,9 +67,9 @@
 
 
             <Button
-                android:id="@+id/btnGo"
+                android:id="@+id/btnGoVeh"
                 android:layout_width="match_parent"
-                android:layout_height="222dp"
+                android:layout_height="92dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
@@ -77,7 +77,23 @@
                 android:background="@color/colorFluid"
                 android:clickable="true"
                 android:onClick="goButtonAction"
-                android:text="@string/FobAssignButton"
+                android:text="@string/FobAssignButtonVeh"
+                android:textColor="#fff"
+                android:textSize="@dimen/go_button_text"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnGoPer"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorFluid"
+                android:clickable="true"
+                android:onClick="goButtonActionPersonnel"
+                android:text="@string/FobAssignButtonPer"
                 android:textColor="#fff"
                 android:textSize="@dimen/go_button_text"
                 android:textStyle="bold" />
