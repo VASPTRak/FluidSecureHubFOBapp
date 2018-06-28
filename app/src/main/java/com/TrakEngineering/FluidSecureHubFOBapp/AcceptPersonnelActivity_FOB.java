@@ -514,7 +514,7 @@ public class AcceptPersonnelActivity_FOB extends AppCompatActivity {
 
                     IsOdoMeterRequire = jsonObject.getString("IsOdoMeterRequire");
                     String IsHoursRequire = jsonObject.getString("IsHoursRequire");
-                    String PersonnelNumber = jsonObject.getString("PersonnelNumber");
+                    String PersonnelNumber = jsonObject.getString("PersonPin");
                     String PreviousOdo = jsonObject.getString("PreviousOdo");
                     String OdoLimit = jsonObject.getString("OdoLimit");
                     String OdometerReasonabilityConditions = jsonObject.getString("OdometerReasonabilityConditions");
@@ -772,7 +772,7 @@ public class AcceptPersonnelActivity_FOB extends AppCompatActivity {
 
                 System.out.println("jsonDatajsonDatajsonData" + jsonData);
                 //----------------------------------------------------------------------------------
-                String authString = "Basic " + AppConstants.convertStingToBase64(vfentity.IMEIUDID + ":" + userEmail + ":" + "CheckPersonnelFobOnly");
+                String authString = "Basic " + AppConstants.convertStingToBase64(vfentity.IMEIUDID + ":" + userEmail + ":" + "CheckPersonFobOnly");
                 response = serverHandler.PostTextData(AcceptPersonnelActivity_FOB.this, AppConstants.webURL, jsonData, authString);
                 //----------------------------------------------------------------------------------
 

@@ -620,6 +620,7 @@ public class AcceptVehicleActivity_FOB extends AppCompatActivity {
                                 Intent intent = new Intent(AcceptVehicleActivity_FOB.this, WelcomeActivity_FOB.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
+                                finish();
                             }
                         });
 
